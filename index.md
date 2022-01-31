@@ -141,3 +141,5 @@ Unreal Engine, OpenGL, Unity 3D, C++, Python, numpy, CMAKE, C#, glm, imgui, Andr
 
 
 ---
+
+<link rel="canonical" href="/pages/index.md">
