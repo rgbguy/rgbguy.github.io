@@ -60,6 +60,13 @@ track builder game for Samsung GearVR using Unreal Engine 4.
 
 ## Projects
 
+### RGB GUY Youtube Channel
+
+- My Personal Tech Channel where I post my experiments.
+[![Channel Link](https://img.shields.io/youtube/channel/views/UCHfPa7u8k61CubB1Ersg7bA?style=social)](https://www.youtube.com/c/RGBGuy) 
+
+---
+
 ### OpenGL C++ based render
 [![View on GitHub](https://img.shields.io/badge/GitHub-View_on_GitHub-blue?logo=GitHub)](https://github.com/rgbguy/Graphics) 
 - Built a cross platform OpenGL renderer with features like model loading, lighting, texturing, materials, camera movement.
