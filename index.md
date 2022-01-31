@@ -1,8 +1,10 @@
+# PORTFOLIO
+---
 # Experience
 ---
-## Qualcomm XR Research, Bangalore [Nov 2018 - Present]
+## Qualcomm XR Research, Bangalore
 
-### Senior Engineer
+### Senior Engineer [Nov'20 - Present]
 
 - Designed a novel ***real-time depth compression algorithm and quality evaluation technique for split rendering*** for Qualcomm Powered VR/AR devices.
 - The proposed solution reduces the judder and improves visual quality by manifolds.
@@ -10,7 +12,7 @@
 
 ---
 
-### Engineer
+### Engineer [Nov'18 - Oct'20]
 
 - Worked on building features and optimising an in house ***Unreal Engine game*** built on top of ***Remote Rendering framework for VR***.
 - Made improvements to the asset pipeline resulting in ***lower shader compile time and improved frame-rate***.
@@ -24,9 +26,9 @@ Achievements:
 
 ---
 
-## Fiverr [Aug 2018 - Nov 2018]
+## Fiverr
 
-### Unreal Engine Game Programmer
+### Game Programmer [Aug'18 - Nov'18]
 
 - Projects include a VR game, a platformer and Architectural Visualizations. ***[Project Reel](https://www.youtube.com/watch?v=m4S0-PM7DcQ)***
 - Gained Level 1 seller title by maintaining consistent 5 star ratings on 23
@@ -38,7 +40,9 @@ consecutive game development orders in a time span of 3 months.
 
 ---
 
-## VizExperts [May 2017 - Aug 2018]
+## VizExperts
+
+### Graphics Engineer [May'17 - Aug'18]
 
 - Used the client-server API of Unreal Engine to build ***Multiplayer*** gameplay features for the proprietary collaborative ***VR*** framework, Georbis Play.
 - Handled the complete ***Animation Programming*** pipeline for Snow and
