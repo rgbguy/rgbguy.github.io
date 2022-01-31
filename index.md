@@ -61,9 +61,8 @@ track builder game for Samsung GearVR using Unreal Engine 4.
 ## Projects
 
 ### RGB GUY Youtube Channel
-
-- My Personal Tech Channel where I post my experiments.
 [![Channel Link](https://img.shields.io/youtube/channel/views/UCHfPa7u8k61CubB1Ersg7bA?style=social)](https://www.youtube.com/c/RGBGuy) 
+- My Personal Tech Channel where I post my experiments.
 
 ---
 
@@ -84,9 +83,9 @@ track builder game for Samsung GearVR using Unreal Engine 4.
 ---
 
 ### Stretchy Clown: Infinite Runner
-[![View on GitHub](https://img.shields.io/badge/GitHub-View_on_GitHub-blue?logo=GitHub)](https://github.com/rgbguy/StretchyClown) 
+[![View on GitHub](https://img.shields.io/badge/GitHub-View_on_GitHub-blue?logo=GitHub)](https://github.com/rgbguy/StretchyClown)
+[(https://img.shields.io/badge/-Download-green)](https://rgbguy.itch.io/stretchyclown) 
 - My Submission for Mashup game jam 2020 hosted on itch.io. Built this infinite runner in 48 hours.. Ranked #6 in Audio, #12 in Fun, #16 in Design out of 126 entries. Based on theme 'size matters'.
-- [Download for PC](https://rgbguy.itch.io/stretchyclown)
 - [Gameplay Video](https://www.youtube.com/watch?v=WrQycVqy0gM&t=29s)
 
 ---
