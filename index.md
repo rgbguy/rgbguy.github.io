@@ -61,7 +61,7 @@ track builder game for Samsung GearVR using Unreal Engine 4.
 ## Projects
 
 ### OpenGL C++ based render
-
+[![View on GitHub](https://img.shields.io/badge/GitHub-View_on_GitHub-blue?logo=GitHub)](https://github.com/rgbguy/Graphics) 
 - Built a cross platform OpenGL renderer with features like model loading, lighting, texturing, materials, camera movement.
 - Added ImGUI support
 
@@ -77,7 +77,7 @@ track builder game for Samsung GearVR using Unreal Engine 4.
 ---
 
 ### Stretchy Clown: Infinite Runner
-
+[![View on GitHub](https://img.shields.io/badge/GitHub-View_on_GitHub-blue?logo=GitHub)](https://github.com/rgbguy/StretchyClown) 
 - My Submission for Mashup game jam 2020 hosted on itch.io. Built this infinite runner in 48 hours.. Ranked #6 in Audio, #12 in Fun, #16 in Design out of 126 entries. Based on theme 'size matters'.
 - [Download for PC](https://rgbguy.itch.io/stretchyclown)
 - [Gameplay Video](https://www.youtube.com/watch?v=WrQycVqy0gM&t=29s)
@@ -111,6 +111,7 @@ track builder game for Samsung GearVR using Unreal Engine 4.
 
 ### Blow Bubble VR: Unity
 
+[![View on GitHub](https://img.shields.io/badge/GitHub-View_on_GitHub-blue?logo=GitHub)](https://github.com/rgbguy/BlowBubbleInVR) 
 - Bubble Burst is a gamified application that uses the Audio Library of Unity3d.
 - The player has a blowing straw in one hand and a chinese fan in the other hand. The application detects the player voice intensity and forms bubble when the player blows. The player can then use the chinese fan to move the bubbles. The bubbles can be blown towards the butterflies to catch them.
 - [Demo Video](https://www.youtube.com/watch?v=BsTvNaqNEFM)
@@ -124,13 +125,13 @@ track builder game for Samsung GearVR using Unreal Engine 4.
 
 ---
 
-## PUBLICATIONS
+## Publications
 
 - [Virtual Prototype Based Simulator for EOT Crane: Springer Singapore](https://www.springerprofessional.de/en/virtual-prototype-based-simulator-for-eot-crane/15178800)
 
 ---
 
-## TOOLSET
+## Toolset
 
 Unreal Engine, OpenGL, Unity 3D, C++, Python, numpy, CMAKE, C#, glm, imgui, Android native, Blender (modelling and scripting), RenderDoc, ARcore, Powershell, SQL
 
