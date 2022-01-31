@@ -1,6 +1,6 @@
 # Experience
 ---
-## Qualcomm XR Research, Bangalore
+## Qualcomm XR Research, Bangalore [Nov 2018 - Present]
 
 ### Senior Engineer
 
@@ -12,7 +12,7 @@
 
 ### Engineer
 
-- Worked on building features and optimising an in house ***Unreal Engine game***] built on top of ***Remote Rendering framework for VR***.
+- Worked on building features and optimising an in house ***Unreal Engine game*** built on top of ***Remote Rendering framework for VR***.
 - Made improvements to the asset pipeline resulting in ***lower shader compile time and improved frame-rate***.
 - Conceptualised and built QArena: XR Home application using ***Unity3D***
 - Integrated the application with Qualcomm's perception API. Tested and benchmarked the app on ***Nreal glasses***. The user is able to place virtual objects on real world geometry.
@@ -24,15 +24,26 @@ Achievements:
 
 ---
 
-## Fiverr
+## Fiverr [Aug 2018 - Nov 2018]
 
 ### Unreal Engine Game Programmer
 
-- Projects include a multiplayer RTS game, a VR game, Turn-based game, Architectural Visualisations. ***[Project Reel](https://www.youtube.com/watch?v=m4S0-PM7DcQ)***
-- Gained level 1 seller title by completing 25+ orders in a period of 4 months.
-- Consistent 5-star ratings on all orders. Repeat orders by multiple clients.
+- Projects include a VR game, a platformer and Architectural Visualizations. ***[Project Reel](https://www.youtube.com/watch?v=m4S0-PM7DcQ)***
+- Gained Level 1 seller title by maintaining consistent 5 star ratings on 23
+consecutive game development orders in a time span of 3 months.
+- Responsibilities: getting client requirements, providing cost projections and timelines, creating game design documents, collaborating with art team on asset requirements.
+- Worked on ***core gameplay features, AI, UI, and Animation Programming***.
 - [Profile link](https://www.fiverr.com/sagarkalbande)
 
 
+---
+
+## VizExperts [May 2017 - Aug 2018]
+
+- Used the client-server API of Unreal Engine to build ***Multiplayer*** gameplay features for the proprietary collaborative ***VR*** framework, Georbis Play.
+- Handled the complete ***Animation Programming*** pipeline for Snow and
+Avalanche simulator, a product build upon Georbis Play.
+- Integrated ***full body tracking***, with HTC Vive for the framework.
+- Collaborated with technical art and 3d modelling team to fix framerate issues, and to build and integrate optimized assets for the game.
 
 ---
