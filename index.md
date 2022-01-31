@@ -60,7 +60,7 @@ track builder game for Samsung GearVR using Unreal Engine 4.
 
 ## Projects
 
-### RGB GUY Youtube Channel
+### RgbGuy Youtube Channel
 [![Channel Link](https://img.shields.io/youtube/channel/views/UCHfPa7u8k61CubB1Ersg7bA?style=social)](https://www.youtube.com/c/RGBGuy) 
 - My Personal Tech Channel where I post my experiments.
 
@@ -74,36 +74,35 @@ track builder game for Samsung GearVR using Unreal Engine 4.
 ---
 
 ### Mawn: Short Indie Horror Game
-
+[![Itch.io](https://img.shields.io/badge/-Download-green)](https://missinggunsstudio.itch.io/mawn) 
+[![Demo Video](https://img.shields.io/badge/Video-Demo-blue)](https://www.youtube.com/watch?time_continue=28&v=Ul6DHS6GukU&feature=emb_logo) 
 - I worked as the sole programmer in a team of 5 for this short horror indie game.
 - The game was well received by the audience, and was covered in multiple youtube channels and blogs.
-- [Download for PC](https://missinggunsstudio.itch.io/mawn)
-- [Gameplay Video](https://www.youtube.com/watch?time_continue=28&v=Ul6DHS6GukU&feature=emb_logo)
 
 ---
 
 ### Stretchy Clown: Infinite Runner
 [![View on GitHub](https://img.shields.io/badge/GitHub-View_on_GitHub-blue?logo=GitHub)](https://github.com/rgbguy/StretchyClown)
-[![Itch.io](https://img.shields.io/badge/-Download-green)](https://rgbguy.itch.io/stretchyclown) 
+[![Itch.io](https://img.shields.io/badge/-Download-green)](https://rgbguy.itch.io/stretchyclown)
+[![Demo Video](https://img.shields.io/badge/Video-Demo-blue)](https://www.youtube.com/watch?v=WrQycVqy0gM&t=29s) 
 - My Submission for Mashup game jam 2020 hosted on itch.io. Built this infinite runner in 48 hours.. Ranked #6 in Audio, #12 in Fun, #16 in Design out of 126 entries. Based on theme 'size matters'.
-- [Gameplay Video](https://www.youtube.com/watch?v=WrQycVqy0gM&t=29s)
 
 ---
 
 ### Avalanche Rescue Simulator: Unreal Engine VR
 
+[![Demo Video](https://img.shields.io/badge/Video-Demo-blue)](https://www.youtube.com/watch?v=RLLrLmIM5Eo&t=265s) 
 - Multiplayer VR game built using Unreal Engine
 - Worked as one of the lead developers for building a VR based training solution for the Snow and Avalanche Study Establishment (SASE), Chandigarh
 - The terrain is generated from real life data. Various events can be triggerd without warning so that the person gradually learns to deal with these situations in a risk free setting.
 - The trainer can see and monitor the performance of the trainee. Based on the actions taken by the trainee in the virtual environment, their skill level can be mapped. 
-- [Demo Video](https://www.youtube.com/watch?v=RLLrLmIM5Eo)
 
 ---
 
 ### Save Ginger: Unreal Engine VR
 
+[![Demo Video](https://img.shields.io/badge/Video-Demo-blue)](https://www.youtube.com/watch?v=m4S0-PM7DcQ&t=22s) 
 - Save Ginger is a VR game, gives a super immersive experience with chills and thrills as the player ventures on a scintillating journey to rescue a cat, which manages to get stuck in the most adventurous places to make the rescue an experience to conquer the fear of heights.
-- [Demo Video](https://www.youtube.com/watch?v=m4S0-PM7DcQ&t=22s)
 - [Game Website](http://saveginger.com.au/)
 
 ---
@@ -118,16 +117,15 @@ track builder game for Samsung GearVR using Unreal Engine 4.
 ### Blow Bubble VR: Unity
 
 [![View on GitHub](https://img.shields.io/badge/GitHub-View_on_GitHub-blue?logo=GitHub)](https://github.com/rgbguy/BlowBubbleInVR) 
+[![Demo Video](https://img.shields.io/badge/Video-Demo-blue)](https://www.youtube.com/watch?v=BsTvNaqNEFM) 
 - Bubble Burst is a gamified application that uses the Audio Library of Unity3d.
 - The player has a blowing straw in one hand and a chinese fan in the other hand. The application detects the player voice intensity and forms bubble when the player blows. The player can then use the chinese fan to move the bubbles. The bubbles can be blown towards the butterflies to catch them.
-- [Demo Video](https://www.youtube.com/watch?v=BsTvNaqNEFM)
 
 ---
 
 ### Generative Art Experiments
-
+[![Demo Video](https://img.shields.io/badge/Video-Demo-blue)](https://www.youtube.com/watch?v=XfxZZGaXkks) 
 - I love building generative art using OpenFrameWorks and C++.
-- [Project Videos](https://www.youtube.com/watch?v=XfxZZGaXkks)
 
 ---
 
