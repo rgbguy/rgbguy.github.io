@@ -1,7 +1,5 @@
 # PORTFOLIO
 ---
-# Experience
----
 ## Qualcomm XR Research, Bangalore
 
 ### Senior Engineer [Nov'20 - Present]
@@ -51,3 +49,9 @@ Avalanche simulator, a product build upon Georbis Play.
 - Collaborated with technical art and 3d modelling team to fix framerate issues, and to build and integrate optimized assets for the game.
 
 ---
+
+### Graphics Engineer Internship [May'16 - July'16]
+
+- Assisted the development of Android version of COOLVR, a hotwheels style
+track builder game for Samsung GearVR using Unreal Engine 4.
+- Received a Pre-Placement Offer.
