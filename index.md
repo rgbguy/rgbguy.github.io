@@ -1,4 +1,4 @@
-# PORTFOLIO
+# Portfolio
 ---
 ## Qualcomm XR Research, Bangalore
 
@@ -55,3 +55,56 @@ Avalanche simulator, a product build upon Georbis Play.
 - Assisted the development of Android version of COOLVR, a hotwheels style
 track builder game for Samsung GearVR using Unreal Engine 4.
 - Received a Pre-Placement Offer.
+
+---
+
+## Projects
+
+### OpenGL C++ based render
+
+- Built a cross platform OpenGL renderer with features like model loading, lighting, texturing, materials, camera movement.
+- Added ImGUI support
+
+---
+
+### Mawn: Short Indie Horror Game
+
+- I worked as the sole programmer in a team of 5 for this short horror indie game.
+- The game was well received by the audience, and was covered in multiple youtube channels and blogs.
+- [Download for PC](https://missinggunsstudio.itch.io/mawn)
+- [Gameplay Video](https://www.youtube.com/watch?time_continue=28&v=Ul6DHS6GukU&feature=emb_logo)
+
+---
+
+### Stretchy Clown: Infinite Runner
+
+- My Submission for Mashup game jam 2020 hosted on itch.io. Built this infinite runner in 48 hours.. Ranked #6 in Audio, #12 in Fun, #16 in Design out of 126 entries. Based on theme 'size matters'.
+- [Download for PC](https://rgbguy.itch.io/stretchyclown)
+- [Gameplay Video](https://www.youtube.com/watch?v=WrQycVqy0gM&t=29s)
+
+---
+
+### Avalanche Rescue Simulator: Unreal Engine VR
+
+- Multiplayer VR game built using Unreal Engine
+- Worked as one of the lead developers for building a VR based training solution for the Snow and Avalanche Study Establishment (SASE), Chandigarh
+- The terrain is generated from real life data. Various events can be triggerd without warning so that the person gradually learns to deal with these situations in a risk free setting.
+- The trainer can see and monitor the performance of the trainee. Based on the actions taken by the trainee in the virtual environment, their skill level can be mapped. 
+- [Demo Video](https://www.youtube.com/watch?v=RLLrLmIM5Eo)
+
+---
+
+### Blow Bubble VR: Unity
+
+- Bubble Burst is a gamified application that uses the Audio Library of Unity3d.
+- The player has a blowing straw in one hand and a chinese fan in the other hand. The application detects the player voice intensity and forms bubble when the player blows. The player can then use the chinese fan to move the bubbles. The bubbles can be blown towards the butterflies to catch them.
+- [Demo Video](https://www.youtube.com/watch?v=BsTvNaqNEFM)
+
+---
+
+### Generative Art Experiments
+
+- I love building generative art using OpenFrameWorks and C++.
+- [Project Videos](https://www.youtube.com/watch?v=XfxZZGaXkks)
+
+---
