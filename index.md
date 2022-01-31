@@ -73,7 +73,7 @@ track builder game for Samsung GearVR using Unreal Engine 4.
 - The game was well received by the audience, and was covered in multiple youtube channels and blogs.
 - [Download for PC](https://missinggunsstudio.itch.io/mawn)
 - [Gameplay Video](https://www.youtube.com/watch?time_continue=28&v=Ul6DHS6GukU&feature=emb_logo)
-
+<center><img src="images/mawn.png"/></center>
 ---
 
 ### Stretchy Clown: Infinite Runner
@@ -81,6 +81,7 @@ track builder game for Samsung GearVR using Unreal Engine 4.
 - My Submission for Mashup game jam 2020 hosted on itch.io. Built this infinite runner in 48 hours.. Ranked #6 in Audio, #12 in Fun, #16 in Design out of 126 entries. Based on theme 'size matters'.
 - [Download for PC](https://rgbguy.itch.io/stretchyclown)
 - [Gameplay Video](https://www.youtube.com/watch?v=WrQycVqy0gM&t=29s)
+<center><img src="images/sclown.png"/></center>
 
 ---
 
@@ -94,11 +95,20 @@ track builder game for Samsung GearVR using Unreal Engine 4.
 
 ---
 
+### Crane Derailment Simulator: Unreal Engine VR
+
+- Handling a derailed crane in order to place it back on track is a long procedure. At VizExperts, I had the opportunity to work as the Lead Developer for this POC. Railway Crane Simulator is a multiplayer VR Simulation where players can join collaboratively and operate to place a derailed train bogie back on track.
+- It demonstrates the protocol that is essential for executing the process. The crane can be controlled using a Physical Joystick. This makes the player give a higher level of immersion that makes his feel as if he is operating the crane physically. This application was built on Unreal Engine.
+<center><img src="images/railwaycranesim.png"/></center>
+
+---
+
 ### Blow Bubble VR: Unity
 
 - Bubble Burst is a gamified application that uses the Audio Library of Unity3d.
 - The player has a blowing straw in one hand and a chinese fan in the other hand. The application detects the player voice intensity and forms bubble when the player blows. The player can then use the chinese fan to move the bubbles. The bubbles can be blown towards the butterflies to catch them.
 - [Demo Video](https://www.youtube.com/watch?v=BsTvNaqNEFM)
+<center><img src="images/blowbubblevr.png"/></center>
 
 ---
 
