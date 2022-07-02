@@ -4,9 +4,9 @@
 
 ### Senior Graphics Engineer [Apr22' - Present]
 
-- At ShareChat, we are building a mobile first graphics sdk. All applications in our content creator ecosystem will use this sdk to render anything and everything!
-- To Architect the graphics engine making sure that complex graphics run even on low end mobile devices is my favourite part.
-- Using C++ most of the time.
+- At ShareChat, we are building a ***mobile first graphics sdk***. All applications in our content creator ecosystem will use this sdk to render anything and everything!
+- To ***architect the graphics engine*** making sure that complex graphics run even on low end mobile devices is my favourite part.
+- Using ***C++*** most of the time.
 
 ---
 ## Qualcomm XR Research, Bangalore
