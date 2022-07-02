@@ -1,12 +1,24 @@
 # Portfolio
 ---
+## ShareChat, Bangalore
+
+### Senior Graphics Engineer [Apr22' - Present]
+
+- At ShareChat, we are building a mobile first graphics sdk. All applications in our content creator ecosystem will use this sdk to render anything and everything!
+- To Architect the graphics engine making sure that complex graphics run even on low end mobile devices is my favourite part.
+- Using C++ most of the time.
+
+---
 ## Qualcomm XR Research, Bangalore
 
-### Senior Engineer [Nov'20 - Present]
+### Senior Engineer [Nov'20 - Apr22']
 
-- Designed a novel ***real-time depth compression algorithm and quality evaluation technique for split rendering*** for Qualcomm Powered VR/AR devices.
-- The proposed solution reduces the judder and improves visual quality by manifolds.
-- Using ***Unreal Engine, Unity and Blender*** and RenderDoc to generate test cases to validate the algorithms.
+- Cloud gaming in case of VR devices requires low latency. To minimise the reprojection error, I worked on designing a novel real-time depth compression algorithm and quality evaluation technique. 
+- The proposed solution reduces the judder, and hence improves the visual quality.
+- Right from literature survey, till the implementation and validation, I played a key role in designing the algorithm and the end to end system working on phone-HMD split VR.
+- Filed parents in XR research
+S20210358219A1 Methods and apparatus for atlas management of augmented reality content
+WO2021226535A1 Multi-layer reprojection techniques for augmented reality
 
 ---
 
@@ -20,7 +32,6 @@
 
 Achievements: 
 - ***QualStar*** award for building a novel Augmented Reality solution for QBuzz 2019. Reached top 5 among 250+ applications in QMaker's Challenge. The system captures a live point cloud of the user and streams it to mobile AR device. The capture-to-render latency is as low as 1ms. Inspired from live holograms as seen in Star Wars and Avengers!
-- IP contributor - filed 3 patents in XR research.
 
 ---
 
