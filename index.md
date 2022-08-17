@@ -149,6 +149,8 @@ track builder game for Samsung GearVR using Unreal Engine 4.
 ## Publications
 
 - [Virtual Prototype Based Simulator for EOT Crane: Springer Singapore](https://www.springerprofessional.de/en/virtual-prototype-based-simulator-for-eot-crane/15178800)
+- [Mechanism for improved light estimation](https://scholar.google.co.uk/citations?view_op=view_citation&hl=en&user=RyI56xcAAAAJ&citation_for_view=RyI56xcAAAAJ:d1gkVwhDpl0C)
+- [Methods and apparatus for atlas management of augmented reality content](https://scholar.google.co.uk/citations?view_op=view_citation&hl=en&user=RyI56xcAAAAJ&citation_for_view=RyI56xcAAAAJ:u5HHmVD_uO8C)
 
 ---
 
