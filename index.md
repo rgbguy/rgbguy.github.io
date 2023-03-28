@@ -4,9 +4,25 @@
 
 ### Senior Graphics Engineer [Apr22' - Present]
 
-- At ShareChat, we are building a ***mobile first graphics sdk***. All applications in our content creator ecosystem will use this sdk to render anything and everything!
-- To ***architect the graphics engine*** making sure that complex graphics run even on low end mobile devices is my favourite part.
-- Using ***C++*** most of the time.
+***👾 Shutter 3D Graphics Library:*** 
+- Architectured and developed 3D rendering pipeline for shutter, a cross platform light weight graphics SDK based on OpenGL and Metal. It powers the rendering of sharechat's Motion Video, Video Editor and Camera.
+- Close collaboration with Product, Computer Vision, Design and App teams.
+- Handled the end to end software release process of the SDK.
+
+***📸 Camera SDK:***
+- Led the implementation of 3D faceAR filters. Built a scalable pipeline where the designers can create numerous effects/filters and Android/iOS users can create content. Similar to Instagram/Snapchat's filters.
+- Added support for various types of effects/filters namely, Face3D overlay, Facemask, FaceMorph, Image/Video Overlay etc. 
+- Maintained close communication with the product team to identify and prioritize important features that drive user engagement.
+- Worked on a range of Image Processing algorithms for face smoothening, sharpening to improve the camera pipeline. 
+
+***🏆 Impact:***
+- Camera SDK scaled to 100% of ShareChat users.
+- New revenue streams opened up as brands use lenses for Marketing/Advertisements.
+
+***🥇Achievements: ***
+- Awarded 'Ace of initative' for leading the team and proactively improving the performance of filters.
+- ⭐️ ⭐️ ⭐️ ⭐️ Exceeding expectations rating (2022-23).
+
 
 ---
 ## Qualcomm XR Research, Bangalore
