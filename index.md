@@ -1,4 +1,15 @@
 # Portfolio
+
+
+---
+## Metadome.ai, Bangalore
+
+### Tech Lead [Apr22' - Present]
+
+***👾 Pixie:*** 
+- Web 3D Graphics Engine and Editor
+
+
 ---
 ## ShareChat, Bangalore
 
