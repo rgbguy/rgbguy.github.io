@@ -43,6 +43,7 @@ title = "rgbguy's Blog"
 baseURL = "https://rgbguy.github.io/"
 languageCode = "en-us"
 defaultContentLanguage = "en"
+description = "A blog about computer graphics, programming, and technology"
 
 # Build configuration
 buildDrafts = false
