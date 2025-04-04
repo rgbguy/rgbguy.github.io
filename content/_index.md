@@ -1,6 +1,7 @@
 +++
-title =  ""
-date = 2022-08-25T21:30:04+08:00
+title = "rgbguy's Blog"
+date = 2023-03-15T00:00:00+00:00
 draft = false
 +++
-To edit this find file nostyleplease/content/_index.md
+
+Welcome to my blog about computer graphics, programming, and technology.
