@@ -37,3 +37,22 @@
     date_format       = "2006-01-02"
     isListGroupByDate = false
     isShowFooter      = true
+
+# Site configuration
+title = "rgbguy's Blog"
+baseURL = "https://rgbguy.github.io/"
+languageCode = "en-us"
+defaultContentLanguage = "en"
+
+# Build configuration
+buildDrafts = false
+buildFuture = false
+buildExpired = false
+
+# Menu configuration
+[menu]
+  [[menu.main]]
+    identifier = "posts"
+    name = "Posts"
+    url = "/posts/"
+    weight = 10
