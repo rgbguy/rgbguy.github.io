@@ -28,7 +28,7 @@ twitter_username: jekyllrb
 github_username:  rgbguy
 
 # Build settings
-theme: no-style-please
+theme: minima
 plugins:
   - jekyll-feed
 
