@@ -31,7 +31,7 @@ custom_css:
 # Blog settings
 title: RGB Guy's Blog
 description: >- # this means to ignore newlines until "baseurl:"
-  A technical blog about programming, technology, and more
+  I talk about Computer Graphics, Image Processing, Algorithms, Programming, UNIX, Game Engines and everything else that helps me be curious!
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://rgbguy.github.io" # the base hostname & protocol for your site
 twitter_username: jekyllrb
