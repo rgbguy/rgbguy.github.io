@@ -1,2 +1,0 @@
-# rgbguy.github.io
-Blog
