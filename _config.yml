@@ -21,7 +21,7 @@
 title: Welcome to my minimal blog
 email: your-email@example.com
 description: >- # this means to ignore newlines until "baseurl:"
-  A minimal blog built with Jekyll and no-style-please theme
+  A minimal dark-themed blog built with Jekyll and minima theme
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://rgbguy.github.io" # the base hostname & protocol for your site
 twitter_username: jekyllrb
