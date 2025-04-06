@@ -1,0 +1,86 @@
+/* Home page specific styles */
+.home {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.home-content {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.page-heading {
+  color: #00ff00;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.post-list {
+  margin-top: 2rem;
+}
+
+.post-list h2 {
+  color: #00ff00;
+  border-bottom: 1px solid #333;
+  padding-bottom: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.post-item {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 4px;
+}
+
+.post-item h3 {
+  margin: 0 0 0.5rem 0;
+}
+
+.post-link {
+  color: #00ff00;
+  text-decoration: none;
+}
+
+.post-link:hover {
+  text-decoration: underline;
+}
+
+.post-meta {
+  color: #666;
+  font-size: 0.9rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.post-excerpt {
+  color: #ccc;
+  line-height: 1.6;
+}
+
+.post-excerpt a {
+  color: #00ff00;
+  text-decoration: none;
+  margin-left: 0.5rem;
+}
+
+.post-excerpt a:hover {
+  text-decoration: underline;
+}
+
+.home-footer {
+  margin-top: 3rem;
+  text-align: center;
+  color: #666;
+}
+
+.home-footer a {
+  color: #00ff00;
+  text-decoration: none;
+}
+
+.home-footer a:hover {
+  text-decoration: underline;
+} 

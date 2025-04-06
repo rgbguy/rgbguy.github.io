@@ -18,19 +18,34 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: Welcome to my minimal blog
-email: your-email@example.com
+# Build settings
+theme: jekyll-theme-hacker
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# Custom CSS
+custom_css:
+  - assets/css/custom.css
+
+# Blog settings
+title: RGB Guy's Blog
 description: >- # this means to ignore newlines until "baseurl:"
-  A minimal dark-themed blog built with Jekyll and minima theme
+  A technical blog about programming, technology, and more
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://rgbguy.github.io" # the base hostname & protocol for your site
 twitter_username: jekyllrb
 github_username:  rgbguy
 
-# Build settings
-theme: minima
-plugins:
-  - jekyll-feed
+# Default front matter
+defaults:
+  -
+    scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      author: "RGB Guy"
 
 # Exclude from processing.
 # The following items will not be processed, by default.
