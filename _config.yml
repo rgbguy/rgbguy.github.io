@@ -24,6 +24,9 @@ plugins:
   - jekyll-feed
   - jekyll-seo-tag
 
+# Show future posts
+future: true
+
 # Custom CSS
 custom_css:
   - assets/css/custom.css
