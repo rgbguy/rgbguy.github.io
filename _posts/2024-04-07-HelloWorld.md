@@ -5,6 +5,7 @@ date: 2024-04-07
 categories: [general]
 tags: []
 ---
+---
 
 Been thinking a lot about having a purely technical blog where I post about my experiements, the stuff that I read, the things that I create. So, here we go!
 

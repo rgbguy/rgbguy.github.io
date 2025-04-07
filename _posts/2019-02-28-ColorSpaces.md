@@ -5,6 +5,8 @@ date: 2019-05-03
 categories: [general]
 tags: [old-medium-posts]
 ---
+---
+
 Every screen on a modern device is made up of pixels. Each pixel can take up a single color. But how are colors represented? To represent colors in different ways, we have Color Spaces.
 
 # RGB
