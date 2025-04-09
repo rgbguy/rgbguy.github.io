@@ -2,7 +2,7 @@
 layout: post
 title: "Deriving Translation and Rotation Matrices"
 date: 2025-04-08
-categories: [general]
+categories: [graphics]
 tags: []
 ---
 
