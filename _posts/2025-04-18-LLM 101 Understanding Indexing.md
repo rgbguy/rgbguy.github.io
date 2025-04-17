@@ -78,78 +78,6 @@ Let’s explore the common indexing methods to see where hashing fits in — and
 
 ---
 
-## 🔧 Types of Indexing in Vector DBs
-
-### 1. **Flat Index (Brute-force)**
-
-- Compares your query to *every* stored vector
-- ✅ 100% accurate  
-- ❌ Very slow for large datasets
-
-Used for:
-- Small datasets
-- Debugging or testing
-
----
-
-### 2. **HNSW (Hierarchical Navigable Small World)**
-
-- Builds a **graph** where vectors are connected to their nearest neighbors
-- When you search, you start at a node and “walk” closer to the most similar vectors
-- Think of it like a network of shortcuts in a city
-
-✅ Fast  
-✅ High accuracy  
-❌ Slightly more memory usage
-
-Used in: Weaviate, Qdrant, Milvus
-
----
-
-### 3. **IVF (Inverted File Index)**
-
-- Uses **K-means** clustering to bucket vectors into groups
-- When you search, it only checks vectors in the most relevant bucket(s)
-
-✅ Good balance of speed and accuracy  
-❌ Less accurate than HNSW
-
-Used in: FAISS, Milvus
-
----
-
-### 4. **PQ (Product Quantization)**
-
-- Compresses vectors by breaking them into chunks and encoding them with smaller representations
-- Very memory-efficient  
-- Slower and less accurate than others
-
-Used for: Billion-scale data where memory is limited
-
----
-
-### 5. **LSH (Locality Sensitive Hashing)** ✅ *This one uses hashing!*
-
-- Hashes similar vectors into the same bucket
-- Fast but less precise
-- Not used as often now, but useful in some scenarios
-
-Used for: Approximate nearest neighbor search in theory-heavy setups
-
----
-
-## 📌 Summary Table
-
-| Index Type | Uses Hashing? | Speed     | Accuracy  | Good For                |
-|------------|----------------|-----------|-----------|--------------------------|
-| Flat       | ❌              | ❌ Slow   | ✅ Exact  | Small datasets           |
-| HNSW       | ❌              | ✅ Fast   | ✅ High   | Real-time applications   |
-| IVF        | ❌              | ✅ Fast   | ⚖️ Medium | Balanced performance     |
-| PQ         | ❌              | ✅ Fast   | ❌ Lower  | Memory-constrained setups|
-| LSH        | ✅              | ✅ Fast   | ❌ Lower  | Simple, large-scale use  |
-
----
-
 ## 🧠 So... What Does Indexing Actually Store?
 
 A vector index stores:
@@ -163,11 +91,42 @@ A vector index stores:
 
 ---
 
-## ⚡ TL;DR
 
-- **Indexing is critical** in vector DBs to make similarity search fast
-- It’s done directly on the **vectors** (embeddings)
-- **Not all indexing is hashing** — most use graphs or clustering
-- You choose the indexing method based on your **accuracy/speed/memory** needs
+## 🧠 What Indexing Really Means
+
+Let’s step away from the technicalities for a moment.
+
+Usually, an **index** is like the first page of a notebook — a **table of contents** that tells you *what lies on what page*. Instead of flipping through every page, you just jump to the exact one you need.
+
+In vector databases, the idea is similar — but instead of storing exact matches or page numbers, we store **vectors that represent meaning**.
+
+> So the "index" is a technique that helps the system **remember where to find similar meanings**, not exact values.
+
+---
+
+### 🧭 What Happens When You Add Something to a Vector DB?
+
+When you insert a new piece of data (like a sentence), it’s first:
+1. Converted into an embedding (a vector)
+2. Then added to the database using an **indexing method**
+
+But here’s the twist:
+- **Where it gets added depends on the indexing strategy.**
+- There are no “pages” — just a **spatial structure** that organizes similar meanings together.
+
+---
+
+### ✏️ Easy to remember:
+
+| Indexing Method | Real-World Analogy                                        |
+|------------------|-----------------------------------------------------------|
+| Flat             | You toss the note at the back of the notebook and read all pages to find anything |
+| HNSW             | You place your note in a neighborhood with other similar notes and connect them with arrows |
+| IVF              | You file the note under a chapter based on what it’s about |
+| LSH              | You stamp it with a keyword and put it in a folder with others with the same stamp |
+
+---
+
+> In short, indexing in vector databases is not about *where* something is stored — it’s about *how it's made findable* based on meaning.
 
 ---
