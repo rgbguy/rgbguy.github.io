@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gamma Correction — rgbguy</title>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+<nav class="site-nav">
+  <a href="../index.html" class="nav-logo">rgb<b>guy</b></a>
+  <ul class="nav-links">
+    <li><a href="../experience.html">experience</a></li>
+    <li><a href="../projects.html">experiments</a></li>
+    <li><a href="../blog.html">blog</a></li>
+    <li><a href="../read.html">reading</a></li>
+    <li><a href="../videos.html">videos</a></li>
+    <li><a href="../learn.html">learn</a></li>
+  </ul>
+
+</nav>
+
+<div class="post-header">
+  <a href="../blog.html" class="post-back">&larr; blog</a>
+  <div class="post-meta">
+    <span>May 3, 2019</span>
+    <span class="post-tag">graphics</span>
+  </div>
+  <h1 class="post-title">Gamma Correction</h1>
+</div>
+
+<div class="post-body">
+  <h2>The Problem</h2>
+  <p>A camera captures an image. You display it on a monitor. The image looks darker than what the camera originally captured. Why?</p>
+  <p>Monitors have a nonlinear intensity-to-voltage response curve. When you supply a voltage of x, the displayed intensity is approximately x raised to the power of 2.5. This means that a mid-range voltage — say 0.5 — produces an intensity of 0.5<sup>2.5</sup> &asymp; 0.177, which is far darker than linear 50% brightness.</p>
+
+  <h2>The Solution</h2>
+  <p>To compensate for the monitor's power curve, gamma correction is applied to the signal before it reaches the monitor. The input signal is raised to the power of 1/2.5 (approximately 0.45), which pre-brightens it. When the monitor then applies its 2.5 power curve, the two effects cancel out and the final output matches the original linear intensity.</p>
+  <pre><code>// Encode for display (gamma encode)
+float encoded = pow(linearValue, 1.0 / 2.2);
+
+// Decode back to linear (gamma decode — done implicitly by sRGB-aware APIs)
+float linear = pow(encodedValue, 2.2);</code></pre>
+
+  <h2>Why 2.2?</h2>
+  <p>The standard gamma value used in practice is 2.2 (not exactly 2.5) because it also accounts for the nonlinear perception of brightness in human vision. The sRGB color space standardizes this: images stored in sRGB are gamma-encoded at ~2.2, and monitors decode them back to linear for display.</p>
+
+  <h2>In Graphics Programming</h2>
+  <p>This matters directly in shaders. Lighting calculations must happen in linear space — physically correct light math only works linearly. If your textures are stored in sRGB (gamma-encoded) and you don't decode them before lighting, your shading math will be wrong.</p>
+  <p>The correct workflow:</p>
+  <ol>
+    <li>Decode sRGB textures to linear space at sample time</li>
+    <li>Perform all lighting math in linear space</li>
+    <li>Re-encode back to sRGB before writing to the framebuffer for display</li>
+  </ol>
+  <p>OpenGL handles this automatically if you create your textures with <code>GL_SRGB8_ALPHA8</code> and your framebuffer with sRGB support enabled via <code>glEnable(GL_FRAMEBUFFER_SRGB)</code>.</p>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-left">&copy; rgbguy &middot; Bengaluru, India &middot; 2026</div>
+</footer>
+<script src="../nav.js"></script>
+</body>
+</html>

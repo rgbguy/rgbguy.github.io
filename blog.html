@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog — rgbguy</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <nav class="site-nav">
+    <a href="index.html" class="nav-logo">rgb<b>guy</b></a>
+    <ul class="nav-links">
+      <li><a href="experience.html">experience</a></li>
+      <li><a href="projects.html">experiments</a></li>
+      <li><a href="blog.html">blog</a></li>
+
+      <li><a href="read.html">reading</a></li>
+      <li><a href="videos.html">videos</a></li>
+
+      <li><a href="learn.html" class="nav-highlight">learn</a></li>
+    </ul>
+
+  </nav>
+
+  <div class="page">
+
+    <div class="page-header">
+      <div class="section-id">03</div>
+      <div class="page-header-text">
+        <h1>My <em>Notes</em></h1>
+        <div class="sub">Technical articles, deep dives, and notes from the build log</div>
+      </div>
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-bar">
+      <span class="filter-label">filter:</span>
+      <a class="tag active" href="#" data-filter="all">all</a>
+      <a class="tag" href="#" data-filter="optimization">optimization</a>
+      <a class="tag" href="#" data-filter="renderer">renderer</a>
+      <a class="tag" href="#" data-filter="graphics">graphics</a>
+      <a class="tag" href="#" data-filter="engine">engine</a>
+      <a class="tag" href="#" data-filter="math">math</a>
+      <a class="tag" href="#" data-filter="c++">c++</a>
+    </div>
+
+    <ul class="blog-list" id="post-list">
+      <li data-tags="graphics renderer"><span class="bl-date">Nov 2025</span><a href="blogs/tessellation.html">Piecing
+          Together the Tessellation Pipeline</a></li>
+      <li data-tags="math graphics"><span class="bl-date">Apr 2025</span><a
+          href="blogs/orthographic-projection.html">Accidentally Derived the Orthographic Projection Matrix</a></li>
+      <li data-tags="math graphics"><span class="bl-date">Apr 2025</span><a href="blogs/deriving-lookat.html">Deriving
+          gluLookAt()</a></li>
+      <li data-tags="math graphics"><span class="bl-date">Apr 2025</span><a
+          href="blogs/translation-rotation-matrices.html">Deriving Translation and Rotation Matrices</a></li>
+      <li data-tags="optimization renderer"><span class="bl-date">Dec 2022</span><a
+          href="blogs/instancing-in-graphics.html">Instancing in Graphics</a></li>
+      <li data-tags="optimization renderer"><span class="bl-date">Dec 2022</span><a
+          href="blogs/hierarchical-lods-culling.html">Hierarchical LODs and Culling</a></li>
+      <li data-tags="graphics renderer"><span class="bl-date">Sep 2022</span><a href="blogs/mipmaps.html">Mipmaps and
+          Why They Are Useful</a></li>
+      <li data-tags="renderer optimization"><span class="bl-date">Aug 2022</span><a
+          href="blogs/batch-rendering.html">Batch Rendering 101</a></li>
+      <li data-tags="math renderer"><span class="bl-date">Aug 2022</span><a
+          href="blogs/bounding-volume-hierarchy.html">Bounding Volume Hierarchy</a></li>
+      <li data-tags="graphics"><span class="bl-date">May 2019</span><a href="blogs/gamma-correction.html">Gamma
+          Correction</a></li>
+      <li data-tags="graphics"><span class="bl-date">May 2019</span><a href="blogs/color-spaces.html">Color Spaces</a>
+      </li>
+      <li data-tags="optimization graphics"><span class="bl-date">Feb 2019</span><a
+          href="blogs/foveated-rendering.html">Optimizations in VR: Foveated Rendering</a></li>
+      <li data-tags="engine optimization"><span class="bl-date">Jul 2018</span><a
+          href="blogs/fortnite-optimization.html">How Epic Games Optimized Unreal Engine for Fortnite Battle Royale</a>
+      </li>
+    </ul>
+
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-left">© rgbguy · Bengaluru, India · 2026</div>
+    <div class="footer-links">
+      <a href="#">youtube</a><a href="#">instagram</a><a href="#">github</a><a href="#">linkedin</a><a
+        href="#">twitter/x</a>
+    </div>
+  </footer>
+
+  <script src="nav.js"></script>
+  <script>
+    const filterLinks = document.querySelectorAll('.filter-bar .tag');
+    const posts = document.querySelectorAll('#post-list li');
+
+    filterLinks.forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+        const filter = this.dataset.filter;
+        filterLinks.forEach(function (l) { l.classList.remove('active'); });
+        this.classList.add('active');
+        posts.forEach(function (post) {
+          if (filter === 'all') {
+            post.removeAttribute('data-hidden');
+          } else {
+            const tags = (post.dataset.tags || '').split(' ');
+            if (tags.includes(filter)) {
+              post.removeAttribute('data-hidden');
+            } else {
+              post.setAttribute('data-hidden', '');
+            }
+          }
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

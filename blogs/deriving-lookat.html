@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deriving gluLookAt() — rgbguy</title>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+<nav class="site-nav">
+  <a href="../index.html" class="nav-logo">rgb<b>guy</b></a>
+  <ul class="nav-links">
+    <li><a href="../experience.html">experience</a></li>
+    <li><a href="../projects.html">experiments</a></li>
+    <li><a href="../blog.html">blog</a></li>
+    <li><a href="../read.html">reading</a></li>
+    <li><a href="../videos.html">videos</a></li>
+    <li><a href="../learn.html">learn</a></li>
+  </ul>
+
+</nav>
+
+<div class="post-header">
+  <a href="../blog.html" class="post-back">&larr; blog</a>
+  <div class="post-meta">
+    <span>Apr 9, 2025</span>
+    <span class="post-tag">math</span>
+  </div>
+  <h1 class="post-title">Deriving gluLookAt()</h1>
+</div>
+
+<div class="post-body">
+  <blockquote>Camera doesn't exist in the 3D world. It's just our perception. We fake that perception by creating a matrix.</blockquote>
+
+  <h2>Understanding gluLookAt</h2>
+  <p>The <code>gluLookAt</code> function accepts three parameters:</p>
+  <ul>
+    <li><strong>eye</strong> — camera position in world space</li>
+    <li><strong>target</strong> — the point being viewed</li>
+    <li><strong>up</strong> — vector defining camera orientation</li>
+  </ul>
+  <p>The objective is creating a matrix that transforms world coordinates to camera coordinates, where the camera sits at the origin, views along the negative z-axis, and has its up-direction along positive y.</p>
+
+  <h2>Step 1 — Creating Camera Basis Vectors</h2>
+  <p>Three orthogonal vectors define the camera's coordinate system:</p>
+  <ul>
+    <li><strong>Forward vector</strong> — points toward the target</li>
+    <li><strong>Right vector</strong> — perpendicular to forward and up</li>
+    <li><strong>Up vector</strong> — perpendicular to forward and right</li>
+  </ul>
+  <p>Why recompute the up vector? The input up vector might not be perfectly perpendicular to the forward vector. Recomputing it maintains an orthonormal basis and prevents skewing or shearing. The forward vector stays fixed because it defines what the camera targets; the up vector is adjusted purely for orthogonality.</p>
+
+  <h2>Step 2 — Building the View Matrix</h2>
+  <p>The view matrix accomplishes two transformations:</p>
+  <ol>
+    <li>Rotates the world to align camera basis vectors with world axes</li>
+    <li>Translates the world so the camera sits at the origin</li>
+  </ol>
+  <p>The <strong>rotation matrix</strong> is constructed using the camera basis vectors (right r, up u, forward f):</p>
+  <pre><code>| rx  ry  rz  0 |
+| ux  uy  uz  0 |
+| fx  fy  fz  0 |
+| 0   0   0   1 |</code></pre>
+  <p>The <strong>translation matrix</strong> moves the camera to the origin using negative eye coordinates:</p>
+  <pre><code>| 1  0  0  -eye.x |
+| 0  1  0  -eye.y |
+| 0  0  1  -eye.z |
+| 0  0  0   1     |</code></pre>
+
+  <h2>Step 3 — Combining Everything</h2>
+  <p>The final view matrix is View = R &times; T. This combination:</p>
+  <ol>
+    <li>Moves the camera to the origin</li>
+    <li>Aligns the view direction with the negative z-axis</li>
+    <li>Aligns the up direction with the positive y-axis</li>
+  </ol>
+  <p>The result: every point in the world is now expressed relative to the camera. This is what makes the "camera" work — there is no actual camera object, just a transformation applied to everything else.</p>
+
+  <h2>The Transformation Pipeline</h2>
+  <p>The sequence that follows:</p>
+  <ul>
+    <li>View matrix applied (world to camera space)</li>
+    <li>Projection matrix applied (camera to clip space)</li>
+    <li>Viewport transform (clip to screen)</li>
+  </ul>
+  <p>This sequence is efficient because the view matrix affects the entire scene before subsequent transformations, keeping the math clean and composable.</p>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-left">&copy; rgbguy &middot; Bengaluru, India &middot; 2026</div>
+</footer>
+<script src="../nav.js"></script>
+</body>
+</html>

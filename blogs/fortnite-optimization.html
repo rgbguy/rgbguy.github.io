@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How Epic Games Optimized Unreal Engine for Fortnite — rgbguy</title>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+<nav class="site-nav">
+  <a href="../index.html" class="nav-logo">rgb<b>guy</b></a>
+  <ul class="nav-links">
+    <li><a href="../experience.html">experience</a></li>
+    <li><a href="../projects.html">experiments</a></li>
+    <li><a href="../blog.html">blog</a></li>
+    <li><a href="../read.html">reading</a></li>
+    <li><a href="../videos.html">videos</a></li>
+    <li><a href="../learn.html">learn</a></li>
+  </ul>
+
+</nav>
+
+<div class="post-header">
+  <a href="../blog.html" class="post-back">&larr; blog</a>
+  <div class="post-meta">
+    <span>Jul 2018</span>
+    <span class="post-tag">engine</span>
+  </div>
+  <h1 class="post-title">How Epic Games Optimized Unreal Engine for Fortnite Battle Royale</h1>
+</div>
+
+<div class="post-body">
+  <p>40 million players a month. Over 4 million players online at a time. Fortnite Battle Royale ran on Unreal Engine 4, targeting PC, console, and mobile simultaneously. The optimization work Epic did to make that possible is a masterclass in production-scale performance engineering.</p>
+
+  <h2>Significance Manager</h2>
+  <p>With up to 100 players in a single match, not all of them need equal CPU attention at any moment. Epic built a Significance Manager that categorizes players into priority buckets based on visibility and proximity. Visible players are set at higher priority; closer players rank higher than distant ones.</p>
+  <p>Different platforms receive different bucket allocations — console gets larger high-priority buckets than mobile. Systems like animation, LOD, and tick rate all query the Significance Manager to scale their effort per actor accordingly.</p>
+
+  <h2>Animation Optimization</h2>
+  <p>Fortnite's character design uses one base model with four separate meshes (head, body, bag, weapon), each with its own animation blueprint. The discovery: Blueprint-based animation evaluation cost 0.93ms per character. Converting to C++ dropped that to 0.19ms — a 5x improvement per character, multiplied across 100 players.</p>
+  <p>Additional animation strategies:</p>
+  <ul>
+    <li><strong>Fast Path animations</strong> — direct variable access in the anim graph without Blueprint modification overhead</li>
+    <li>Disabling tick updates for meshes not visible on screen</li>
+    <li><strong>Update Rate Optimization (URO)</strong> — running animations below frame rate for distant or off-screen characters</li>
+    <li>Switching from AnimDynamics to RigidBody nodes for physics-driven secondary motion</li>
+  </ul>
+
+  <h2>Rendering</h2>
+  <p>Supply drops (the falling crates) used skeletal meshes but were rendered as static geometry when not animating, reducing the rendering pipeline cost. Dynamic animation bounds were calculated from physics assets rather than recalculated from vertex positions every frame.</p>
+
+  <h2>HUD and Widget Performance</h2>
+  <p>Converting HUD code from Blueprints to C++ gave significant gains. Widgets that didn't change every frame were wrapped in Invalidation Panels to prevent continuous re-evaluation. The "dumpticks enabled" console command was used during profiling to identify systems ticking unnecessarily.</p>
+
+  <h2>Object Pooling</h2>
+  <p>Particle effects and frequently spawned objects were pooled rather than destroyed and respawned. C++ components were prioritized over Blueprint versions for faster instantiation. Soundcue evaluation overhead was reduced by batching and pre-caching.</p>
+
+  <h2>Level Streaming</h2>
+  <p>Rather than loading the entire map upfront, Epic used dynamic level streaming with adaptive time budgets. During the skydive phase at match start — when players are moving quickly across the map and many new areas become visible — the system allocated 5ms per frame for post-load processing. During normal walking gameplay, this dropped to 3ms. I/O operations were overlapped across sequential level loads to minimize stalls.</p>
+
+  <h2>Collision and Movement on Mobile</h2>
+  <p>Instead of continuous collision checking during player movement, capsules teleport between server-provided transforms. This eliminated most per-frame collision evaluation on mobile where compute budget is tightest.</p>
+
+  <h2>Texture Streaming</h2>
+  <p>Texture streaming ran conservatively during active gameplay to preserve frame time. The system accelerated texture loading during the pre-match lobby, when players customize skins and performance requirements are lower.</p>
+
+  <h2>The Philosophy</h2>
+  <p>Epic's optimization work wasn't a single big win — it was dozens of small ones compounded across every system. Identify what work is unnecessary, eliminate it or defer it. Measure on all target platforms. The console numbers will mislead you on mobile. Prioritize the common case.</p>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-left">&copy; rgbguy &middot; Bengaluru, India &middot; 2026</div>
+</footer>
+<script src="../nav.js"></script>
+</body>
+</html>

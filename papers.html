@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Papers — rgbguy</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <nav class="site-nav">
+    <a href="index.html" class="nav-logo">rgb<b>guy</b></a>
+    <ul class="nav-links">
+      <li><a href="experience.html">experience</a></li>
+      <li><a href="projects.html">experiments</a></li>
+      <li><a href="blog.html">blog</a></li>
+
+      <li><a href="read.html">reading</a></li>
+      <li><a href="videos.html">videos</a></li>
+
+      <li><a href="learn.html" class="nav-highlight">learn</a></li>
+    </ul>
+
+  </nav>
+
+  <div class="page">
+
+    <div class="page-header">
+      <div class="section-id">06</div>
+      <div class="page-header-text">
+        <h1>Papers &amp; Articles</h1>
+        <div class="sub">Research papers — active, queued, and done</div>
+      </div>
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-bar">
+      <span class="filter-label">filter:</span>
+      <a class="tag active" href="#" data-filter="all">all</a>
+      <a class="tag" href="#" data-filter="reading">reading</a>
+      <a class="tag" href="#" data-filter="done">done</a>
+      <a class="tag" href="#" data-filter="queue">queued</a>
+      <a class="tag" href="#" data-filter="rendering">rendering</a>
+      <a class="tag" href="#" data-filter="math">math</a>
+      <a class="tag" href="#" data-filter="ml">ml × graphics</a>
+    </div>
+
+    <div class="line-grid-2" id="papers-list">
+
+      <div class="reading-item" data-tags="rendering done">
+        <div class="reading-kind">Paper</div>
+        <div>
+          <h4>Instant Neural Graphics Primitives (Instant-NGP)</h4>
+          <p>Müller et al. — hash grid encoding, NeRF acceleration</p>
+          <div class="r-status s-done">done</div>
+        </div>
+      </div>
+
+      <div class="reading-item" data-tags="rendering math done">
+        <div class="reading-kind">Paper</div>
+        <div>
+          <h4>Real-Time Rendering of Physically Based Materials (GGX)</h4>
+          <p>Heitz et al. — microfacet theory, masking-shadowing functions</p>
+          <div class="r-status s-done">done</div>
+        </div>
+      </div>
+
+      <div class="reading-item" data-tags="rendering queue">
+        <div class="reading-kind">Paper</div>
+        <div>
+          <h4>A Visibility Buffer Rendering Pipeline</h4>
+          <p>Burns &amp; Hunt — foundations of deferred material evaluation</p>
+          <div class="r-status s-queue">queued</div>
+        </div>
+      </div>
+
+      <div class="reading-item" data-tags="ml rendering queue">
+        <div class="reading-kind">Paper</div>
+        <div>
+          <h4>Placeholder Paper — Title Goes Here</h4>
+          <p>Author et al. — short description coming soon</p>
+          <div class="r-status s-queue">queued</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-left">© rgbguy · Bengaluru, India · 2026</div>
+    <div class="footer-links">
+      <a href="#">youtube</a><a href="#">instagram</a><a href="#">github</a><a href="#">linkedin</a><a
+        href="#">twitter/x</a>
+    </div>
+  </footer>
+
+  <script src="nav.js"></script>
+  <script>
+    const filterLinks = document.querySelectorAll('.filter-bar .tag');
+    const items = document.querySelectorAll('#papers-list .reading-item');
+    filterLinks.forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+        const filter = this.dataset.filter;
+        filterLinks.forEach(function (l) { l.classList.remove('active'); });
+        this.classList.add('active');
+        items.forEach(function (item) {
+          if (filter === 'all') {
+            item.removeAttribute('data-hidden');
+          } else {
+            const tags = (item.dataset.tags || '').split(' ');
+            if (tags.includes(filter)) {
+              item.removeAttribute('data-hidden');
+            } else {
+              item.setAttribute('data-hidden', '');
+            }
+          }
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

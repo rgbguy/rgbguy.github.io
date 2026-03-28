@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hierarchical LODs and Culling — rgbguy</title>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+<nav class="site-nav">
+  <a href="../index.html" class="nav-logo">rgb<b>guy</b></a>
+  <ul class="nav-links">
+    <li><a href="../experience.html">experience</a></li>
+    <li><a href="../projects.html">experiments</a></li>
+    <li><a href="../blog.html">blog</a></li>
+    <li><a href="../read.html">reading</a></li>
+    <li><a href="../videos.html">videos</a></li>
+    <li><a href="../learn.html">learn</a></li>
+  </ul>
+
+</nav>
+
+<div class="post-header">
+  <a href="../blog.html" class="post-back">&larr; blog</a>
+  <div class="post-meta">
+    <span>Dec 24, 2022</span>
+    <span class="post-tag">optimization</span>
+  </div>
+  <h1 class="post-title">Hierarchical LODs and Culling</h1>
+</div>
+
+<div class="post-body">
+  <p>Have you ever wondered how games like PUBG and Fortnite, with such massive open worlds and enormous numbers of objects, still run at 60fps on a mobile device? These games employ various optimization techniques. Two of the most important are based on the same fundamental principle: don't render what the player can't meaningfully see.</p>
+
+  <h2>Hierarchical LODs</h2>
+  <p>Hierarchical Level of Detail (HLOD) divides a 3D scene into hierarchical levels of detail. Each LOD represents a group of objects that are displayed at a certain level of detail depending on the distance of those objects from the viewer.</p>
+  <p>The technique organizes scenes into clusters at the highest hierarchy level. As the viewer approaches a cluster, the detail level increases and more objects get rendered individually. This allows the renderer to prioritize important nearby objects while representing distant areas as simplified merged meshes.</p>
+  <p>In Unreal Engine, this is implemented as HLOD proxies — entire clusters of actors merged into low-poly stand-ins that swap in when the player is far enough away. The visual difference is imperceptible at distance, but the performance savings are significant.</p>
+
+  <h2>Hierarchical Culling</h2>
+  <p>Hierarchical culling reduces the number of rendered objects by eliminating those that the player cannot see. While similar in spirit to HLOD, it emphasizes reducing object count rather than adjusting individual object detail levels.</p>
+  <p>Implementation commonly uses spatial data structures — octrees or quadtrees — to create hierarchical region boundaries. The renderer only processes objects within regions that are currently in view. If the bounding volume of an entire region fails the visibility test, everything inside is skipped without examining individual objects.</p>
+  <p>This is closely related to Bounding Volume Hierarchy (BVH), which takes the same idea and applies it to ray-object intersection tests in ray tracing and ray casting scenarios.</p>
+
+  <h2>The Core Principle</h2>
+  <p>Both techniques share the same insight: the cost of rendering scales with what you actually render, not with what exists in the scene. A world with a million objects can run fast if only a few thousand are ever processed in any given frame. The challenge is building the data structures and heuristics that make those decisions cheaply and correctly.</p>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-left">&copy; rgbguy &middot; Bengaluru, India &middot; 2026</div>
+</footer>
+<script src="../nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Resources — rgbguy</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <nav class="site-nav">
+    <a href="index.html" class="nav-logo">rgb<b>guy</b></a>
+    <ul class="nav-links">
+      <li><a href="experience.html">experience</a></li>
+      <li><a href="projects.html">experiments</a></li>
+      <li><a href="blog.html">blog</a></li>
+
+      <li><a href="read.html">reading</a></li>
+      <li><a href="videos.html">videos</a></li>
+
+      <li><a href="learn.html" class="nav-highlight">learn</a></li>
+    </ul>
+
+  </nav>
+
+  <div class="page">
+
+    <div class="page-header">
+      <div class="section-id">03</div>
+      <div class="page-header-text">
+        <h1>The <em>Field Guide</em></h1>
+        <div class="sub">For anyone learning graphics — concepts explained from first principles, no black boxes</div>
+      </div>
+    </div>
+
+    <!-- My repos -->
+    <div class="section-label">// my teaching repos</div>
+    <div class="line-grid-2" style="margin-bottom: 3rem;">
+
+      <a href="#" class="guide-item">
+        <div class="guide-num">01</div>
+        <div>
+          <h4>What even is a pixel? Rasterization from zero</h4>
+          <p>How triangles become pixels. Edge functions, barycentric coords, depth buffers — the foundations of how a
+            GPU draws anything at all.</p>
+          <div class="guide-level level-begin">beginner · github repo</div>
+        </div>
+      </a>
+
+      <a href="#" class="guide-item">
+        <div class="guide-num">02</div>
+        <div>
+          <h4>The math behind 3D transforms — matrices without the magic</h4>
+          <p>Rotation, translation, scale, and the MVP matrix — derived, not memorized. Understand exactly what you're
+            sending to the GPU and why.</p>
+          <div class="guide-level level-begin">beginner · github repo</div>
+        </div>
+      </a>
+
+      <a href="#" class="guide-item">
+        <div class="guide-num">03</div>
+        <div>
+          <h4>How Phong lighting actually works</h4>
+          <p>Ambient, diffuse, specular — where each term comes from physically and how to implement it in GLSL. The
+            math derivation, not just the formula.</p>
+          <div class="guide-level level-begin">beginner · github repo</div>
+        </div>
+      </a>
+
+      <a href="#" class="guide-item">
+        <div class="guide-num">04</div>
+        <div>
+          <h4>Shadow maps — the depth trick that fakes shadows</h4>
+          <p>Render from the light's perspective, store depth, compare at shading time. Common artifacts —
+            peter-panning, acne — and how to fix them.</p>
+          <div class="guide-level level-mid">intermediate · github repo</div>
+        </div>
+      </a>
+
+      <a href="#" class="guide-item">
+        <div class="guide-num">05</div>
+        <div>
+          <h4>GPU architecture — warps, SMs, and why divergence kills you</h4>
+          <p>How a modern GPU executes shader code, why branching in shaders is expensive, and what the memory hierarchy
+            looks like under the hood.</p>
+          <div class="guide-level level-mid">intermediate · writeup</div>
+        </div>
+      </a>
+
+      <a href="#" class="guide-item">
+        <div class="guide-num">06</div>
+        <div>
+          <h4>Nanite &amp; visibility buffers — how Unreal 5 renders billions of triangles</h4>
+          <p>Cluster hierarchies, deferred material evaluation, and the key architectural insight behind the visibility
+            buffer approach.</p>
+          <div class="guide-level level-adv">advanced · writeup</div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- External links -->
+    <div class="section-label">// external links i recommend</div>
+    <div class="line-grid-2">
+
+      <a href="#" class="guide-item">
+        <div class="guide-num">↗</div>
+        <div>
+          <h4>Placeholder External Resource</h4>
+          <p>Curated links for beginners coming soon. I only list things I've personally used and found genuinely
+            valuable.</p>
+          <div class="guide-level level-begin">beginner</div>
+        </div>
+      </a>
+
+    </div>
+
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-left">© rgbguy · Bengaluru, India · 2026</div>
+    <div class="footer-links">
+      <a href="#">youtube</a><a href="#">instagram</a><a href="#">github</a><a href="#">linkedin</a><a
+        href="#">twitter/x</a>
+    </div>
+  </footer>
+
+  <script src="nav.js"></script>
+</body>
+
+</html>

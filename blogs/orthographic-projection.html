@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accidentally Derived the Orthographic Projection Matrix — rgbguy</title>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+<nav class="site-nav">
+  <a href="../index.html" class="nav-logo">rgb<b>guy</b></a>
+  <ul class="nav-links">
+    <li><a href="../experience.html">experience</a></li>
+    <li><a href="../projects.html">experiments</a></li>
+    <li><a href="../blog.html">blog</a></li>
+    <li><a href="../read.html">reading</a></li>
+    <li><a href="../videos.html">videos</a></li>
+    <li><a href="../learn.html">learn</a></li>
+  </ul>
+
+</nav>
+
+<div class="post-header">
+  <a href="../blog.html" class="post-back">&larr; blog</a>
+  <div class="post-meta">
+    <span>Apr 17, 2025</span>
+    <span class="post-tag">math</span>
+  </div>
+  <h1 class="post-title">Accidentally Derived the Orthographic Projection Matrix (A Bit Differently)</h1>
+</div>
+
+<div class="post-body">
+  <blockquote>I wasn't trying to reinvent the wheel. I was just trying to roll it my way.</blockquote>
+
+  <h2>The Standard Matrix</h2>
+  <p>The orthographic projection matrix commonly found in OpenGL documentation looks like this:</p>
+  <pre><code>| 2/(R-L)    0          0         -(R+L)/(R-L) |
+| 0          2/(T-B)    0         -(T+B)/(T-B) |
+| 0          0         -2/(F-N)   -(F+N)/(F-N) |
+| 0          0          0          1           |</code></pre>
+  <p>I wanted to understand where this comes from rather than just memorize it.</p>
+
+  <h2>My Derivation Approach</h2>
+  <p>My goal was to map the near plane (N) to -1 and the far plane (F) to +1. My methodology:</p>
+  <ol>
+    <li>Add half the range: <code>(F - N) / 2</code></li>
+    <li>Subtract F</li>
+    <li>Divide by <code>(F - N) / 2</code></li>
+  </ol>
+  <p>Verification with example values (N=2, F=6):</p>
+  <ul>
+    <li>For z = 2: produces -1 ✓</li>
+    <li>For z = 6: produces +1 ✓</li>
+  </ul>
+
+  <h2>The Z-Mapping Equation</h2>
+  <p>This gives the NDC z value:</p>
+  <pre><code>z_ndc = (2z - (F + N)) / (F - N)</code></pre>
+  <p>Expanded:</p>
+  <pre><code>z_ndc = (2 / (F - N)) * z  -  (F + N) / (F - N)</code></pre>
+
+  <h2>Formal Derivation</h2>
+  <p>Using a linear function <code>f(z) = Az + B</code> with constraints:</p>
+  <ul>
+    <li><code>-1 = A * N + B</code></li>
+    <li><code>1 = A * F + B</code></li>
+  </ul>
+  <p>Solving yields:</p>
+  <pre><code>A = 2 / (F - N)
+B = -(F + N) / (F - N)</code></pre>
+  <p>This produces the identical Z-row found in the standard orthographic matrix. The derivation matched — I had arrived at the same place by following the math rather than memorizing the formula.</p>
+
+  <h2>Why This Matters</h2>
+  <p>Exploration and understanding fundamentals often teaches more than rote memorization. When you derive something yourself, even if the result is already known, you now own the intuition behind it. You can reconstruct it when you forget, and extend it when you need to.</p>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-left">&copy; rgbguy &middot; Bengaluru, India &middot; 2026</div>
+</footer>
+<script src="../nav.js"></script>
+</body>
+</html>

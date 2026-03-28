@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deriving Translation and Rotation Matrices — rgbguy</title>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+<nav class="site-nav">
+  <a href="../index.html" class="nav-logo">rgb<b>guy</b></a>
+  <ul class="nav-links">
+    <li><a href="../experience.html">experience</a></li>
+    <li><a href="../projects.html">experiments</a></li>
+    <li><a href="../blog.html">blog</a></li>
+    <li><a href="../read.html">reading</a></li>
+    <li><a href="../videos.html">videos</a></li>
+    <li><a href="../learn.html">learn</a></li>
+  </ul>
+
+</nav>
+
+<div class="post-header">
+  <a href="../blog.html" class="post-back">&larr; blog</a>
+  <div class="post-meta">
+    <span>Apr 8, 2025</span>
+    <span class="post-tag">math</span>
+  </div>
+  <h1 class="post-title">Deriving Translation and Rotation Matrices</h1>
+</div>
+
+<div class="post-body">
+  <blockquote>Why?</blockquote>
+  <p>Because understanding the underlying math is what separates someone who uses graphics from someone who builds it. These are the two most fundamental transforms in 3D graphics, and they're worth deriving from scratch at least once.</p>
+
+  <h2>Translation Matrix</h2>
+  <p>We want to move a 3D point (x, y, z) by adding displacement values (tx, ty, tz). In homogeneous coordinates a point becomes a 4&times;1 vector with a final component of 1.</p>
+  <p>The translation matrix is a 4&times;4 identity with the translation values in the top-right column:</p>
+  <pre><code>| 1  0  0  tx |   | x |   | x + tx |
+| 0  1  0  ty | * | y | = | y + ty |
+| 0  0  1  tz |   | z |   | z + tz |
+| 0  0  0  1  |   | 1 |   | 1      |</code></pre>
+  <p>The homogeneous coordinate (the fourth component = 1) is what makes this multiplication work. Without it, you cannot represent translation as a matrix multiply — which is why homogeneous coordinates exist.</p>
+
+  <h2>Rotation Matrices</h2>
+  <p>Using polar coordinates and trigonometric identities, we can derive rotation matrices for each axis. The key identity:</p>
+  <pre><code>cos(phi + theta) = cos(phi)*cos(theta) - sin(phi)*sin(theta)
+sin(phi + theta) = sin(phi)*cos(theta) + cos(phi)*sin(theta)</code></pre>
+
+  <h3>Z-axis rotation</h3>
+  <p>Rotates points in the xy-plane while preserving z:</p>
+  <pre><code>| cos(t)  -sin(t)  0  0 |
+| sin(t)   cos(t)  0  0 |
+| 0        0       1  0 |
+| 0        0       0  1 |</code></pre>
+
+  <h3>X-axis rotation</h3>
+  <p>Preserves x, rotates in the yz-plane:</p>
+  <pre><code>| 1   0       0      0 |
+| 0   cos(t)  -sin(t) 0 |
+| 0   sin(t)   cos(t) 0 |
+| 0   0        0      1 |</code></pre>
+
+  <h3>Y-axis rotation</h3>
+  <p>Preserves y, rotates in the xz-plane (note the sign flip vs X rotation):</p>
+  <pre><code>|  cos(t)  0  sin(t)  0 |
+|  0       1  0       0 |
+| -sin(t)  0  cos(t)  0 |
+|  0       0  0       1 |</code></pre>
+
+  <h2>Composing Transforms</h2>
+  <p>Because all transforms are represented as 4&times;4 matrices, they compose through multiplication. The standard order for a Model matrix is Scale &times; Rotate &times; Translate (applied right to left). This is the M in the MVP matrix used in every vertex shader.</p>
+  <p>Once you understand the derivation, the MVP stops being a magic incantation and becomes a sequence of coordinate space changes you can reason about.</p>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-left">&copy; rgbguy &middot; Bengaluru, India &middot; 2026</div>
+</footer>
+<script src="../nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What I've Read — rgbguy</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <nav class="site-nav">
+    <a href="index.html" class="nav-logo">rgb<b>guy</b></a>
+    <ul class="nav-links">
+      <li><a href="experience.html">experience</a></li>
+      <li><a href="projects.html">experiments</a></li>
+      <li><a href="blog.html">blog</a></li>
+      <li><a href="read.html">reading</a></li>
+      <li><a href="videos.html">videos</a></li>
+      <li><a href="learn.html" class="nav-highlight">learn</a></li>
+    </ul>
+
+  </nav>
+
+  <div class="page">
+
+    <div class="page-header">
+      <div class="section-id">04</div>
+      <div class="page-header-text">
+        <h1>What I've <em>Read</em></h1>
+        <div class="sub">Books &middot; Papers &middot; Articles &mdash; active, queued, and done</div>
+      </div>
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-bar">
+      <span class="filter-label">filter:</span>
+      <a class="tag active" href="#" data-filter="all">all</a>
+      <a class="tag" href="#" data-filter="queue">queued</a>
+      <a class="tag" href="#" data-filter="reading">reading</a>
+      <a class="tag" href="#" data-filter="done">done</a>
+      <a class="tag" href="#" data-filter="paper">papers</a>
+      <a class="tag" href="#" data-filter="article">articles</a>
+      <a class="tag" href="#" data-filter="book">books</a>
+      <a class="tag" href="#" data-filter="graphics">graphics</a>
+      <a class="tag" href="#" data-filter="ml">ml &times; graphics</a>
+    </div>
+
+    <ul class="blog-list" id="read-list">
+      <li data-tags="queue paper graphics ml"><span class="bl-date">paper</span><a
+          href="https://arxiv.org/pdf/2407.09543" target="_blank">Neural Texture Block Compression</a><span
+          class="bl-author">Fujieda, Harada</span></li>
+      <li data-tags="queue paper graphics ml"><span class="bl-date">paper</span><a
+          href="https://arxiv.org/pdf/2111.05849" target="_blank">Advances in Neural Rendering</a><span
+          class="bl-author">Tewari et al.</span></li>
+      <li data-tags="queue paper graphics ml"><span class="bl-date">paper</span><a
+          href="https://arxiv.org/pdf/2003.08934" target="_blank">NeRF: Representing Scenes as Neural Radiance Fields
+          for View Synthesis</a><span class="bl-author">Mildenhall et al.</span></li>
+      <li data-tags="queue paper graphics ml"><span class="bl-date">paper</span><a
+          href="https://arxiv.org/pdf/2201.05989" target="_blank">Instant Neural Graphics Primitives with a
+          Multiresolution Hash Encoding</a><span class="bl-author">Müller, Evans, Schied, Keller</span></li>
+      <li data-tags="queue paper graphics ml"><span class="bl-date">paper</span><a
+          href="https://arxiv.org/pdf/2308.04079" target="_blank">3D Gaussian Splatting for Real-Time Radiance Field
+          Rendering</a><span class="bl-author">Kerbl, Kopanas, Leimkühler, Drettakis</span></li>
+      <li data-tags="queue paper graphics ml"><span class="bl-date">paper</span><a
+          href="https://arxiv.org/pdf/2308.13404" target="_blank">Relighting Neural Radiance Fields with Shadow and
+          Highlight Hints</a><span class="bl-author">Zeng, Chen, Dong, Peers, Wu, Tong</span></li>
+      <li data-tags="queue paper graphics"><span class="bl-date">paper</span><a
+          href="https://advances.realtimerendering.com/s2021/Karis_Nanite_SIGGRAPH_Advances_2021_final.pdf"
+          target="_blank">A Deep Dive into Nanite Virtualized Geometry</a><span class="bl-author">Karis, Stubbe,
+          Wihlidal</span></li>
+      <li data-tags="queue paper graphics"><span class="bl-date">paper</span><a
+          href="https://advances.realtimerendering.com/s2022/SIGGRAPH2022-Advances-Lumen-Wright%20et%20al.pdf"
+          target="_blank">Lumen: Real-time Global Illumination in Unreal Engine 5</a><span class="bl-author">Wright,
+          Narkowicz, Kelly</span></li>
+      <li data-tags="queue paper graphics"><span class="bl-date">paper</span><a
+          href="https://jcgt.org/published/0002/02/04/" target="_blank">A Cache-Friendly Approach to Deferred
+          Shading</a><span class="bl-author">Burns, Hunt</span></li>
+      <li data-tags="queue paper graphics"><span class="bl-date">paper</span><a
+          href="https://research.nvidia.com/sites/default/files/pubs/2017-02_Real-Time-Global-Illumination/light-field-probes-final.pdf"
+          target="_blank">Real-Time Global Illumination using Precomputed Light Field Probes</a><span
+          class="bl-author">McGuire, Mara, Nowrouzezahrai, Luebke</span></li>
+      <li data-tags="queue article graphics"><span class="bl-date">article</span><a
+          href="https://knarkowicz.wordpress.com/2022/08/18/journey-to-lumen/" target="_blank">Journey to Lumen</a><span
+          class="bl-author">Krzysztof Narkowicz</span></li>
+      <li data-tags="queue article graphics"><span class="bl-date">article</span><a
+          href="https://developer.nvidia.com/blog/introduction-turing-mesh-shaders/" target="_blank">Introduction to
+          Turing Mesh Shaders</a><span class="bl-author">Christoph Kubisch</span></li>
+      <li data-tags="queue article graphics"><span class="bl-date">article</span><a
+          href="https://blog.voxagon.se/2026/03/13/teardown-multiplayer.html" target="_blank">The Unlikely Story of
+          Teardown Multiplayer</a><span class="bl-author">Dennis Gustafsson</span></li>
+      <li data-tags="queue article graphics"><span class="bl-date">docs</span><a
+          href="https://dev.epicgames.com/documentation/en-us/unreal-engine/nanite-virtualized-geometry-in-unreal-engine"
+          target="_blank">Nanite Virtualized Geometry in Unreal Engine</a><span class="bl-author">Epic Games</span></li>
+      <li data-tags="queue article graphics"><span class="bl-date">docs</span><a
+          href="https://dev.epicgames.com/documentation/en-us/unreal-engine/lumen-technical-details-in-unreal-engine"
+          target="_blank">Lumen Technical Details in Unreal Engine</a><span class="bl-author">Epic Games</span></li>
+    </ul>
+
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-left">&copy; rgbguy &middot; Bengaluru, India &middot; 2026</div>
+    <div class="footer-links">
+      <a href="https://www.youtube.com/@rgbguy" target="_blank">youtube</a>
+      <a href="https://www.instagram.com/rgbguy/" target="_blank">instagram</a>
+      <a href="https://github.com/rgbguy" target="_blank">github</a>
+      <a href="https://www.linkedin.com/in/rgbguy/" target="_blank">linkedin</a>
+      <a href="#">twitter/x</a>
+    </div>
+  </footer>
+
+  <script src="nav.js"></script>
+  <script>
+    const filterLinks = document.querySelectorAll('.filter-bar .tag');
+    const items = document.querySelectorAll('#read-list li');
+    filterLinks.forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+        const filter = this.dataset.filter;
+        filterLinks.forEach(function (l) { l.classList.remove('active'); });
+        this.classList.add('active');
+        items.forEach(function (item) {
+          if (filter === 'all') {
+            item.removeAttribute('data-hidden');
+          } else {
+            const tags = (item.dataset.tags || '').split(' ');
+            if (tags.includes(filter)) {
+              item.removeAttribute('data-hidden');
+            } else {
+              item.setAttribute('data-hidden', '');
+            }
+          }
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

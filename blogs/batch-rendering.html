@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Batch Rendering 101 — rgbguy</title>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+<nav class="site-nav">
+  <a href="../index.html" class="nav-logo">rgb<b>guy</b></a>
+  <ul class="nav-links">
+    <li><a href="../experience.html">experience</a></li>
+    <li><a href="../projects.html">experiments</a></li>
+    <li><a href="../blog.html">blog</a></li>
+    <li><a href="../read.html">reading</a></li>
+    <li><a href="../videos.html">videos</a></li>
+    <li><a href="../learn.html">learn</a></li>
+  </ul>
+
+</nav>
+
+<div class="post-header">
+  <a href="../blog.html" class="post-back">&larr; blog</a>
+  <div class="post-meta">
+    <span>Aug 2022</span>
+    <span class="post-tag">renderer</span>
+  </div>
+  <h1 class="post-title">Batch Rendering 101</h1>
+</div>
+
+<div class="post-body">
+  <p>The conventional approach to rendering multiple objects involves submitting vertex buffers, setting uniforms, and issuing individual draw calls for each object. As the number of objects increases, so do the draw calls — and with them comes a performance bottleneck that underutilises the GPU.</p>
+  <p>Batch rendering solves this by consolidating vertex data into a single buffer and issuing one draw call instead of many.</p>
+
+  <h2>The Core Idea</h2>
+  <p>Pack all your geometry into a single vertex buffer. Submit once. The GPU processes everything in one pass, with far less CPU-GPU synchronization overhead.</p>
+  <p>Three practical challenges arise immediately:</p>
+  <ol>
+    <li>How to pass per-object shader data without setting uniforms between draws</li>
+    <li>Managing dynamic geometry that changes every frame</li>
+    <li>Handling multiple textures for different meshes within one batch</li>
+  </ol>
+
+  <h2>Handling Multiple Textures</h2>
+  <p>Bind all needed textures to specific texture slots upfront, then store the slot index as a vertex attribute. The shader reads it per-fragment:</p>
+  <pre><code>// C++: bind textures to slots
+glActiveTexture(GL_TEXTURE0); glBindTexture(GL_TEXTURE_2D, tex0);
+glActiveTexture(GL_TEXTURE1); glBindTexture(GL_TEXTURE_2D, tex1);
+
+// Pass sampler array uniform
+int samplers[2] = { 0, 1 };
+glUniform1iv(glGetUniformLocation(shader, "u_Textures"), 2, samplers);</code></pre>
+  <pre><code>// GLSL fragment shader
+uniform sampler2D u_Textures[2];
+in float v_TexIndex;
+
+void main() {
+    int index = int(v_TexIndex);
+    color = texture(u_Textures[index], v_TexCoord);
+}</code></pre>
+
+  <h2>Dynamic Geometry</h2>
+  <p>Use the right buffer hint:</p>
+  <ul>
+    <li><code>GL_STATIC_DRAW</code> — geometry set once, drawn many times</li>
+    <li><code>GL_DYNAMIC_DRAW</code> — geometry updated frequently each frame</li>
+  </ul>
+  <p>Two methods to update buffer contents without reallocating:</p>
+  <pre><code>// Method 1: glBufferSubData
+glBufferSubData(GL_ARRAY_BUFFER, offset, size, data);</code></pre>
+  <pre><code>// Method 2: map the buffer directly
+void* ptr = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+memcpy(ptr, data, size);
+glUnmapBuffer(GL_ARRAY_BUFFER);</code></pre>
+  <p>Both pre-allocate the buffer at startup and update in-place, avoiding the cost of re-uploading the entire buffer each frame.</p>
+
+  <h2>The Payoff</h2>
+  <p>A well-implemented batch renderer can reduce draw calls from thousands to single digits per frame. This is the approach used in 2D engines, UI renderers, and particle systems — anywhere you have many small objects that share geometry types and can be sorted by state.</p>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-left">&copy; rgbguy &middot; Bengaluru, India &middot; 2026</div>
+</footer>
+<script src="../nav.js"></script>
+</body>
+</html>

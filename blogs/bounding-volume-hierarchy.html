@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bounding Volume Hierarchy — rgbguy</title>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+<nav class="site-nav">
+  <a href="../index.html" class="nav-logo">rgb<b>guy</b></a>
+  <ul class="nav-links">
+    <li><a href="../experience.html">experience</a></li>
+    <li><a href="../projects.html">experiments</a></li>
+    <li><a href="../blog.html">blog</a></li>
+    <li><a href="../read.html">reading</a></li>
+    <li><a href="../videos.html">videos</a></li>
+    <li><a href="../learn.html">learn</a></li>
+  </ul>
+
+</nav>
+
+<div class="post-header">
+  <a href="../blog.html" class="post-back">&larr; blog</a>
+  <div class="post-meta">
+    <span>Aug 31, 2022</span>
+    <span class="post-tag">math</span>
+  </div>
+  <h1 class="post-title">Bounding Volume Hierarchy</h1>
+</div>
+
+<div class="post-body">
+  <h2>The Problem</h2>
+  <p>Imagine you are writing a ray tracer. For it to work, you need to fire rays and check each one for intersection with the scene geometry. The more rays you fire, the better the output image. But this requires checking ray-triangle intersections.</p>
+  <p>If you have a geometry with a million triangles and you are shooting a million rays, you now need to calculate ray-triangle intersection a million &times; million times. That is 10<sup>12</sup> intersection tests per frame. Real-time rendering at these numbers is impossible without specialized hardware — and even then, a naive implementation wastes most of it.</p>
+
+  <h2>The Solution</h2>
+  <p>Divide your geometry into spatial chunks. If a ray doesn't hit the bounding box of a chunk, skip every triangle inside it entirely.</p>
+  <p>This is the core idea behind Bounding Volume Hierarchy — a tree structure where each node contains a bounding box, and each leaf node references a small set of triangles. To test a ray against the scene, you traverse the tree: if the ray misses a node's bounding box, you prune that entire subtree.</p>
+  <p>BVH falls under the family of spatial partitioning algorithms, alongside quad trees, octrees, k-d trees, BSP trees, and r-trees. Each has different trade-offs in construction cost, query cost, and memory.</p>
+
+  <h2>When to Use BVH</h2>
+  <p>BVH is valuable anywhere you need to query for object positions or intersections: ray tracing, physics collision detection, frustum culling, light influence queries. It brings down O(n) or O(n&sup2;) search complexity to O(log n) for well-balanced trees.</p>
+
+  <h2>Trade-offs</h2>
+  <ul>
+    <li><strong>Dynamic scenes:</strong> BVH must be rebuilt or refitted when geometry moves. Refitting (updating bounding boxes without restructuring) is fast but degrades tree quality over time. Full rebuilds are expensive but maintain optimal structure.</li>
+    <li><strong>Memory:</strong> BVH trades memory for speed. The tree itself requires additional storage on top of the original geometry.</li>
+    <li><strong>Construction cost:</strong> Building a high-quality BVH (e.g., using SAH — Surface Area Heuristic) takes time. For real-time use, construction is typically done offline or with faster approximate methods.</li>
+  </ul>
+  <p>For static geometry — which is most of the geometry in most scenes — BVH construction cost is paid once and query benefits are paid every frame.</p>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-left">&copy; rgbguy &middot; Bengaluru, India &middot; 2026</div>
+</footer>
+<script src="../nav.js"></script>
+</body>
+</html>

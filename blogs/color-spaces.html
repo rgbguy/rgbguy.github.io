@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Color Spaces — rgbguy</title>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+<nav class="site-nav">
+  <a href="../index.html" class="nav-logo">rgb<b>guy</b></a>
+  <ul class="nav-links">
+    <li><a href="../experience.html">experience</a></li>
+    <li><a href="../projects.html">experiments</a></li>
+    <li><a href="../blog.html">blog</a></li>
+    <li><a href="../read.html">reading</a></li>
+    <li><a href="../videos.html">videos</a></li>
+    <li><a href="../learn.html">learn</a></li>
+  </ul>
+
+</nav>
+
+<div class="post-header">
+  <a href="../blog.html" class="post-back">&larr; blog</a>
+  <div class="post-meta">
+    <span>May 3, 2019</span>
+    <span class="post-tag">graphics</span>
+  </div>
+  <h1 class="post-title">Color Spaces</h1>
+</div>
+
+<div class="post-body">
+  <p>Every screen is made up of pixels. Each pixel takes a single color. But how are colors represented? To represent colors in different ways, we have color spaces.</p>
+
+  <h2>RGB</h2>
+  <p>The most common color representation. An 8-bit RGB channel stores values from 0 to 255 (2<sup>8</sup> - 1). Total colors in 8-bit RGB: 256 &times; 256 &times; 256 = 16.7 million. Visualized as a cube.</p>
+  <p>RGB is an <strong>additive</strong> color model. Colors are produced by adding light: black is the absence of all three channels, white is maximum of all three. Used in digital displays and rendering.</p>
+
+  <h2>CMYK</h2>
+  <p>Used in color printing. Why not RGB for printing? Because when you tell a printer to print white, it uses no ink — white is the paper. So white = 0 for all channels. CMYK is a <strong>subtractive</strong> model: colors are produced by subtracting light through ink absorption.</p>
+  <p>The K (black) channel exists separately from combining C+M+Y to produce black — mainly to save ink. When CMY primaries combine at full strength, they produce red, green, and blue as secondary colors.</p>
+
+  <h2>Adobe RGB vs sRGB</h2>
+  <p>Adobe RGB was developed by Adobe in 1998 to encompass most colors achievable on CMYK printers, while remaining expressible through RGB primaries on a display. Both spaces store the same number of values (per bit depth), but Adobe RGB has larger spacing between individual colors — meaning finer gradations across a wider gamut. This makes it useful for photography and print work. sRGB is the standard for web and consumer displays.</p>
+
+  <h2>YUV</h2>
+  <p>A luma-chroma system: one luminance value (Y) and two chrominance values (U, V). This separation has a practical historical origin — early broadcast displays were black-and-white and only needed brightness (Y). When color TV arrived, U and V were added while keeping Y backward compatible with existing monochrome receivers. The encoding worked on both types of displays.</p>
+
+  <h2>YCbCr</h2>
+  <p>Luma + Chrominance Blue + Chrominance Red. Heavily used for video encoding. In simple terms: brightness of each pixel + blueness + redness. If Y ranges 0-255, Cb and Cr range from -127 to 128. This representation is more efficient for compression than RGB because the human eye is more sensitive to luminance changes than chrominance changes — so chroma channels can be downsampled with minimal perceptual quality loss (chroma subsampling, e.g. 4:2:0).</p>
+
+  <h2>YCoCg</h2>
+  <p>Luma + Chrominance Orange + Chrominance Green. Similar encoding philosophy to YCbCr but designed for frames stored in RGB color space. Used in some video compression and real-time graphics scenarios because the forward and inverse transforms are simple integer operations with no multiplications.</p>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-left">&copy; rgbguy &middot; Bengaluru, India &middot; 2026</div>
+</footer>
+<script src="../nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Optimizations in VR: Foveated Rendering — rgbguy</title>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+<nav class="site-nav">
+  <a href="../index.html" class="nav-logo">rgb<b>guy</b></a>
+  <ul class="nav-links">
+    <li><a href="../experience.html">experience</a></li>
+    <li><a href="../projects.html">experiments</a></li>
+    <li><a href="../blog.html">blog</a></li>
+    <li><a href="../read.html">reading</a></li>
+    <li><a href="../videos.html">videos</a></li>
+    <li><a href="../learn.html">learn</a></li>
+  </ul>
+
+</nav>
+
+<div class="post-header">
+  <a href="../blog.html" class="post-back">&larr; blog</a>
+  <div class="post-meta">
+    <span>Feb 28, 2019</span>
+    <span class="post-tag">optimization</span>
+  </div>
+  <h1 class="post-title">Optimizations in VR: Foveated Rendering</h1>
+</div>
+
+<div class="post-body">
+  <h2>The Performance Problem in VR</h2>
+  <p>Standard games require around 60fps to feel smooth. VR demands significantly more — approximately 90fps — to prevent disorientation and nausea. Drop below that, and the user feels it immediately. This challenge intensifies on mobile and standalone headsets like the Oculus Go, where compute budgets are severely constrained.</p>
+  <p>Foveated rendering is a GPU optimization strategy that addresses this by rendering only the part of the image the user is actually looking at in full resolution, while reducing quality in the periphery.</p>
+
+  <h2>Fixed Foveated Rendering</h2>
+  <p>The simpler implementation. The center of the screen is rendered at full resolution; regions toward the edges are rendered at progressively lower resolutions. This mimics human peripheral vision — our eyes have high acuity at the fovea (center) and much lower resolution toward the edges of the visual field.</p>
+  <p>The result is a multi-resolution framebuffer: stepped resolution changes moving outward from the center. The GPU does significantly less fragment shading work at the edges, reducing overall pixel throughput without visible quality loss in the center of focus.</p>
+  <p>This works well as a static optimization — no eye tracking hardware required.</p>
+
+  <h2>Foveated Rendering with Eye Tracking</h2>
+  <p>The more advanced approach. Rather than hardcoding the high-resolution region at screen center, eye tracking hardware detects where the user is actually looking and shifts the high-resolution region to match their gaze point in real time.</p>
+  <p>FOVE, a Tokyo-based startup, pioneered eye tracking in VR headsets in 2014. Since then, HTC, Meta/Oculus, and others have integrated eye tracking into higher-end devices. The system dynamically increases resolution around the gaze point and reduces it elsewhere — providing both better visual quality where it matters and significantly better performance everywhere else.</p>
+  <p>The quality improvement over fixed foveated is meaningful: users can look anywhere in the scene and the high-resolution region follows, rather than being locked to center.</p>
+
+  <h2>Applications Beyond VR</h2>
+  <p>Eye tracking enables far more than just rendering optimization. In both VR and non-VR contexts, knowing exactly where a user is looking enables: more natural UI interaction, accessibility tools, attention analytics, gaze-driven input, and social presence features (eye contact in avatars). The rendering optimization is just the most immediately quantifiable benefit.</p>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-left">&copy; rgbguy &middot; Bengaluru, India &middot; 2026</div>
+</footer>
+<script src="../nav.js"></script>
+</body>
+</html>

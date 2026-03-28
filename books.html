@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Books — rgbguy</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <nav class="site-nav">
+    <a href="index.html" class="nav-logo">rgb<b>guy</b></a>
+    <ul class="nav-links">
+      <li><a href="experience.html">experience</a></li>
+      <li><a href="projects.html">experiments</a></li>
+      <li><a href="blog.html">blog</a></li>
+
+      <li><a href="read.html">reading</a></li>
+      <li><a href="videos.html">videos</a></li>
+
+      <li><a href="learn.html" class="nav-highlight">learn</a></li>
+    </ul>
+
+  </nav>
+
+  <div class="page">
+
+    <div class="page-header">
+      <div class="section-id">06</div>
+      <div class="page-header-text">
+        <h1>Reading <em>Stack</em></h1>
+        <div class="sub">Books — active, queued, and done</div>
+      </div>
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-bar">
+      <span class="filter-label">filter:</span>
+      <a class="tag active" href="#" data-filter="all">all</a>
+      <a class="tag" href="#" data-filter="reading">reading</a>
+      <a class="tag" href="#" data-filter="done">done</a>
+      <a class="tag" href="#" data-filter="queue">queued</a>
+      <a class="tag" href="#" data-filter="graphics">graphics</a>
+      <a class="tag" href="#" data-filter="math">math</a>
+      <a class="tag" href="#" data-filter="nonfiction">nonfiction</a>
+    </div>
+
+    <div class="line-grid-2" id="books-list">
+
+      <div class="reading-item" data-tags="graphics math reading">
+        <div class="reading-kind">Book</div>
+        <div>
+          <h4>Real-Time Rendering, 4th edition</h4>
+          <p>Akenine-Möller, Haines, Hoffman</p>
+          <div class="r-status s-reading">reading</div>
+        </div>
+      </div>
+
+      <div class="reading-item" data-tags="nonfiction reading">
+        <div class="reading-kind">Book</div>
+        <div>
+          <h4>Arthashastra — Chanakya</h4>
+          <p>Leadership, statecraft, and strategy — applied to building things</p>
+          <div class="r-status s-reading">reading</div>
+        </div>
+      </div>
+
+      <div class="reading-item" data-tags="graphics math queue">
+        <div class="reading-kind">Book</div>
+        <div>
+          <h4>Physically Based Rendering: From Theory to Implementation</h4>
+          <p>Pharr, Jakob, Humphreys — PBRT 4th edition</p>
+          <div class="r-status s-queue">queued</div>
+        </div>
+      </div>
+
+      <div class="reading-item" data-tags="math queue">
+        <div class="reading-kind">Book</div>
+        <div>
+          <h4>Placeholder Book — Title</h4>
+          <p>Author · Publisher</p>
+          <div class="r-status s-queue">queued</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-left">© rgbguy · Bengaluru, India · 2026</div>
+    <div class="footer-links">
+      <a href="#">youtube</a><a href="#">instagram</a><a href="#">github</a><a href="#">linkedin</a><a
+        href="#">twitter/x</a>
+    </div>
+  </footer>
+
+  <script src="nav.js"></script>
+  <script>
+    const filterLinks = document.querySelectorAll('.filter-bar .tag');
+    const items = document.querySelectorAll('#books-list .reading-item');
+    filterLinks.forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+        const filter = this.dataset.filter;
+        filterLinks.forEach(function (l) { l.classList.remove('active'); });
+        this.classList.add('active');
+        items.forEach(function (item) {
+          if (filter === 'all') {
+            item.removeAttribute('data-hidden');
+          } else {
+            const tags = (item.dataset.tags || '').split(' ');
+            if (tags.includes(filter)) {
+              item.removeAttribute('data-hidden');
+            } else {
+              item.setAttribute('data-hidden', '');
+            }
+          }
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

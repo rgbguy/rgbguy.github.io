@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Piecing Together the Tessellation Pipeline — rgbguy</title>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+<nav class="site-nav">
+  <a href="../index.html" class="nav-logo">rgb<b>guy</b></a>
+  <ul class="nav-links">
+    <li><a href="../experience.html">experience</a></li>
+    <li><a href="../projects.html">experiments</a></li>
+    <li><a href="../blog.html">blog</a></li>
+    <li><a href="../read.html">reading</a></li>
+    <li><a href="../videos.html">videos</a></li>
+    <li><a href="../learn.html">learn</a></li>
+  </ul>
+
+</nav>
+
+<div class="post-header">
+  <a href="../blog.html" class="post-back">&larr; blog</a>
+  <div class="post-meta">
+    <span>Nov 6, 2025</span>
+    <span class="post-tag">graphics</span>
+  </div>
+  <h1 class="post-title">Piecing Together the Tessellation Pipeline</h1>
+</div>
+
+<div class="post-body">
+  <p>I had been staring at OpenGL's tessellation shaders for hours, trying to make sense of patches, layouts, and all those mysterious <code>gl_TessLevel</code> variables. Here is a summary of it all.</p>
+
+  <h2>What's a "patch"?</h2>
+  <p>A patch functions as the fundamental input unit to the tessellation pipeline, comparable to how vertices feed the vertex shader or fragments feed the fragment shader. It represents a group of vertices that defines a piece of a surface to be subdivided.</p>
+  <p>To specify patch vertex count:</p>
+  <pre><code>glPatchParameteri(GL_PATCH_VERTICES, 4);</code></pre>
+  <p>When drawing patches:</p>
+  <pre><code>glDrawArrays(GL_PATCHES, 0, 4);</code></pre>
+  <p>The Tessellation Control Shader (TCS) executes once per vertex in the input patch.</p>
+
+  <h2>What happens in the Tessellation Control Shader?</h2>
+  <p>The TCS accesses patch vertices through the built-in array <code>gl_in[]</code>. With <code>layout(vertices = 4) out;</code> declared, four control points exist per patch. Each TCS invocation is identified by <code>gl_InvocationID</code> and writes to <code>gl_out[gl_InvocationID]</code>.</p>
+  <p>Basic forwarding:</p>
+  <pre><code>gl_out[gl_InvocationID].gl_Position = gl_in[gl_InvocationID].gl_Position;</code></pre>
+  <p>This passes control point positions to the Tessellation Evaluation Shader (TES) — a crucial step for downstream processing.</p>
+
+  <h2>What about the tessellation levels?</h2>
+  <p>Within the TCS, tessellation granularity is specified:</p>
+  <pre><code>gl_TessLevelOuter[0..3] = ...
+gl_TessLevelInner[0..1] = ...</code></pre>
+  <p>Level counts depend on domain type:</p>
+  <ul>
+    <li><strong>triangles:</strong> outer = 3, inner = 1</li>
+    <li><strong>quads:</strong> outer = 4, inner = 2</li>
+    <li><strong>isolines:</strong> outer = 2, inner = 0</li>
+  </ul>
+  <p>Outer levels govern edge subdivision; inner levels control interior density.</p>
+
+  <h2>How does the Tessellation Evaluation Shader fit in?</h2>
+  <p>The TES interprets patch structure through layout declarations:</p>
+  <pre><code>layout(quads) in;</code></pre>
+  <p>This specifies quad domain interpretation using (u, v) coordinates between 0 and 1 for vertex interpolation across the surface. Alignment requirements: TCS vertex count must match TES domain:</p>
+  <ul>
+    <li><code>layout(vertices = 4)</code> + <code>layout(quads)</code> = compatible</li>
+    <li><code>layout(vertices = 3)</code> + <code>layout(triangles)</code> = compatible</li>
+  </ul>
+  <p>Mismatched counts result in OpenGL ignoring excess data.</p>
+
+  <h2>What are Tessellation Coordinates (gl_TessCoord)?</h2>
+  <p>The tessellator generates new vertices with built-in variable <code>gl_TessCoord</code>, indicating position within the tessellated patch.</p>
+  <table>
+    <thead><tr><th>Domain</th><th>gl_TessCoord contents</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td>quads</td><td>vec3(x, y, z) where z = 0</td><td>(x, y) in [0,1] across the quad</td></tr>
+      <tr><td>triangles</td><td>vec3(u, v, w) with u+v+w=1</td><td>Barycentric coordinates</td></tr>
+      <tr><td>isolines</td><td>vec3(u, v, w) where u,v&isin;[0,1]</td><td>u = position along line, v = line index</td></tr>
+    </tbody>
+  </table>
+  <pre><code>float u = gl_TessCoord.x;
+float v = gl_TessCoord.y;</code></pre>
+  <p>For quads: u = 0 is left, u = 1 is right, v = 0 is bottom, v = 1 is top. Bilinear interpolation between four control points:</p>
+  <pre><code>vec3 P = mix(mix(P0, P1, u), mix(P3, P2, u), v);</code></pre>
+
+  <h2>Why is the MVP multiplied in the TES?</h2>
+  <p>Applying the Model-View-Projection transformation in the vertex shader before tessellation produces incorrect results. Projection via the MVP is not linear, and tessellation interpolates linearly. Tessellating in clip space distorts edges and produces curved artifacts.</p>
+  <p>Correct approach: maintain object or world space coordinates during tessellation, then apply MVP in TES:</p>
+  <pre><code>gl_Position = uMVPMatrix * vec4(P, 1.0);</code></pre>
+  <p>This ensures all generated vertices receive proper clip-space transformation.</p>
+
+  <h2>How does everything connect?</h2>
+  <table>
+    <thead><tr><th>Stage</th><th>Operates on</th><th>Space</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td>Vertex Shader</td><td>1 vertex</td><td>Object</td><td>Passes raw vertex data</td></tr>
+      <tr><td>Tessellation Control</td><td>Patch (N vertices)</td><td>Object</td><td>Sets tessellation levels</td></tr>
+      <tr><td>Tessellator</td><td>—</td><td>Object</td><td>Subdivides patch</td></tr>
+      <tr><td>Tessellation Evaluation</td><td>Generated vertices</td><td>Object &rarr; Clip</td><td>Interpolates + applies MVP</td></tr>
+      <tr><td>Fragment Shader</td><td>Fragments</td><td>Screen</td><td>Final color</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Quick Recap</h2>
+  <ul>
+    <li>Four vertices = one patch via <code>glPatchParameteri(GL_PATCH_VERTICES, 4)</code></li>
+    <li>TCS executes per patch with <code>layout(vertices = 4) out;</code></li>
+    <li>TES interprets patch structure through <code>layout(quads) in;</code></li>
+    <li>Tessellation level counts vary by domain type (triangles / quads / isolines)</li>
+    <li>Apply MVP transformation in TES, not vertex shader</li>
+    <li>The <code>gl_out[]</code> array bridges TCS and TES data flow</li>
+  </ul>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-left">&copy; rgbguy &middot; Bengaluru, India &middot; 2026</div>
+</footer>
+<script src="../nav.js"></script>
+</body>
+</html>
