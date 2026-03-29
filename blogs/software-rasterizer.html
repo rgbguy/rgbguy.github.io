@@ -42,6 +42,8 @@
 <div class="post-body">
   <p>GPUs abstract away everything that happens between a vertex and a pixel. I wanted to see what that actually looks like in code. No OpenGL, no Vulkan, just a framebuffer in memory and math. Here is a walkthrough of a minimal triangle rasterizer written in C that outputs a PNG. Full source on <a href="https://github.com/rgbguy/software-rasterizer/tree/main" target="_blank">GitHub</a>.</p>
 
+  <img src="../assets/rasterizer.png" alt="Software rasterizer output" style="width:100%;margin:1.5rem 0 2.5rem;display:block;" />
+
   <h2>The Framebuffer</h2>
   <p>A framebuffer is just a flat array of pixels. Each pixel is three bytes: red, green, blue. Width x height x 3 bytes total.</p>
   <pre><code>typedef struct {
