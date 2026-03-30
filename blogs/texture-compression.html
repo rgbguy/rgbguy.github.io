@@ -582,34 +582,6 @@
       artist exported the asset. At runtime the GPU decoder is just a shift, a mask, and a lerp. That's why it runs for
       free at three billion samples per second.</p>
 
-    <h2>In DirectX 11</h2>
-
-    <p>Compress offline with texconv (part of DirectXTex):</p>
-
-    <pre><code>texconv -f BC1_UNORM albedo.png -o textures/</code></pre>
-
-    <p>One field changes in your texture descriptor:</p>
-
-    <pre><code>// before
-desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-
-// after
-desc.Format = DXGI_FORMAT_BC1_UNORM;</code></pre>
-
-    <p>Width and height stay as original pixel dimensions. D3D11 handles the block math. The SysMemPitch changes because
-      you're now describing rows of blocks, not rows of pixels:</p>
-
-    <pre><code>// raw RGBA
-initData.SysMemPitch = width * 4;
-
-// BC1
-initData.SysMemPitch = ((width + 3) / 4) * 8;  // 8 bytes per block-column</code></pre>
-
-    <p>Your HLSL doesn't change at all. <code>myTex.Sample()</code> is identical. The hardware decompresses
-      transparently as part of the fetch. Your shader never sees compressed data.</p>
-
-    <p>For alpha, use <code>DXGI_FORMAT_BC3_UNORM</code>. For higher quality, <code>DXGI_FORMAT_BC7_UNORM</code>. Both
-      follow the same pipeline.</p>
 
     <h2>The cache benefit is the real reason</h2>
 
