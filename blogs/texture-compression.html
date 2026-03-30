@@ -64,17 +64,27 @@
 
   <p>Every texture in every game you've played, the brick wall, the rust, the grass, was never stored as real colors. Your GPU has been reconstructing approximate colors from a handful of numbers, billions of times per frame, and it's been doing this since 1998.</p>
 
-  <h2>Why Textures Are a Problem</h2>
+  <h2>The Core Problem</h2>
 
   <p>A single 4K texture in raw RGBA is 32MB. A modern game has thousands of them. VRAM is fast, but it's not infinite, and it has a cache. If your texture data doesn't fit in the cache you pay a penalty every sample. Every frame. For every visible surface.</p>
 
-  <p>The obvious answer is compression. But you can't just zip a texture. The GPU needs to decompress individual pixels on the fly, in hardware, in the middle of rendering. The decompressor has to be trivially cheap. No entropy coding. No variable-length anything. Just a formula the hardware can run in one clock.</p>
+  <p>The obvious answer is compression. But you can't just zip a texture. The GPU needs to decompress individual pixels on the fly, in hardware, in the middle of rendering. The decompressor has to be trivially cheap: no entropy coding, no variable-length anything, just a formula the hardware can run in one clock.</p>
 
-  <p>That's what BC1 is.</p>
+  <h2>What BC1 Is</h2>
 
-  <h2>How BC1 Works</h2>
+  <p>S3 Graphics invented it in 1998 and called it DXT1. Microsoft licensed it into DirectX 6. It was renamed BC1 in DirectX 10. Every DirectX-compliant GPU has decoded it in hardware ever since. Same bits, same format, three different names depending on the era.</p>
 
-  <p>BC1 works on 4x4 blocks of pixels. Each block is 16 pixels. Instead of storing all 16 pixel colors, you store just two: the two endpoints of the block's color range, and a 2-bit index per pixel saying which of four steps between those endpoints that pixel should use.</p>
+  <h2>The 4×4 Block and the Budget</h2>
+
+  <p>BC1 works on 4×4 blocks of pixels. Each block is 16 pixels. Raw, that's 16 × 4 bytes = 64 bytes. The target is 8× compression: 8 bytes per block. That's the only goal. Everything else falls out of that budget.</p>
+
+  <p>Those 8 bytes split into two parts:</p>
+
+  <pre><code>8 bytes total
+├── 4 bytes  →  2 color endpoints (C0, C1) in RGB565
+└── 4 bytes  →  16 pixels × 2 bits each = 32 bits</code></pre>
+
+  <p>Spending 4 bytes on two color endpoints was the design decision. The remaining 4 bytes forced everything else.</p>
 
   <figure class="diagram">
     <svg viewBox="0 0 620 260" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Space Mono, monospace">
@@ -153,97 +163,13 @@
     <figcaption>BC1 block layout. 64 bytes becomes 8 bytes. The GPU decodes each pixel with a single lerp at sample time.</figcaption>
   </figure>
 
-  <p>The four palette colors aren't stored. They're derived. C0 and C1 are the two endpoints. The GPU generates C2 = lerp(C0, C1, 1/3) and C3 = lerp(C0, C1, 2/3) on the fly. Each pixel's 2-bit index picks one of those four.</p>
+  <h2>Why Endpoints</h2>
 
-  <p>That's the whole decompressor. A table lookup and a lerp. One clock cycle. This is why it can run in hardware with zero performance cost.</p>
+  <p>The alternative is to give each pixel 4 bits and quantize to a global 16-step palette. The problem: if your block is a dark patch, say all pixels between values 40 and 80, maybe two of those 16 global steps land in your range. Fourteen steps wasted. Big jumps. Visible banding.</p>
 
-  <h2>Finding the Two Endpoints</h2>
+  <p>Endpoints fix this. You spend 4 bytes to describe the block's actual color range, then subdivide just that range into 4 steps. All steps useful, all steps tight. Adaptive precision per block instead of fixed global precision.</p>
 
-  <p>The interesting part happens offline. How do you pick the best two endpoints for a block? You want C0 and C1 to span the block's color range as tightly as possible, so the four palette steps land where the actual colors are.</p>
-
-  <p>Think of each pixel's color as a point in 3D space. R, G, B are the three axes. Your 16 pixels are 16 dots scattered in that space. You want to find the line that best describes where those dots sit. The two endpoints are the farthest points along that line.</p>
-
-  <p>That's PCA. Principal Component Analysis. You find the axis of greatest variance in your point cloud, then project everything onto it.</p>
-
-  <figure class="diagram">
-    <svg viewBox="0 0 580 280" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Space Mono, monospace">
-
-      <!-- axes -->
-      <line x1="50" y1="240" x2="280" y2="240" stroke="#1c1c1c" stroke-width="1.5"/>
-      <line x1="50" y1="240" x2="50" y2="30" stroke="#1c1c1c" stroke-width="1.5"/>
-      <text x="290" y="244" fill="#444440" font-size="10">R</text>
-      <text x="44" y="24" fill="#444440" font-size="10">G</text>
-
-      <!-- scattered points -->
-      <circle cx="80" cy="210" r="4" fill="#888880" opacity="0.7"/>
-      <circle cx="95" cy="200" r="4" fill="#888880" opacity="0.7"/>
-      <circle cx="110" cy="188" r="4" fill="#888880" opacity="0.7"/>
-      <circle cx="120" cy="185" r="4" fill="#888880" opacity="0.7"/>
-      <circle cx="130" cy="175" r="4" fill="#888880" opacity="0.7"/>
-      <circle cx="145" cy="163" r="4" fill="#888880" opacity="0.7"/>
-      <circle cx="100" cy="196" r="4" fill="#888880" opacity="0.7"/>
-      <circle cx="150" cy="158" r="4" fill="#888880" opacity="0.7"/>
-      <circle cx="160" cy="148" r="4" fill="#888880" opacity="0.7"/>
-      <circle cx="170" cy="140" r="4" fill="#888880" opacity="0.7"/>
-      <circle cx="180" cy="133" r="4" fill="#888880" opacity="0.7"/>
-      <circle cx="190" cy="125" r="4" fill="#888880" opacity="0.7"/>
-      <circle cx="200" cy="117" r="4" fill="#888880" opacity="0.7"/>
-      <circle cx="215" cy="108" r="4" fill="#888880" opacity="0.7"/>
-      <circle cx="225" cy="98" r="4" fill="#888880" opacity="0.7"/>
-      <circle cx="238" cy="88" r="4" fill="#888880" opacity="0.7"/>
-
-      <!-- principal axis line -->
-      <line x1="68" y1="222" x2="250" y2="78" stroke="#F97316" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.6"/>
-
-      <!-- endpoints -->
-      <circle cx="72" cy="219" r="6" fill="none" stroke="#F97316" stroke-width="2"/>
-      <circle cx="246" cy="81" r="6" fill="none" stroke="#F97316" stroke-width="2"/>
-      <text x="56" y="236" fill="#F97316" font-size="9">C0</text>
-      <text x="250" y="78" fill="#F97316" font-size="9">C1</text>
-
-      <!-- projection lines -->
-      <line x1="80" y1="210" x2="76" y2="215" stroke="#444440" stroke-width="0.8" opacity="0.5"/>
-      <line x1="160" y1="148" x2="157" y2="151" stroke="#444440" stroke-width="0.8" opacity="0.5"/>
-      <line x1="238" y1="88" x2="244" y2="84" stroke="#444440" stroke-width="0.8" opacity="0.5"/>
-
-      <!-- label -->
-      <text x="155" y="260" fill="#444440" font-size="9" text-anchor="middle">principal axis (direction of max variance)</text>
-
-      <!-- right side: what happens -->
-      <text x="330" y="50" fill="#444440" font-size="10" letter-spacing="1">WHAT GETS STORED</text>
-
-      <rect x="330" y="62" width="16" height="16" fill="#5a2a2a" rx="2"/>
-      <text x="354" y="74" fill="#888880" font-size="10">C0  (one extreme)</text>
-
-      <rect x="330" y="86" width="16" height="16" fill="#c06060" rx="2"/>
-      <text x="354" y="98" fill="#888880" font-size="10">C1  (other extreme)</text>
-
-      <text x="330" y="128" fill="#444440" font-size="10" letter-spacing="1">WHAT GETS DERIVED</text>
-
-      <rect x="330" y="140" width="16" height="16" fill="#5a2a2a" rx="2"/>
-      <rect x="352" y="140" width="16" height="16" fill="#7a3e3e" rx="2"/>
-      <rect x="374" y="140" width="16" height="16" fill="#9a5252" rx="2"/>
-      <rect x="396" y="140" width="16" height="16" fill="#c06060" rx="2"/>
-      <text x="330" y="174" fill="#444440" font-size="9">lerp(C0, C1, 0/3..3/3)</text>
-
-      <text x="330" y="200" fill="#444440" font-size="10" letter-spacing="1">WHAT EACH PIXEL STORES</text>
-      <text x="330" y="218" fill="#888880" font-size="10">a 2-bit index: 00 01 10 11</text>
-      <text x="330" y="234" fill="#444440" font-size="9">pointing to one of the 4 above</text>
-    </svg>
-    <figcaption>PCA on the block's pixel colors. The principal axis is the line of greatest variance. C0 and C1 sit at the extremes. Everything else is derived.</figcaption>
-  </figure>
-
-  <p>In practice: compute the mean color of the 16 pixels, build a covariance matrix, find its largest eigenvector, project all pixels onto that vector, take the min and max projections as your two endpoints. Each pixel then snaps to the nearest of the four palette colors and stores a 2-bit index.</p>
-
-  <p>This runs offline when the artist exports the texture. The .dds file on disk is already compressed. At load time it's just a memcpy into VRAM. At runtime the GPU decodes it transparently. Your shader just calls <code>Sample()</code> and gets a color back, same as any uncompressed texture.</p>
-
-  <h2>Why Not Just Quantize Each Pixel?</h2>
-
-  <p>The obvious question: why not just reduce each pixel to 4 bits directly? Smaller storage, simpler.</p>
-
-  <p>The problem is that 4 bits gives you 16 steps spread across the full 0 to 255 range. Each step is about 17 units wide. If your block is a dark patch, say all pixels between 40 and 80, you get maybe two or three of those 16 steps landing in your range. Big jumps. Visible banding.</p>
-
-  <p>The endpoints solve this. Instead of 16 fixed steps across the whole range, you describe the block's actual range with C0 and C1, then subdivide just that range into 4 steps. All 4 steps are useful. All 4 steps are tight. Much less banding.</p>
+  <p>It's the same idea as floating point vs fixed point: spend some bits describing the range, then use the remaining bits to subdivide it. More precision ends up where it matters.</p>
 
   <figure class="diagram">
     <svg viewBox="0 0 580 210" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Space Mono, monospace">
@@ -316,35 +242,169 @@
     <figcaption>With naive quantization, only 2 of 16 steps fall in the block's actual color range. BC1 describes the range first, so all 4 steps are used where the colors actually live.</figcaption>
   </figure>
 
-  <p>This is the same idea as floating point vs fixed point. You spend some bits describing the range, then use the remaining bits to subdivide it. More of your precision ends up where it matters.</p>
+  <h2>The Line in RGB Space</h2>
 
-  <h2>Cache Is the Real Win</h2>
+  <p>C0 and C1 are not scalars. They're vec3, full RGB colors. Together they define a line segment in 3D RGB space. Moving along that line with a single scalar <em>t</em> changes R, G, B proportionally:</p>
 
-  <p>You save memory, obviously. But that's not the main reason to use it.</p>
+  <pre><code>lerp(C0, C1, t) = (
+    R0 + t*(R1-R0),
+    G0 + t*(G1-G0),
+    B0 + t*(B1-B0)
+)</code></pre>
 
-  <p>A 256x256 raw RGBA texture is 256KB. The same texture in BC1 is 32KB. Eight times more texture fits in the GPU's L2 cache at the same time. Cache hit rate goes up, memory bandwidth pressure goes down, and you get better performance even before you count the VRAM savings.</p>
+  <p>One scalar drives all three channels. That's why two endpoints are enough to describe an entire color range.</p>
 
-  <p>BC1 textures aren't just smaller. They're faster. That's why it's been mandatory in every DirectX GPU since 1999 and still in active use today.</p>
+  <h2>The 4 Colors</h2>
+
+  <p>2 bits per pixel means 4 possible values. Those map to 4 equally spaced <em>t</em> values along the line:</p>
+
+  <pre><code>00  →  t = 0    →  C0                 (stored)
+01  →  t = 1/3  →  lerp(C0, C1, 1/3)  (derived)
+10  →  t = 2/3  →  lerp(C0, C1, 2/3)  (derived)
+11  →  t = 1    →  C1                 (stored)</code></pre>
+
+  <p>Only C0 and C1 are stored. The middle two are always recomputed by the GPU. They're perfectly predictable from the endpoints. Every pixel in the block must be one of these four colors. That constraint is the compression.</p>
+
+  <h2>What the Index Actually Is</h2>
+
+  <p>The 2-bit index is a quantized scalar <em>t</em>. Each pixel has its own independent <em>t</em>, but you can't store 16 floats (512 bits). So each <em>t</em> is rounded to the nearest of the 4 allowed values and stored as 2 bits:</p>
+
+  <pre><code>exact t = 0.72  →  nearest = 2/3  →  store 10
+exact t = 0.11  →  nearest = 0    →  store 00
+exact t = 0.94  →  nearest = 1    →  store 11</code></pre>
+
+  <p>The rounding error is the lossy part. That's where color information is permanently lost.</p>
+
+  <h2>Why You Need Both</h2>
+
+  <p>Endpoints and indices do different things:</p>
+
+  <pre><code>C0, C1   →  what 4 colors are possible in this block
+indices  →  which of those 4 colors each pixel actually is</code></pre>
+
+  <p>Endpoints without indices: you know the palette but not the painting. Indices without endpoints: you know the arrangement but not what colors to put where. Both are necessary. Neither is redundant.</p>
+
+  <h2>Finding the Best Line</h2>
+
+  <p>Given 16 pixels as points in 3D RGB space, finding the best C0 and C1 is a line-fitting problem. That's PCA.</p>
+
+  <p>Compute the mean color of the 16 pixels, build a covariance matrix, find its largest eigenvector (the axis of greatest color variance), project all pixels onto that axis, and take the min and max projections as C0 and C1. Each pixel then snaps to the nearest of the four colors and stores its 2-bit index.</p>
+
+  <p>PCA doesn't change any pixel's color. It just finds the best line. The color loss happens when each pixel's exact <em>t</em> gets rounded to the nearest of 4 values.</p>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 580 280" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Space Mono, monospace">
+
+      <!-- axes -->
+      <line x1="50" y1="240" x2="280" y2="240" stroke="#1c1c1c" stroke-width="1.5"/>
+      <line x1="50" y1="240" x2="50" y2="30" stroke="#1c1c1c" stroke-width="1.5"/>
+      <text x="290" y="244" fill="#444440" font-size="10">R</text>
+      <text x="44" y="24" fill="#444440" font-size="10">G</text>
+
+      <!-- scattered points -->
+      <circle cx="80" cy="210" r="4" fill="#888880" opacity="0.7"/>
+      <circle cx="95" cy="200" r="4" fill="#888880" opacity="0.7"/>
+      <circle cx="110" cy="188" r="4" fill="#888880" opacity="0.7"/>
+      <circle cx="120" cy="185" r="4" fill="#888880" opacity="0.7"/>
+      <circle cx="130" cy="175" r="4" fill="#888880" opacity="0.7"/>
+      <circle cx="145" cy="163" r="4" fill="#888880" opacity="0.7"/>
+      <circle cx="100" cy="196" r="4" fill="#888880" opacity="0.7"/>
+      <circle cx="150" cy="158" r="4" fill="#888880" opacity="0.7"/>
+      <circle cx="160" cy="148" r="4" fill="#888880" opacity="0.7"/>
+      <circle cx="170" cy="140" r="4" fill="#888880" opacity="0.7"/>
+      <circle cx="180" cy="133" r="4" fill="#888880" opacity="0.7"/>
+      <circle cx="190" cy="125" r="4" fill="#888880" opacity="0.7"/>
+      <circle cx="200" cy="117" r="4" fill="#888880" opacity="0.7"/>
+      <circle cx="215" cy="108" r="4" fill="#888880" opacity="0.7"/>
+      <circle cx="225" cy="98" r="4" fill="#888880" opacity="0.7"/>
+      <circle cx="238" cy="88" r="4" fill="#888880" opacity="0.7"/>
+
+      <!-- principal axis line -->
+      <line x1="68" y1="222" x2="250" y2="78" stroke="#F97316" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.6"/>
+
+      <!-- endpoints -->
+      <circle cx="72" cy="219" r="6" fill="none" stroke="#F97316" stroke-width="2"/>
+      <circle cx="246" cy="81" r="6" fill="none" stroke="#F97316" stroke-width="2"/>
+      <text x="56" y="236" fill="#F97316" font-size="9">C0</text>
+      <text x="250" y="78" fill="#F97316" font-size="9">C1</text>
+
+      <!-- projection lines -->
+      <line x1="80" y1="210" x2="76" y2="215" stroke="#444440" stroke-width="0.8" opacity="0.5"/>
+      <line x1="160" y1="148" x2="157" y2="151" stroke="#444440" stroke-width="0.8" opacity="0.5"/>
+      <line x1="238" y1="88" x2="244" y2="84" stroke="#444440" stroke-width="0.8" opacity="0.5"/>
+
+      <!-- label -->
+      <text x="155" y="260" fill="#444440" font-size="9" text-anchor="middle">principal axis (direction of max variance)</text>
+
+      <!-- right side: what happens -->
+      <text x="330" y="50" fill="#444440" font-size="10" letter-spacing="1">WHAT GETS STORED</text>
+
+      <rect x="330" y="62" width="16" height="16" fill="#5a2a2a" rx="2"/>
+      <text x="354" y="74" fill="#888880" font-size="10">C0  (one extreme)</text>
+
+      <rect x="330" y="86" width="16" height="16" fill="#c06060" rx="2"/>
+      <text x="354" y="98" fill="#888880" font-size="10">C1  (other extreme)</text>
+
+      <text x="330" y="128" fill="#444440" font-size="10" letter-spacing="1">WHAT GETS DERIVED</text>
+
+      <rect x="330" y="140" width="16" height="16" fill="#5a2a2a" rx="2"/>
+      <rect x="352" y="140" width="16" height="16" fill="#7a3e3e" rx="2"/>
+      <rect x="374" y="140" width="16" height="16" fill="#9a5252" rx="2"/>
+      <rect x="396" y="140" width="16" height="16" fill="#c06060" rx="2"/>
+      <text x="330" y="174" fill="#444440" font-size="9">lerp(C0, C1, 0/3..3/3)</text>
+
+      <text x="330" y="200" fill="#444440" font-size="10" letter-spacing="1">WHAT EACH PIXEL STORES</text>
+      <text x="330" y="218" fill="#888880" font-size="10">a 2-bit index: 00 01 10 11</text>
+      <text x="330" y="234" fill="#444440" font-size="9">pointing to one of the 4 above</text>
+    </svg>
+    <figcaption>PCA on the block's pixel colors. The principal axis is the line of greatest variance. C0 and C1 sit at the extremes. Everything else is derived.</figcaption>
+  </figure>
+
+  <h2>When Does This Happen</h2>
+
+  <pre><code>Offline (build pipeline)
+  PNG → texconv → PCA runs, endpoints found, indices assigned
+  output: .dds file (BC1 bytes on disk)
+
+Load time
+  .dds → CreateTexture2D() → VRAM
+  no decompression, just a memcpy
+
+Runtime (every frame, every sample)
+  myTex.Sample(sampler, uv)
+  → GPU fetches 8-byte block from VRAM
+  → reads 2-bit index for this pixel
+  → lerps between C0 and C1
+  → returns color to shader
+  one clock, transparent to your HLSL</code></pre>
+
+  <p>The expensive part never touches your game. At runtime the decoder is a shift, a mask, and a lerp.</p>
+
+  <h2>Why BC1 Is Faster, Not Just Smaller</h2>
+
+  <p>A 256×256 BC1 texture is 32KB. Raw RGBA is 256KB. Eight times more texture fits in the GPU's L2 cache at once. Cache hit rate goes up, memory bandwidth pressure goes down. You get better performance even before counting the VRAM savings.</p>
 
   <h2>Using BC1 in DirectX 11</h2>
 
   <p>Compress your texture offline with <code>texconv</code> (part of DirectXTex):</p>
   <pre><code>texconv -f BC1_UNORM albedo.png -o textures/</code></pre>
 
-  <p>This writes a <code>.dds</code> file with the BC1 data already packed. On the D3D11 side, one field is all that changes when you describe the texture:</p>
+  <p>This writes a <code>.dds</code> file with the BC1 data already packed. On the D3D11 side, one field changes:</p>
   <pre><code>desc.Format = DXGI_FORMAT_BC1_UNORM;  // instead of DXGI_FORMAT_R8G8B8A8_UNORM</code></pre>
 
   <p>The rest of your pipeline stays the same. The shader sees a normal texture. The hardware handles decompression transparently at sample time.</p>
 
   <p>If you need alpha, swap to <code>DXGI_FORMAT_BC3_UNORM</code>. For higher quality, <code>DXGI_FORMAT_BC7_UNORM</code> is the DX11 option, though the encoder is slower offline.</p>
 
-  <h2>Where It Goes From Here</h2>
+  <h2>Where It Breaks Down</h2>
 
-  <p>BC1's assumption is that 16 pixels in a block cluster along a line in RGB space. When that's true, smooth gradients and single-material surfaces, you lose almost nothing. When it's not, sharp color transitions or complex patterns within a single block, you get the blocky artifacts you've seen on low-quality textures.</p>
+  <p>BC1 assumes all 16 pixels in a block cluster along a single line in RGB space. When that holds (smooth gradients, solid surfaces, highlights) quality is excellent. When it breaks (hard edges between two different colors bisecting a block, complex multi-color patterns) you get visible block artifacts. The block can only have 4 colors. If the real content needs more, it shows.</p>
 
-  <p>BC7 extended this by splitting blocks into sub-regions, each with their own endpoint pair. Better quality, more complex encoder.</p>
+  <h2>Where It Goes Next</h2>
 
-  <p>And in 2024, AMD asked what happens if you replace the "find a line in RGB space" step with a small neural network. What if the two stored values aren't endpoints of a line but latent codes in a learned space that can represent color distributions a line never could? That's the NTBC paper that started all this. But understanding BC1 (the PCA, the lerp, the 2-bit index) is what makes that paper land.</p>
+  <p>BC7 (DirectX 11) splits blocks into sub-regions, each with their own endpoint pair. Multiple PCA fits per block. Better quality, double the byte cost.</p>
+
+  <p>In 2024, AMD asked what happens if you replace the line-finding step entirely with a small neural network. Instead of assuming colors fit a line, a tiny network learns the best possible mapping for each block. Same bit budget, better quality. That's NTBC, the paper that started this rabbit hole. Understanding BC1 (the PCA, the lerp, the 2-bit index, the quantization step) is what makes that paper land.</p>
 
   <p>The best compression schemes are the ones nobody thinks about. BC1 has been running in every GPU for 26 years. That's good engineering.</p>
 
