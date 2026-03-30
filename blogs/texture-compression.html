@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-H4ZKJ77Z2W"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-H4ZKJ77Z2W');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>rgbguy</title>
+  <link rel="icon" type="image/jpeg" href="../assets/dp.jpg" />
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    .diagram {
+      background: #0e0e0e;
+      border: 1px solid #1c1c1c;
+      border-radius: 4px;
+      margin: 2rem 0;
+      padding: 1.5rem;
+      overflow-x: auto;
+    }
+    .diagram figcaption {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      color: #444440;
+      letter-spacing: 0.08em;
+      margin-top: 1rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+<nav class="site-nav">
+  <a href="../index.html" class="nav-logo">rgb<b>guy</b></a>
+  <ul class="nav-links">
+    <li><a href="../experience.html">experience</a></li>
+    <li><a href="../projects.html">experiments</a></li>
+    <li><a href="../blog.html">blog</a></li>
+    <li><a href="../read.html">reading</a></li>
+    <li><a href="../videos.html">videos</a></li>
+    <li><a href="../learn.html">learn</a></li>
+  </ul>
+</nav>
+
+<div class="post-header">
+  <a href="../blog.html" class="post-back">&larr; blog</a>
+  <div class="post-meta">
+    <span>Mar 30, 2026</span>
+    <span class="post-tag">graphics</span>
+    <span class="post-tag">renderer</span>
+  </div>
+  <h1 class="post-title">GPUs interpolate textures. BC1 explained.</h1>
+</div>
+
+<div class="post-body">
+
+  <p>I was reading a paper on neural texture compression when I hit a footnote that sent me down a rabbit hole for three hours. The footnote mentioned BC1. I thought I knew what it was. I didn't.</p>
+
+  <p>Every texture in every game you've played, the brick wall, the rust, the grass, was never stored as real colors. Your GPU has been reconstructing approximate colors from a handful of numbers, billions of times per frame, and it's been doing this since 1998.</p>
+
+  <h2>Why Textures Are a Problem</h2>
+
+  <p>A single 4K texture in raw RGBA is 32MB. A modern game has thousands of them. VRAM is fast, but it's not infinite, and it has a cache. If your texture data doesn't fit in the cache you pay a penalty every sample. Every frame. For every visible surface.</p>
+
+  <p>The obvious answer is compression. But you can't just zip a texture. The GPU needs to decompress individual pixels on the fly, in hardware, in the middle of rendering. The decompressor has to be trivially cheap. No entropy coding. No variable-length anything. Just a formula the hardware can run in one clock.</p>
+
+  <p>That's what BC1 is.</p>
+
+  <h2>How BC1 Works</h2>
+
+  <p>BC1 works on 4x4 blocks of pixels. Each block is 16 pixels. Instead of storing all 16 pixel colors, you store just two: the two endpoints of the block's color range, and a 2-bit index per pixel saying which of four steps between those endpoints that pixel should use.</p>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 620 260" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Space Mono, monospace">
+
+      <!-- 4x4 pixel grid -->
+      <text x="80" y="22" fill="#444440" font-size="10" text-anchor="middle" letter-spacing="1">4 x 4 BLOCK</text>
+      <rect x="8"  y="30" width="28" height="28" fill="#5a2a2a" rx="2"/>
+      <rect x="40" y="30" width="28" height="28" fill="#6b3030" rx="2"/>
+      <rect x="72" y="30" width="28" height="28" fill="#7c3535" rx="2"/>
+      <rect x="104" y="30" width="28" height="28" fill="#6b3030" rx="2"/>
+      <rect x="8"  y="62" width="28" height="28" fill="#7c3535" rx="2"/>
+      <rect x="40" y="62" width="28" height="28" fill="#8d3a3a" rx="2"/>
+      <rect x="72" y="62" width="28" height="28" fill="#9e4040" rx="2"/>
+      <rect x="104" y="62" width="28" height="28" fill="#8d3a3a" rx="2"/>
+      <rect x="8"  y="94" width="28" height="28" fill="#6b3030" rx="2"/>
+      <rect x="40" y="94" width="28" height="28" fill="#7c3535" rx="2"/>
+      <rect x="72" y="94" width="28" height="28" fill="#8d3a3a" rx="2"/>
+      <rect x="104" y="94" width="28" height="28" fill="#9e4040" rx="2"/>
+      <rect x="8"  y="126" width="28" height="28" fill="#5a2a2a" rx="2"/>
+      <rect x="40" y="126" width="28" height="28" fill="#6b3030" rx="2"/>
+      <rect x="72" y="126" width="28" height="28" fill="#7c3535" rx="2"/>
+      <rect x="104" y="126" width="28" height="28" fill="#8d3a3a" rx="2"/>
+
+      <!-- raw size label -->
+      <text x="72" y="178" fill="#888880" font-size="10" text-anchor="middle">16 pixels x 4 bytes</text>
+      <text x="72" y="194" fill="#F97316" font-size="11" text-anchor="middle" font-weight="bold">= 64 bytes raw</text>
+
+      <!-- Arrow -->
+      <line x1="155" y1="95" x2="195" y2="95" stroke="#444440" stroke-width="1.5"/>
+      <polygon points="195,91 203,95 195,99" fill="#444440"/>
+      <text x="179" y="88" fill="#444440" font-size="9" text-anchor="middle">BC1</text>
+
+      <!-- Compressed layout -->
+      <text x="390" y="22" fill="#444440" font-size="10" text-anchor="middle" letter-spacing="1">COMPRESSED BLOCK</text>
+
+      <!-- C0 -->
+      <rect x="210" y="30" width="90" height="40" fill="#141414" stroke="#1c1c1c" rx="2"/>
+      <rect x="213" y="33" width="12" height="12" fill="#5a2a2a" rx="1"/>
+      <text x="232" y="47" fill="#deded6" font-size="10">C0</text>
+      <text x="232" y="60" fill="#444440" font-size="9">2 bytes</text>
+
+      <!-- C1 -->
+      <rect x="308" y="30" width="90" height="40" fill="#141414" stroke="#1c1c1c" rx="2"/>
+      <rect x="311" y="33" width="12" height="12" fill="#9e4040" rx="1"/>
+      <text x="330" y="47" fill="#deded6" font-size="10">C1</text>
+      <text x="330" y="60" fill="#444440" font-size="9">2 bytes</text>
+
+      <!-- indices -->
+      <rect x="210" y="82" width="188" height="40" fill="#141414" stroke="#1c1c1c" rx="2"/>
+      <text x="304" y="100" fill="#deded6" font-size="10" text-anchor="middle">pixel indices</text>
+      <text x="304" y="113" fill="#444440" font-size="9" text-anchor="middle">16 x 2 bits = 4 bytes</text>
+
+      <!-- palette interpolation -->
+      <text x="430" y="50" fill="#444440" font-size="9">palette:</text>
+      <rect x="430" y="58" width="16" height="16" fill="#5a2a2a" rx="2"/>
+      <rect x="452" y="58" width="16" height="16" fill="#718080" rx="2"/>
+      <rect x="474" y="58" width="16" height="16" fill="#8d9595" rx="2"/>
+      <rect x="496" y="58" width="16" height="16" fill="#9e4040" rx="2"/>
+      <text x="430" y="91" fill="#444440" font-size="8">C0</text>
+      <text x="449" y="91" fill="#444440" font-size="8">1/3</text>
+      <text x="470" y="91" fill="#444440" font-size="8">2/3</text>
+      <text x="493" y="91" fill="#444440" font-size="8">C1</text>
+      <text x="463" y="110" fill="#888880" font-size="8" text-anchor="middle">lerp(C0, C1, t)</text>
+
+      <!-- total -->
+      <rect x="210" y="135" width="188" height="30" fill="#0e0e0e" stroke="#F97316" stroke-width="1" rx="2"/>
+      <text x="304" y="154" fill="#F97316" font-size="11" text-anchor="middle" font-weight="bold">= 8 bytes total  (8x smaller)</text>
+
+      <!-- comparison bar -->
+      <text x="72" y="228" fill="#444440" font-size="9" text-anchor="middle">raw</text>
+      <rect x="8" y="234" width="128" height="10" fill="#F97316" opacity="0.6" rx="2"/>
+
+      <text x="208" y="228" fill="#444440" font-size="9" text-anchor="middle">BC1</text>
+      <rect x="148" y="234" width="16" height="10" fill="#F97316" rx="2"/>
+    </svg>
+    <figcaption>BC1 block layout. 64 bytes becomes 8 bytes. The GPU decodes each pixel with a single lerp at sample time.</figcaption>
+  </figure>
+
+  <p>The four palette colors aren't stored. They're derived. C0 and C1 are the two endpoints. The GPU generates C2 = lerp(C0, C1, 1/3) and C3 = lerp(C0, C1, 2/3) on the fly. Each pixel's 2-bit index picks one of those four.</p>
+
+  <p>That's the whole decompressor. A table lookup and a lerp. One clock cycle. This is why it can run in hardware with zero performance cost.</p>
+
+  <h2>Finding the Two Endpoints</h2>
+
+  <p>The interesting part happens offline. How do you pick the best two endpoints for a block? You want C0 and C1 to span the block's color range as tightly as possible, so the four palette steps land where the actual colors are.</p>
+
+  <p>Think of each pixel's color as a point in 3D space. R, G, B are the three axes. Your 16 pixels are 16 dots scattered in that space. You want to find the line that best describes where those dots sit. The two endpoints are the farthest points along that line.</p>
+
+  <p>That's PCA. Principal Component Analysis. You find the axis of greatest variance in your point cloud, then project everything onto it.</p>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 580 280" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Space Mono, monospace">
+
+      <!-- axes -->
+      <line x1="50" y1="240" x2="280" y2="240" stroke="#1c1c1c" stroke-width="1.5"/>
+      <line x1="50" y1="240" x2="50" y2="30" stroke="#1c1c1c" stroke-width="1.5"/>
+      <text x="290" y="244" fill="#444440" font-size="10">R</text>
+      <text x="44" y="24" fill="#444440" font-size="10">G</text>
+
+      <!-- scattered points -->
+      <circle cx="80" cy="210" r="4" fill="#888880" opacity="0.7"/>
+      <circle cx="95" cy="200" r="4" fill="#888880" opacity="0.7"/>
+      <circle cx="110" cy="188" r="4" fill="#888880" opacity="0.7"/>
+      <circle cx="120" cy="185" r="4" fill="#888880" opacity="0.7"/>
+      <circle cx="130" cy="175" r="4" fill="#888880" opacity="0.7"/>
+      <circle cx="145" cy="163" r="4" fill="#888880" opacity="0.7"/>
+      <circle cx="100" cy="196" r="4" fill="#888880" opacity="0.7"/>
+      <circle cx="150" cy="158" r="4" fill="#888880" opacity="0.7"/>
+      <circle cx="160" cy="148" r="4" fill="#888880" opacity="0.7"/>
+      <circle cx="170" cy="140" r="4" fill="#888880" opacity="0.7"/>
+      <circle cx="180" cy="133" r="4" fill="#888880" opacity="0.7"/>
+      <circle cx="190" cy="125" r="4" fill="#888880" opacity="0.7"/>
+      <circle cx="200" cy="117" r="4" fill="#888880" opacity="0.7"/>
+      <circle cx="215" cy="108" r="4" fill="#888880" opacity="0.7"/>
+      <circle cx="225" cy="98" r="4" fill="#888880" opacity="0.7"/>
+      <circle cx="238" cy="88" r="4" fill="#888880" opacity="0.7"/>
+
+      <!-- principal axis line -->
+      <line x1="68" y1="222" x2="250" y2="78" stroke="#F97316" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.6"/>
+
+      <!-- endpoints -->
+      <circle cx="72" cy="219" r="6" fill="none" stroke="#F97316" stroke-width="2"/>
+      <circle cx="246" cy="81" r="6" fill="none" stroke="#F97316" stroke-width="2"/>
+      <text x="56" y="236" fill="#F97316" font-size="9">C0</text>
+      <text x="250" y="78" fill="#F97316" font-size="9">C1</text>
+
+      <!-- projection lines -->
+      <line x1="80" y1="210" x2="76" y2="215" stroke="#444440" stroke-width="0.8" opacity="0.5"/>
+      <line x1="160" y1="148" x2="157" y2="151" stroke="#444440" stroke-width="0.8" opacity="0.5"/>
+      <line x1="238" y1="88" x2="244" y2="84" stroke="#444440" stroke-width="0.8" opacity="0.5"/>
+
+      <!-- label -->
+      <text x="155" y="260" fill="#444440" font-size="9" text-anchor="middle">principal axis (direction of max variance)</text>
+
+      <!-- right side: what happens -->
+      <text x="330" y="50" fill="#444440" font-size="10" letter-spacing="1">WHAT GETS STORED</text>
+
+      <rect x="330" y="62" width="16" height="16" fill="#5a2a2a" rx="2"/>
+      <text x="354" y="74" fill="#888880" font-size="10">C0  (one extreme)</text>
+
+      <rect x="330" y="86" width="16" height="16" fill="#c06060" rx="2"/>
+      <text x="354" y="98" fill="#888880" font-size="10">C1  (other extreme)</text>
+
+      <text x="330" y="128" fill="#444440" font-size="10" letter-spacing="1">WHAT GETS DERIVED</text>
+
+      <rect x="330" y="140" width="16" height="16" fill="#5a2a2a" rx="2"/>
+      <rect x="352" y="140" width="16" height="16" fill="#7a3e3e" rx="2"/>
+      <rect x="374" y="140" width="16" height="16" fill="#9a5252" rx="2"/>
+      <rect x="396" y="140" width="16" height="16" fill="#c06060" rx="2"/>
+      <text x="330" y="174" fill="#444440" font-size="9">lerp(C0, C1, 0/3..3/3)</text>
+
+      <text x="330" y="200" fill="#444440" font-size="10" letter-spacing="1">WHAT EACH PIXEL STORES</text>
+      <text x="330" y="218" fill="#888880" font-size="10">a 2-bit index: 00 01 10 11</text>
+      <text x="330" y="234" fill="#444440" font-size="9">pointing to one of the 4 above</text>
+    </svg>
+    <figcaption>PCA on the block's pixel colors. The principal axis is the line of greatest variance. C0 and C1 sit at the extremes. Everything else is derived.</figcaption>
+  </figure>
+
+  <p>In practice: compute the mean color of the 16 pixels, build a covariance matrix, find its largest eigenvector, project all pixels onto that vector, take the min and max projections as your two endpoints. Each pixel then snaps to the nearest of the four palette colors and stores a 2-bit index.</p>
+
+  <p>This runs offline when the artist exports the texture. The .dds file on disk is already compressed. At load time it's just a memcpy into VRAM. At runtime the GPU decodes it transparently. Your shader just calls <code>Sample()</code> and gets a color back, same as any uncompressed texture.</p>
+
+  <h2>Why Not Just Quantize Each Pixel?</h2>
+
+  <p>The obvious question: why not just reduce each pixel to 4 bits directly? Smaller storage, simpler.</p>
+
+  <p>The problem is that 4 bits gives you 16 steps spread across the full 0 to 255 range. Each step is about 17 units wide. If your block is a dark patch, say all pixels between 40 and 80, you get maybe two or three of those 16 steps landing in your range. Big jumps. Visible banding.</p>
+
+  <p>The endpoints solve this. Instead of 16 fixed steps across the whole range, you describe the block's actual range with C0 and C1, then subdivide just that range into 4 steps. All 4 steps are useful. All 4 steps are tight. Much less banding.</p>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 580 210" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Space Mono, monospace">
+
+      <!-- NAIVE -->
+      <text x="10" y="20" fill="#444440" font-size="9" letter-spacing="1">NAIVE: quantize each pixel to 4 bits</text>
+
+      <!-- full range bar -->
+      <rect x="10" y="30" width="420" height="18" fill="#141414" stroke="#1c1c1c" rx="2"/>
+      <text x="10" y="62" fill="#444440" font-size="8">0</text>
+      <text x="424" y="62" fill="#444440" font-size="8">255</text>
+
+      <!-- 16 evenly spaced ticks -->
+      <line x1="10"  y1="30" x2="10"  y2="48" stroke="#1c1c1c" stroke-width="1"/>
+      <line x1="36"  y1="30" x2="36"  y2="48" stroke="#1c1c1c" stroke-width="1"/>
+      <line x1="62"  y1="30" x2="62"  y2="48" stroke="#1c1c1c" stroke-width="1"/>
+      <line x1="88"  y1="30" x2="88"  y2="48" stroke="#1c1c1c" stroke-width="1"/>
+      <line x1="114" y1="30" x2="114" y2="48" stroke="#1c1c1c" stroke-width="1"/>
+      <line x1="140" y1="30" x2="140" y2="48" stroke="#1c1c1c" stroke-width="1"/>
+      <line x1="166" y1="30" x2="166" y2="48" stroke="#1c1c1c" stroke-width="1"/>
+      <line x1="192" y1="30" x2="192" y2="48" stroke="#1c1c1c" stroke-width="1"/>
+      <line x1="218" y1="30" x2="218" y2="48" stroke="#1c1c1c" stroke-width="1"/>
+      <line x1="244" y1="30" x2="244" y2="48" stroke="#1c1c1c" stroke-width="1"/>
+      <line x1="270" y1="30" x2="270" y2="48" stroke="#1c1c1c" stroke-width="1"/>
+      <line x1="296" y1="30" x2="296" y2="48" stroke="#1c1c1c" stroke-width="1"/>
+      <line x1="322" y1="30" x2="322" y2="48" stroke="#1c1c1c" stroke-width="1"/>
+      <line x1="348" y1="30" x2="348" y2="48" stroke="#1c1c1c" stroke-width="1"/>
+      <line x1="374" y1="30" x2="374" y2="48" stroke="#1c1c1c" stroke-width="1"/>
+      <line x1="430" y1="30" x2="430" y2="48" stroke="#1c1c1c" stroke-width="1"/>
+
+      <!-- actual color cluster highlight -->
+      <rect x="114" y="30" width="54" height="18" fill="#F97316" opacity="0.15" rx="0"/>
+      <rect x="114" y="30" width="2" height="18" fill="#F97316" opacity="0.6"/>
+      <rect x="166" y="30" width="2" height="18" fill="#F97316" opacity="0.6"/>
+      <text x="141" y="26" fill="#F97316" font-size="8" text-anchor="middle">actual colors</text>
+      <text x="141" y="62" fill="#F97316" font-size="8" text-anchor="middle">only 2 steps here</text>
+
+      <!-- BC1 -->
+      <text x="10" y="95" fill="#444440" font-size="9" letter-spacing="1">BC1: describe the range first, then subdivide</text>
+
+      <!-- range bar -->
+      <rect x="10" y="105" width="420" height="18" fill="#141414" stroke="#1c1c1c" rx="2"/>
+      <text x="10" y="137" fill="#F97316" font-size="8">C0 (dark)</text>
+      <text x="395" y="137" fill="#F97316" font-size="8">C1 (bright)</text>
+
+      <!-- 4 ticks -->
+      <line x1="10"  y1="105" x2="10"  y2="123" stroke="#F97316" stroke-width="1.5" opacity="0.8"/>
+      <line x1="150" y1="105" x2="150" y2="123" stroke="#F97316" stroke-width="1.5" opacity="0.8"/>
+      <line x1="290" y1="105" x2="290" y2="123" stroke="#F97316" stroke-width="1.5" opacity="0.8"/>
+      <line x1="430" y1="105" x2="430" y2="123" stroke="#F97316" stroke-width="1.5" opacity="0.8"/>
+
+      <defs>
+        <linearGradient id="rangeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" style="stop-color:#5a2a2a;stop-opacity:0.5"/>
+          <stop offset="100%" style="stop-color:#c06060;stop-opacity:0.5"/>
+        </linearGradient>
+      </defs>
+      <rect x="10" y="105" width="420" height="18" fill="url(#rangeGrad)" rx="2"/>
+
+      <text x="215" y="155" fill="#888880" font-size="8" text-anchor="middle">all 4 steps land inside the actual color range</text>
+
+      <!-- legend -->
+      <text x="480" y="50" fill="#444440" font-size="9">step size</text>
+      <line x1="480" y1="60" x2="560" y2="60" stroke="#888880" stroke-width="1" stroke-dasharray="2,2"/>
+      <text x="480" y="73" fill="#888880" font-size="9">naive: ~17</text>
+      <text x="480" y="88" fill="#F97316" font-size="9">BC1:  ~2-3</text>
+      <text x="480" y="108" fill="#444440" font-size="8">(same block,</text>
+      <text x="480" y="120" fill="#444440" font-size="8">same bit count)</text>
+    </svg>
+    <figcaption>With naive quantization, only 2 of 16 steps fall in the block's actual color range. BC1 describes the range first, so all 4 steps are used where the colors actually live.</figcaption>
+  </figure>
+
+  <p>This is the same idea as floating point vs fixed point. You spend some bits describing the range, then use the remaining bits to subdivide it. More of your precision ends up where it matters.</p>
+
+  <h2>Cache Is the Real Win</h2>
+
+  <p>You save memory, obviously. But that's not the main reason to use it.</p>
+
+  <p>A 256x256 raw RGBA texture is 256KB. The same texture in BC1 is 32KB. Eight times more texture fits in the GPU's L2 cache at the same time. Cache hit rate goes up, memory bandwidth pressure goes down, and you get better performance even before you count the VRAM savings.</p>
+
+  <p>BC1 textures aren't just smaller. They're faster. That's why it's been mandatory in every DirectX GPU since 1999 and still in active use today.</p>
+
+  <h2>Using BC1 in DirectX 11</h2>
+
+  <p>Compress your texture offline with <code>texconv</code> (part of DirectXTex):</p>
+  <pre><code>texconv -f BC1_UNORM albedo.png -o textures/</code></pre>
+
+  <p>This writes a <code>.dds</code> file with the BC1 data already packed. On the D3D11 side, one field is all that changes when you describe the texture:</p>
+  <pre><code>desc.Format = DXGI_FORMAT_BC1_UNORM;  // instead of DXGI_FORMAT_R8G8B8A8_UNORM</code></pre>
+
+  <p>The rest of your pipeline stays the same. The shader sees a normal texture. The hardware handles decompression transparently at sample time.</p>
+
+  <p>If you need alpha, swap to <code>DXGI_FORMAT_BC3_UNORM</code>. For higher quality, <code>DXGI_FORMAT_BC7_UNORM</code> is the DX11 option, though the encoder is slower offline.</p>
+
+  <h2>Where It Goes From Here</h2>
+
+  <p>BC1's assumption is that 16 pixels in a block cluster along a line in RGB space. When that's true, smooth gradients and single-material surfaces, you lose almost nothing. When it's not, sharp color transitions or complex patterns within a single block, you get the blocky artifacts you've seen on low-quality textures.</p>
+
+  <p>BC7 extended this by splitting blocks into sub-regions, each with their own endpoint pair. Better quality, more complex encoder.</p>
+
+  <p>And in 2024, AMD asked what happens if you replace the "find a line in RGB space" step with a small neural network. What if the two stored values aren't endpoints of a line but latent codes in a learned space that can represent color distributions a line never could? That's the NTBC paper that started all this. But understanding BC1 (the PCA, the lerp, the 2-bit index) is what makes that paper land.</p>
+
+  <p>The best compression schemes are the ones nobody thinks about. BC1 has been running in every GPU for 26 years. That's good engineering.</p>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-left">&copy; rgbguy &middot; Bengaluru, India &middot; 2026</div>
+</footer>
+<script src="../nav.js"></script>
+</body>
+</html>
