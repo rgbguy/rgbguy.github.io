@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-H4ZKJ77Z2W"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-H4ZKJ77Z2W');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>rgbguy</title>
+  <link rel="icon" type="image/jpeg" href="../assets/dp.jpg" />
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    .video-embed {
+      position: relative;
+      width: 100%;
+      padding-top: 56.25%;
+      margin: 2rem 0;
+    }
+    .video-embed iframe {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      border: 1px solid #1c1c1c;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+<nav class="site-nav">
+  <a href="../index.html" class="nav-logo">rgb<b>guy</b></a>
+  <ul class="nav-links">
+    <li><a href="../experience.html">experience</a></li>
+    <li><a href="../projects.html">experiments</a></li>
+    <li><a href="../blog.html">blog</a></li>
+    <li><a href="../read.html">reading</a></li>
+    <li><a href="../videos.html">videos</a></li>
+    <li><a href="../learn.html">learn</a></li>
+  </ul>
+</nav>
+
+<div class="post-header">
+  <a href="../blog.html" class="post-back">&larr; blog</a>
+  <div class="post-meta">
+    <span>Apr 3, 2026</span>
+    <span class="post-tag">renderer</span>
+    <span class="post-tag">graphics</span>
+  </div>
+  <h1 class="post-title">Computationally Fast Object Picking in OpenGL</h1>
+</div>
+
+<div class="post-body">
+
+  <p>I ran into an interesting problem while working on my engine. I wanted something that sounds trivial from a user's perspective: click on the screen, select the object under the cursor. Turns out it isn't trivial at all.</p>
+
+  <h2>First Thought: Ray Casting</h2>
+
+  <p>My first instinct was the classic approach. If the user clicks a pixel, I can construct a ray from the camera through that pixel into the scene, intersect it with objects, and pick the closest hit.</p>
+
+  <p>The plan was straightforward enough:</p>
+  <ul>
+    <li>Convert 2D screen coordinates into a 3D ray</li>
+    <li>Intersect that ray with bounding volumes first (spheres, AABBs) to keep it cheap</li>
+    <li>Fall back to triangle-level checks only if needed</li>
+    <li>Maybe wire up a BVH or octree later for bigger scenes</li>
+  </ul>
+
+  <p>At this point it felt like the correct, "proper graphics programmer" way to do it.</p>
+
+  <h2>Then I Hit the Real Problem</h2>
+
+  <p>All my geometry lives on the GPU. Vertex data is in VBOs. The CPU doesn't have direct access to any of it, and reading it back means pipeline stalls. So to do ray-triangle intersection on the CPU, I'd have to either duplicate all the geometry on the CPU side, or read it back from the GPU every time someone clicks something.</p>
+
+  <p>Both options felt wrong. I was doing a lot of work just to replicate something the GPU already does every single frame.</p>
+
+  <p>The GPU is literally drawing every object, every pixel, every frame. It knows exactly what is in front. Why am I recalculating that?</p>
+
+  <h2>Object ID Rendering</h2>
+
+  <p>While digging into how engines actually solve this, I came across an approach called color picking, or object ID rendering. This was one of those moments where things just clicked.</p>
+
+  <p>The idea: instead of computing intersections manually, just ask the GPU what it already rendered.</p>
+
+  <p>Here is how it works:</p>
+  <ul>
+    <li>Assign each object a unique integer ID starting from 1. Zero means "no object."</li>
+    <li>Render the scene into an offscreen framebuffer using a flat shader that outputs the object ID as a color instead of the usual lighting result.</li>
+    <li>When the user clicks, read the pixel under the cursor with <code>glReadPixels</code>.</li>
+    <li>Decode that color back into an ID. That is your selected object.</li>
+  </ul>
+
+  <p>No ray math. No geometry duplication. No CPU-side intersection tests. Just leverage the rasterization the GPU was already doing.</p>
+
+  <h2>Encoding IDs as Colors</h2>
+
+  <p>The simplest approach is to encode each ID as a normalized float and store it in a single color channel:</p>
+
+  <pre><code>// Vertex shader: pass through object ID as uniform
+uniform float u_objectID;
+uniform float u_totalObjects;
+
+// Fragment shader
+out vec4 fragColor;
+void main() {
+    float encoded = u_objectID / u_totalObjects;
+    fragColor = vec4(encoded, 0.0, 0.0, 1.0);
+}</code></pre>
+
+  <p>On the CPU side, after <code>glReadPixels</code>:</p>
+
+  <pre><code>// Read back the pixel
+GLfloat pixel[4];
+glReadPixels(mouseX, mouseY, 1, 1, GL_RGBA, GL_FLOAT, pixel);
+
+// Decode
+int selectedID = (int)round(pixel[0] * totalObjects);</code></pre>
+
+  <p>A few things I learned the hard way:</p>
+
+  <ul>
+    <li><strong>IDs start from 1.</strong> Zero is reserved for "nothing." Clear the framebuffer to black (0,0,0) so clicking empty space gives you ID 0.</li>
+    <li><strong>Round, don't truncate.</strong> Floating point encoding introduces tiny errors. I was using <code>(int)(pixel * total)</code> at first and kept getting the wrong ID by one. Switching to <code>round()</code> fixed it.</li>
+    <li><strong>Coordinate origin mismatch.</strong> Win32 gives you mouse coordinates with the origin at the top-left. OpenGL's <code>glReadPixels</code> expects the origin at the bottom-left. Flip the Y: <code>glY = clientHeight - mouseY - 1</code>.</li>
+    <li><strong>Only render this pass on click.</strong> There is no reason to run it every frame. Trigger it only when a mouse button goes down.</li>
+  </ul>
+
+  <h2>Blender Does This Too</h2>
+
+  <p>This is not a hack or a workaround. It is a well-established technique. Blender uses the same idea internally for its viewport selection. The image below is what the ID buffer looks like: every object gets a flat, unique color, and the depth test still resolves which one is on top.</p>
+
+  <img src="../assets/objectIDRender.png" alt="Object ID render buffer in Blender" style="width:100%;margin:1.5rem 0;display:block;border-radius:4px;border:1px solid #1c1c1c;" />
+
+  <h2>Tradeoffs</h2>
+
+  <p>This approach is GPU-driven, works for any geometry complexity, and gives pixel-perfect results because depth testing is built in. You do not need to maintain any CPU-side spatial structures.</p>
+
+  <p>The cost is that <code>glReadPixels</code> forces a CPU-GPU sync. The GPU has to finish rendering before the CPU can read the result, which creates a stall. For a one-time click event that is usually fine. If you were doing hover highlighting on every frame it would become a problem, and you would want to use a pixel buffer object (PBO) to do the readback asynchronously.</p>
+
+  <p>There is also a precision limit with float encoding. If you have more objects than the float precision can represent distinctly, IDs start to collide. The fix is to use an integer framebuffer attachment (<code>GL_R32UI</code>) and write the ID directly as an unsigned int, no encoding needed.</p>
+
+  <h2>Video Walkthrough</h2>
+
+  <p>The scene has 24 spheres. IDs are encoded as <code>id / totalObjects</code>, so the first sphere (ID 1) maps to <code>1/24 ≈ 0.04</code>, which renders almost black. The last sphere (ID 24) maps to <code>24/24 = 1.0</code>, which renders pure white. You can see this gradient in the ID buffer: top-left sphere is nearly black, bottom-right is white. Everything in between is a shade of grey proportional to its ID.</p>
+
+  <div class="video-embed">
+    <iframe src="https://www.youtube.com/embed/qcI3KpnP8Cg" title="Object Picking in OpenGL" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-left">&copy; rgbguy &middot; Bengaluru, India &middot; 2026</div>
+</footer>
+<script src="../nav.js"></script>
+</body>
+</html>
