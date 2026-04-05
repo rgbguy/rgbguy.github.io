@@ -1222,6 +1222,19 @@ nav.site-nav {
   font-weight: 300;
   vertical-align: top;
 }
+.video-wrap {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  margin: 1.5rem 0 2rem;
+}
+.video-wrap iframe {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
 .post-body blockquote {
   border-left: 2px solid var(--red);
   padding: 0.25rem 0 0.25rem 1.25rem;

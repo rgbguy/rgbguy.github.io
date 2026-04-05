@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-H4ZKJ77Z2W"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-H4ZKJ77Z2W');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>rgbguy</title>
+  <link rel="icon" type="image/jpeg" href="../assets/dp.jpg" />
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+<nav class="site-nav">
+  <a href="../index.html" class="nav-logo">rgb<b>guy</b></a>
+  <ul class="nav-links">
+    <li><a href="../experience.html">experience</a></li>
+    <li><a href="../projects.html">experiments</a></li>
+    <li><a href="../blog.html">blog</a></li>
+    <li><a href="../read.html">reading</a></li>
+    <li><a href="../videos.html">videos</a></li>
+    <li><a href="../learn.html">learn</a></li>
+  </ul>
+</nav>
+
+<div class="post-header">
+  <a href="../blog.html" class="post-back">&larr; blog</a>
+  <div class="post-meta">
+    <span>Apr 6, 2026</span>
+    <span class="post-tag">graphics</span>
+    <span class="post-tag">renderer</span>
+  </div>
+  <h1 class="post-title">Implementing the PS1 Wobble Effect in OpenGL</h1>
+</div>
+
+<div class="post-body">
+
+  <p>I wanted to implement the PS1 aesthetic. The wobbly models, the swimming textures. Here's what I made:</p>
+
+  <div class="video-wrap">
+    <iframe src="https://www.youtube.com/embed/AFimRp_aFlg" title="PS1 aesthetic video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </div>
+
+  <p>While researching how people recreate this look, I found that the wobble and the texture swimming are not stylistic choices. They are two separate hardware limitations baked into the PS1 itself.</p>
+
+  <h2>No FPU. Everything Was Integer.</h2>
+
+  <p>The PS1 had a co-processor called the GTE (Geometry Transformation Engine) that handled all 3D math. Transforms, projections, everything. There was no floating point unit, so all of it ran on fixed-point integer arithmetic.</p>
+
+  <p>The GTE output integer screen-space coordinates. Vertices could only land on whole pixel positions. As geometry moved, it snapped from one integer to the next instead of gliding smoothly. That snapping is the wobble.</p>
+
+  <h2>No Z-Buffer. No Per-Pixel Divide.</h2>
+
+  <p>The rasterizer had no depth buffer. Z-sorting was handled by the CPU using painter's algorithm. It also had no per-pixel divide, which is what killed perspective-correct texture interpolation.</p>
+
+  <p>Correct UV interpolation across a triangle works like this:</p>
+
+  <pre><code>result = (u/w interpolated) / (1/w interpolated)</code></pre>
+
+  <p>Each UV gets divided by W at the vertices, interpolated across the triangle, then divided again by the interpolated 1/W at each pixel. That final per-pixel divide is what the PS1 rasterizer couldn't do. So it skipped W correction entirely and just interpolated UV linearly in screen space. That's affine texture mapping, and it's why textures slide and warp as the camera moves.</p>
+
+  <h2>Implementing Vertex Snapping</h2>
+
+  <p>I snap in NDC space and convert back to clip space before writing <code>gl_Position</code>. W has to stay untouched since the rasterizer still uses it downstream.</p>
+
+  <pre><code>vec4 clip = uMVPMatrix * aPosition;
+vec2 ndc  = vec2(clip.x / clip.w, clip.y / clip.w);
+
+float snapRes = 50.0;
+vec2 snapped  = floor(ndc * snapRes) / snapRes;
+
+gl_Position = vec4(snapped.x * clip.w,
+                   snapped.y * clip.w,
+                   clip.z,
+                   clip.w);</code></pre>
+
+  <p>Lower <code>snapRes</code> means coarser snapping. I tuned it by eye rather than tying it to a fixed resolution.</p>
+
+  <h2>Implementing Affine Texture Warping</h2>
+
+  <p>GLSL has an interpolation qualifier called <code>noperspective</code>. It makes the rasterizer interpolate the attribute linearly in screen space with no W correction. Exactly what the PS1 rasterizer did.</p>
+
+  <p>Vertex shader:</p>
+
+  <pre><code>noperspective out vec2 vTexCoords;</code></pre>
+
+  <p>Fragment shader:</p>
+
+  <pre><code>noperspective in vec2 vTexCoords;</code></pre>
+
+  <p>I tried another approach first: dividing UV by W manually in the vertex shader.</p>
+
+  <pre><code>// doesn't work
+vTexCoords = aTexCoords / gl_Position.w;</code></pre>
+
+  <p>The rasterizer treats it as a regular varying and perspective-corrects it anyway. The manual divide and the hardware divide cancel each other out and produce correct interpolation. There's no GL flag to disable perspective correction at runtime. The qualifier is the only way.</p>
+
+  <h2>Two Artifacts, Two Chips</h2>
+
+  <p>These are independent effects from two different chips. Vertex snapping is a GTE limitation. Affine warping is a rasterizer limitation. Either one works without the other. Both together give the full PS1 look.</p>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-left">&copy; rgbguy &middot; Bengaluru, India &middot; 2026</div>
+</footer>
+<script src="../nav.js"></script>
+</body>
+</html>
