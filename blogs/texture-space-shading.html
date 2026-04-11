@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-H4ZKJ77Z2W"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-H4ZKJ77Z2W');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>rgbguy</title>
+  <link rel="icon" type="image/jpeg" href="../assets/dp.jpg" />
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+<nav class="site-nav">
+  <a href="../index.html" class="nav-logo">rgb<b>guy</b></a>
+  <ul class="nav-links">
+    <li><a href="../experience.html">experience</a></li>
+    <li><a href="../projects.html">experiments</a></li>
+    <li><a href="../blog.html">blog</a></li>
+    <li><a href="../read.html">reading</a></li>
+    <li><a href="../videos.html">videos</a></li>
+    <li><a href="../learn.html">learn</a></li>
+  </ul>
+</nav>
+
+<div class="post-header">
+  <a href="../blog.html" class="post-back">&larr; blog</a>
+  <div class="post-meta">
+    <span>Apr 6, 2026</span>
+    <span class="post-tag">graphics</span>
+    <span class="post-tag">renderer</span>
+  </div>
+  <h1 class="post-title">Texture Space Shading</h1>
+</div>
+
+<div class="post-body">
+
+  <p>I was studying how light baking works. A baked lightmap is just a texture. The lighting is computed once and stored in UV space, not screen space. That made me curious about the broader idea: what if you did all your shading in UV space instead?</p>
+
+  <div class="video-wrap">
+    <iframe src="https://www.youtube.com/embed/sxpLHyw5RyY" title="Texture space shading" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </div>
+
+  <p>So I implemented it. Here's what it is.</p>
+
+  <h2>The Idea</h2>
+
+  <p>Normal rendering writes shading results to screen space. Each pixel on screen gets a color, and that color is computed for that screen position.</p>
+
+  <p>Texture space shading flips this. Instead of rendering to the screen, you render to a texture using the mesh's UV coordinates as the output position. The fragment shader runs in UV space. The result gets stored in the texture. Then a second pass samples that texture and draws the mesh to screen as usual.</p>
+
+  <p>To do the first pass, the vertex shader outputs UV as the clip-space position:</p>
+
+  <pre><code>// first pass: render into UV space
+vec2 uv = aTexCoords * 2.0 - 1.0;  // remap [0,1] to [-1,1]
+gl_Position = vec4(uv, 0.0, 1.0);</code></pre>
+
+  <p>The rasterizer covers the triangles as they exist in UV space. The fragment shader runs for each texel the mesh occupies, computes lighting, and writes to the framebuffer. That framebuffer is your shading texture.</p>
+
+  <p>The second pass is just normal mesh rendering with one extra texture sample:</p>
+
+  <pre><code>// second pass: sample the shading texture
+vec3 shading = texture(uShadingTex, vTexCoords).rgb;
+fragColor = vec4(shading, 1.0);</code></pre>
+
+  <h2>Why This Is Useful</h2>
+
+  <ul>
+    <li><strong>Light baking.</strong> Render lighting once into a texture, reuse it every frame with no per-frame shading cost.</li>
+    <li><strong>Decoupled shading rate.</strong> Shade at a lower resolution than the screen. Useful for expensive effects like ray-traced lighting or subsurface scattering.</li>
+    <li><strong>Temporal stability.</strong> Shading lives in texture space, not screen space. It doesn't flicker when the camera moves.</li>
+    <li><strong>Cached effects.</strong> Wet surfaces, dirt accumulation, burn marks. Write to the texture once, persist the result across frames.</li>
+  </ul>
+
+  <h2>One Catch</h2>
+
+  <p>UV layouts need to be clean. Overlapping UVs mean multiple surface points write to the same texel. Seams and padding matter more than they do for regular texturing. If the mesh wasn't unwrapped with this in mind, the output will have artifacts along UV boundaries.</p>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-left">&copy; rgbguy &middot; Bengaluru, India &middot; 2026</div>
+</footer>
+<script src="../nav.js"></script>
+</body>
+</html>
