@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-H4ZKJ77Z2W"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-H4ZKJ77Z2W');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>rgbguy</title>
+  <link rel="icon" type="image/jpeg" href="../assets/dp.jpg" />
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+<nav class="site-nav">
+  <a href="../index.html" class="nav-logo">rgb<b>guy</b></a>
+  <ul class="nav-links">
+    <li><a href="../experience.html">experience</a></li>
+    <li><a href="../projects.html">experiments</a></li>
+    <li><a href="../blog.html">blog</a></li>
+    <li><a href="../read.html">reading</a></li>
+    <li><a href="../videos.html">videos</a></li>
+    <li><a href="../learn.html">learn</a></li>
+  </ul>
+</nav>
+
+<div class="post-header">
+  <a href="../blog.html" class="post-back">&larr; blog</a>
+  <div class="post-meta">
+    <span>Apr 27, 2026</span>
+    <span class="post-tag">graphics</span>
+    <span class="post-tag">optimization</span>
+  </div>
+  <h1 class="post-title">CUDA-OpenGL Interop: Letting the GPU Talk to Itself</h1>
+</div>
+
+<div class="post-body">
+
+  <p>When you compute geometry on the CPU and draw it with OpenGL, data has to travel from system RAM to GPU VRAM over PCIe every frame. For a large mesh updated every frame, that transfer becomes the bottleneck. The math is fast. The bus is slow.</p>
+
+  <p>CUDA-OpenGL interop removes that transfer. A CUDA kernel writes directly into an OpenGL buffer object while it lives in GPU memory. OpenGL then reads from the same memory. No round-trip through the CPU. No copy.</p>
+
+  <h2>The Four Steps</h2>
+
+  <p>Interop follows a strict protocol every frame. Always in this order:</p>
+
+  <ul>
+    <li><strong>Register</strong> the OpenGL buffer with CUDA (done once at init)</li>
+    <li><strong>Map</strong> the resource to give CUDA exclusive access</li>
+    <li><strong>Get a device pointer</strong> into the buffer that your kernel can write to</li>
+    <li><strong>Unmap</strong> to return the buffer back to OpenGL</li>
+  </ul>
+
+  <p>When the buffer is mapped, OpenGL must not use it. When it is unmapped, CUDA must not touch it. Violating this is undefined behavior.</p>
+
+  <h2>Step 1: Register</h2>
+
+  <p>Create a normal OpenGL VBO, then register it with CUDA. This is a one-time call at initialization:</p>
+
+  <pre><code>glGenBuffers(1, &vbo);
+glBindBuffer(GL_ARRAY_BUFFER, vbo);
+glBufferData(GL_ARRAY_BUFFER, bufferSize, NULL, GL_DYNAMIC_DRAW);
+glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+struct cudaGraphicsResource *cuResource;
+cudaGraphicsGLRegisterBuffer(&cuResource, vbo, cudaGraphicsMapFlagsWriteDiscard);</code></pre>
+
+  <p><code>cudaGraphicsMapFlagsWriteDiscard</code> is a hint that tells CUDA the kernel will overwrite the entire buffer, so there is no need to preserve its previous contents. This allows the driver to skip any synchronization needed to maintain coherency with the old data. Use it when your kernel recomputes everything each frame.</p>
+
+  <h2>Step 2: Map</h2>
+
+  <p>Before launching your kernel each frame, map the resource. This hands ownership to CUDA and blocks OpenGL from reading it until you unmap:</p>
+
+  <pre><code>cudaGraphicsMapResources(1, &cuResource, 0);</code></pre>
+
+  <p>The second argument is the count of resources to map, and the third is an optional CUDA stream. Passing 0 uses the default stream.</p>
+
+  <h2>Step 3: Get a Device Pointer</h2>
+
+  <p>Once mapped, ask for a raw pointer into the buffer's GPU memory:</p>
+
+  <pre><code>float4 *devPtr = NULL;
+size_t mappedSize = 0;
+cudaGraphicsResourceGetMappedPointer((void**)&devPtr, &mappedSize, cuResource);</code></pre>
+
+  <p><code>devPtr</code> now addresses GPU memory that belongs to the VBO. Pass it to your kernel like any other device pointer. Whatever the kernel writes there, OpenGL will see after you unmap.</p>
+
+  <h2>Step 4: Unmap and Draw</h2>
+
+  <p>After the kernel finishes, unmap to return the buffer to OpenGL, then draw as normal:</p>
+
+  <pre><code>cudaGraphicsUnmapResources(1, &cuResource, 0);
+
+glBindBuffer(GL_ARRAY_BUFFER, vbo);
+glVertexAttribPointer(ATTRIB_POSITION, 4, GL_FLOAT, GL_FALSE, 0, NULL);
+glEnableVertexAttribArray(ATTRIB_POSITION);
+glDrawArrays(GL_POINTS, 0, vertexCount);</code></pre>
+
+  <p>The VBO that OpenGL binds is the same one CUDA just wrote into. No upload happened.</p>
+
+  <h2>Cleanup</h2>
+
+  <p>On shutdown, unregister the resource before deleting the buffer:</p>
+
+  <pre><code>cudaGraphicsUnregisterResource(cuResource);
+glDeleteBuffers(1, &vbo);</code></pre>
+
+  <p>Deleting a VBO that is still registered with CUDA is undefined behavior. Always unregister first.</p>
+
+  <h2>When It Is Worth It</h2>
+
+  <p>Interop pays off when a large GPU buffer is updated every frame by a computation that parallelizes well across thousands of threads. Particle systems, fluid and wave surfaces, physics-driven meshes. If the buffer is small, or updated rarely, the overhead of registration and the map/unmap calls each frame is not worth it. The benefit is proportional to how much data you would otherwise be transferring.</p>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-left">&copy; rgbguy &middot; Bengaluru, India &middot; 2026</div>
+</footer>
+<script src="../nav.js"></script>
+</body>
+</html>
