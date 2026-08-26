@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-H4ZKJ77Z2W"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-H4ZKJ77Z2W');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>rgbguy</title>
+  <link rel="icon" type="image/jpeg" href="../assets/dp.jpg" />
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+<nav class="site-nav">
+  <a href="../index.html" class="nav-logo">rgb<b>guy</b></a>
+  <ul class="nav-links">
+    <li><a href="../experience.html">experience</a></li>
+    <li><a href="../projects.html">experiments</a></li>
+    <li><a href="../blog.html">blog</a></li>
+    <li><a href="../read.html">reading</a></li>
+    <li><a href="../videos.html">videos</a></li>
+    <li><a href="../learn.html">learn</a></li>
+  </ul>
+</nav>
+
+<div class="post-header">
+  <a href="../blog.html" class="post-back">&larr; blog</a>
+  <div class="post-meta">
+    <span>Aug 26, 2026</span>
+    <span class="post-tag">graphics</span>
+    <span class="post-tag">optimization</span>
+  </div>
+  <h1 class="post-title">Multithreading OpenGL: The Shared-Context Pattern</h1>
+</div>
+
+<div class="post-body">
+
+  <p>An OpenGL context can only be current on one thread at a time, and every GL call operates on whatever context is current on the calling thread. That single fact is why "multithreaded OpenGL" doesn't mean calling <code>glDrawArrays</code> from multiple threads at once — it means moving non-rendering work off the render thread. Most commonly, asset loading.</p>
+
+  <h2>The Technique: A Secondary Shared Context</h2>
+
+  <p>Create your normal render context (<code>ghrc</code>) and make it current on the main thread as usual. Then:</p>
+
+  <ul>
+    <li>Create a second context (<code>ghrcLoader</code>) on the same pixel format.</li>
+    <li>Call <code>wglShareLists(ghrc, ghrcLoader)</code> — GLX/EGL have equivalents — before the second context is ever made current anywhere.</li>
+    <li>Hand <code>ghrcLoader</code> to a worker thread. It calls <code>wglMakeCurrent(hdc, ghrcLoader)</code> on itself and can now issue GL calls that land in the same object namespace as the main context.</li>
+    <li>Sync with a <code>glFinish()</code> (or a fence sync object for something less blunt) before the main thread touches what the worker produced, then <code>join()</code>.</li>
+  </ul>
+
+  <h2>What's Shareable — and What Isn't</h2>
+
+  <p>This is the part that bites everyone the first time:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Shared across the share group</th>
+        <th>NOT shared — per-context only</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Buffer objects (VBO/EBO/UBO/SSBO)</td>
+        <td>Vertex array objects (VAO)</td>
+      </tr>
+      <tr>
+        <td>Textures</td>
+        <td>Framebuffer objects (FBO)</td>
+      </tr>
+      <tr>
+        <td>Shader/program objects</td>
+        <td>Query objects</td>
+      </tr>
+      <tr>
+        <td>Sync objects</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Buffers and textures are just GPU memory plus metadata, so the driver can genuinely share them. A VAO, though, is a bundle of bindings — which buffer is attached to which attribute slot — and that's defined as context-local state, full stop. If you create and populate a VAO on the loader thread's context and then bind it from the main context, you get undefined behavior: it can silently render nothing, or run for a while and crash the driver later.</p>
+
+  <p><strong>Rule of thumb:</strong> upload data on the worker thread, but always build the VAO on the thread/context that will render it.</p>
+
+  <h2>The Pattern in Practice</h2>
+
+  <pre><code>Worker thread (shared context)          Main thread (render context)
+&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;           &#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;&#8213;
+Parse asset file (CPU only,             Do other independent init work
+no GL calls &#8212; thread-safe)              (compile shaders, decode textures)
+glGenBuffers / glBufferData
+  (vbo, ebo &#8212; shareable)
+glFinish(); wglMakeCurrent(NULL,NULL)
+        &#9492;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472; join() &#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;&#9472;
+                                         glGenVertexArrays + attrib pointers
+                                         (VAO &#8212; must be main-thread/context)</code></pre>
+
+  <p>The win comes from the overlap window, not from the GL calls themselves being parallel. CPU-bound parsing — Assimp, image decode, and the like — running concurrently with other CPU-bound init work is where the wall-clock time actually drops. Spawning a thread and immediately <code>join()</code>ing it, with no overlap, is strictly slower than doing it all inline, because you pay thread-creation and context-switch overhead for nothing.</p>
+
+  <h2>Real-World Use Cases</h2>
+
+  <ul>
+    <li><strong>Loading-screen asset streaming:</strong> parse/decode meshes, textures, and audio on worker threads while the main thread keeps the loading screen rendering at 60fps instead of freezing.</li>
+    <li><strong>Open-world texture/geometry streaming:</strong> stream in LODs and textures for newly-visible chunks on background threads as the camera moves, uploading via a shared context without stalling the frame.</li>
+    <li><strong>Video/texture decode pipelines:</strong> decode video frames or large image sequences off-thread, upload to a texture via the shared context, consume on the render thread.</li>
+    <li><strong>Procedural/large-dataset content:</strong> point clouds, terrain, CAD/BIM models — anything where CPU-side parsing time rivals or exceeds GPU upload time benefits from overlapping the two.</li>
+  </ul>
+
+  <h2>Gotchas</h2>
+
+  <ul>
+    <li><strong>Not free.</strong> Context creation and <code>wglMakeCurrent</code> switches carry real, driver-dependent overhead, and <code>glFinish()</code> is a hard sync point. For small assets, threading can lose to doing it inline.</li>
+    <li><strong>Driver-dependent robustness.</strong> Share groups don't always behave identically at the edges across NVIDIA, AMD, and Intel.</li>
+    <li><strong>Submission itself still isn't parallel.</strong> Within one context, command submission is not parallelized — this pattern parallelizes preparation, not draw-call submission. That's what <code>glMultiDrawIndirect</code>, persistent-mapped buffers, or Vulkan/D3D12 command lists are for.</li>
+  </ul>
+
+  <h2>The Measured Example</h2>
+
+  <p>Parsing a 94MB <code>.glb</code> and building its GPU buffers, single-threaded (shader &rarr; parse+upload &rarr; texture, all serial) versus multithreaded (parse+buffer-upload on a worker with a shared context, overlapped with shader compile and texture decode/upload on the main thread, VAO built on main after <code>join()</code>) showed roughly 30% faster wall-clock for the multithreaded path — purely from overlapping the Assimp parse with otherwise-serial main-thread work.</p>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-left">&copy; rgbguy &middot; Bengaluru, India &middot; 2026</div>
+</footer>
+<script src="../nav.js"></script>
+</body>
+</html>
