@@ -43,7 +43,7 @@
   <p>Instancing in computer graphics refers to the technique of using a single set of geometry, shader, and textures to draw multiple copies of an object in a scene. It is used to reduce the number of draw calls needed to render a scene, which can significantly improve the performance of the rendering pipeline.</p>
 
   <h2>Why it matters</h2>
-  <p>One of the key benefits of instancing is that it allows the GPU to batch together multiple draw calls into a single call, reducing the overhead of issuing multiple draw commands. This is especially useful when rendering a large number of similar objects — grass, trees, particles — which can quickly add up and strain the GPU.</p>
+  <p>One of the key benefits of instancing is that it allows the GPU to batch together multiple draw calls into a single call, reducing the overhead of issuing multiple draw commands. This is especially useful when rendering a large number of similar objects - grass, trees, particles - which can quickly add up and strain the GPU.</p>
   <p>Without instancing, rendering 1000 trees means 1000 separate draw calls, each with its own state setup, buffer binding, and driver overhead. With instancing, that becomes one call.</p>
 
   <h2>Basic Example</h2>
@@ -75,7 +75,7 @@ glVertexAttribDivisor(1, 1);</code></pre>
   <p>Now each instance reads its own offset from the buffer, and you can place thousands of objects with a single draw call.</p>
 
   <h2>Applications</h2>
-  <p>Instancing shows up everywhere: foliage rendering, particle systems, crowd simulation, repeated architectural elements, shadow casters. Whenever you have many objects sharing the same mesh — instancing is the answer.</p>
+  <p>Instancing shows up everywhere: foliage rendering, particle systems, crowd simulation, repeated architectural elements, shadow casters. Whenever you have many objects sharing the same mesh - instancing is the answer.</p>
 </div>
 
 <footer class="site-footer">

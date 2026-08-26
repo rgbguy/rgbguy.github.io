@@ -54,7 +54,7 @@
   <p>The TCS accesses patch vertices through the built-in array <code>gl_in[]</code>. With <code>layout(vertices = 4) out;</code> declared, four control points exist per patch. Each TCS invocation is identified by <code>gl_InvocationID</code> and writes to <code>gl_out[gl_InvocationID]</code>.</p>
   <p>Basic forwarding:</p>
   <pre><code>gl_out[gl_InvocationID].gl_Position = gl_in[gl_InvocationID].gl_Position;</code></pre>
-  <p>This passes control point positions to the Tessellation Evaluation Shader (TES) — a crucial step for downstream processing.</p>
+  <p>This passes control point positions to the Tessellation Evaluation Shader (TES) - a crucial step for downstream processing.</p>
 
   <h2>What about the tessellation levels?</h2>
   <p>Within the TCS, tessellation granularity is specified:</p>
@@ -105,7 +105,7 @@ float v = gl_TessCoord.y;</code></pre>
     <tbody>
       <tr><td>Vertex Shader</td><td>1 vertex</td><td>Object</td><td>Passes raw vertex data</td></tr>
       <tr><td>Tessellation Control</td><td>Patch (N vertices)</td><td>Object</td><td>Sets tessellation levels</td></tr>
-      <tr><td>Tessellator</td><td>—</td><td>Object</td><td>Subdivides patch</td></tr>
+      <tr><td>Tessellator</td><td>-</td><td>Object</td><td>Subdivides patch</td></tr>
       <tr><td>Tessellation Evaluation</td><td>Generated vertices</td><td>Object &rarr; Clip</td><td>Interpolates + applies MVP</td></tr>
       <tr><td>Fragment Shader</td><td>Fragments</td><td>Screen</td><td>Final color</td></tr>
     </tbody>

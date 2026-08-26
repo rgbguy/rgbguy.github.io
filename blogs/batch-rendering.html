@@ -40,7 +40,7 @@
 </div>
 
 <div class="post-body">
-  <p>The conventional approach to rendering multiple objects involves submitting vertex buffers, setting uniforms, and issuing individual draw calls for each object. As the number of objects increases, so do the draw calls — and with them comes a performance bottleneck that underutilises the GPU.</p>
+  <p>The conventional approach to rendering multiple objects involves submitting vertex buffers, setting uniforms, and issuing individual draw calls for each object. As the number of objects increases, so do the draw calls - and with them comes a performance bottleneck that underutilises the GPU.</p>
   <p>Batch rendering solves this by consolidating vertex data into a single buffer and issuing one draw call instead of many.</p>
 
   <h2>The Core Idea</h2>
@@ -73,8 +73,8 @@ void main() {
   <h2>Dynamic Geometry</h2>
   <p>Use the right buffer hint:</p>
   <ul>
-    <li><code>GL_STATIC_DRAW</code> — geometry set once, drawn many times</li>
-    <li><code>GL_DYNAMIC_DRAW</code> — geometry updated frequently each frame</li>
+    <li><code>GL_STATIC_DRAW</code> - geometry set once, drawn many times</li>
+    <li><code>GL_DYNAMIC_DRAW</code> - geometry updated frequently each frame</li>
   </ul>
   <p>Two methods to update buffer contents without reallocating:</p>
   <pre><code>// Method 1: glBufferSubData
@@ -86,7 +86,7 @@ glUnmapBuffer(GL_ARRAY_BUFFER);</code></pre>
   <p>Both pre-allocate the buffer at startup and update in-place, avoiding the cost of re-uploading the entire buffer each frame.</p>
 
   <h2>The Payoff</h2>
-  <p>A well-implemented batch renderer can reduce draw calls from thousands to single digits per frame. This is the approach used in 2D engines, UI renderers, and particle systems — anywhere you have many small objects that share geometry types and can be sorted by state.</p>
+  <p>A well-implemented batch renderer can reduce draw calls from thousands to single digits per frame. This is the approach used in 2D engines, UI renderers, and particle systems - anywhere you have many small objects that share geometry types and can be sorted by state.</p>
 </div>
 
 <footer class="site-footer">
