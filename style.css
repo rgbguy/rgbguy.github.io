@@ -392,6 +392,33 @@ nav.site-nav {
 }
 .blog-list a:hover { color: var(--text); }
 
+/* ── Tools grid ── */
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+.tool-item {
+  padding: 1.1rem 1.25rem;
+  border: 1px solid var(--line);
+  transition: border-color 0.15s;
+}
+.tool-item:hover { border-color: var(--line-2); }
+.tool-title {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--text);
+  text-decoration: none;
+}
+.tool-title:hover { color: var(--red); }
+.tool-desc {
+  font-size: 0.8rem;
+  color: var(--text-2);
+  font-weight: 300;
+  line-height: 1.5;
+  margin-top: 0.45rem;
+}
+
 /* ── Reading item ── */
 .reading-item {
   padding: 0.85rem 1.25rem;
