@@ -45,22 +45,22 @@
   <h2>Understanding gluLookAt</h2>
   <p>The <code>gluLookAt</code> function accepts three parameters:</p>
   <ul>
-    <li><strong>eye</strong> — camera position in world space</li>
-    <li><strong>target</strong> — the point being viewed</li>
-    <li><strong>up</strong> — vector defining camera orientation</li>
+    <li><strong>eye</strong> - camera position in world space</li>
+    <li><strong>target</strong> - the point being viewed</li>
+    <li><strong>up</strong> - vector defining camera orientation</li>
   </ul>
   <p>The objective is creating a matrix that transforms world coordinates to camera coordinates, where the camera sits at the origin, views along the negative z-axis, and has its up-direction along positive y.</p>
 
-  <h2>Step 1 — Creating Camera Basis Vectors</h2>
+  <h2>Step 1 - Creating Camera Basis Vectors</h2>
   <p>Three orthogonal vectors define the camera's coordinate system:</p>
   <ul>
-    <li><strong>Forward vector</strong> — points toward the target</li>
-    <li><strong>Right vector</strong> — perpendicular to forward and up</li>
-    <li><strong>Up vector</strong> — perpendicular to forward and right</li>
+    <li><strong>Forward vector</strong> - points toward the target</li>
+    <li><strong>Right vector</strong> - perpendicular to forward and up</li>
+    <li><strong>Up vector</strong> - perpendicular to forward and right</li>
   </ul>
   <p>Why recompute the up vector? The input up vector might not be perfectly perpendicular to the forward vector. Recomputing it maintains an orthonormal basis and prevents skewing or shearing. The forward vector stays fixed because it defines what the camera targets; the up vector is adjusted purely for orthogonality.</p>
 
-  <h2>Step 2 — Building the View Matrix</h2>
+  <h2>Step 2 - Building the View Matrix</h2>
   <p>The view matrix accomplishes two transformations:</p>
   <ol>
     <li>Rotates the world to align camera basis vectors with world axes</li>
@@ -77,14 +77,14 @@
 | 0  0  1  -eye.z |
 | 0  0  0   1     |</code></pre>
 
-  <h2>Step 3 — Combining Everything</h2>
+  <h2>Step 3 - Combining Everything</h2>
   <p>The final view matrix is View = R &times; T. This combination:</p>
   <ol>
     <li>Moves the camera to the origin</li>
     <li>Aligns the view direction with the negative z-axis</li>
     <li>Aligns the up direction with the positive y-axis</li>
   </ol>
-  <p>The result: every point in the world is now expressed relative to the camera. This is what makes the "camera" work — there is no actual camera object, just a transformation applied to everything else.</p>
+  <p>The result: every point in the world is now expressed relative to the camera. This is what makes the "camera" work - there is no actual camera object, just a transformation applied to everything else.</p>
 
   <h2>The Transformation Pipeline</h2>
   <p>The sequence that follows:</p>

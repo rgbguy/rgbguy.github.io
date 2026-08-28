@@ -45,11 +45,11 @@
   <h2>Hierarchical LODs</h2>
   <p>Hierarchical Level of Detail (HLOD) divides a 3D scene into hierarchical levels of detail. Each LOD represents a group of objects that are displayed at a certain level of detail depending on the distance of those objects from the viewer.</p>
   <p>The technique organizes scenes into clusters at the highest hierarchy level. As the viewer approaches a cluster, the detail level increases and more objects get rendered individually. This allows the renderer to prioritize important nearby objects while representing distant areas as simplified merged meshes.</p>
-  <p>In Unreal Engine, this is implemented as HLOD proxies — entire clusters of actors merged into low-poly stand-ins that swap in when the player is far enough away. The visual difference is imperceptible at distance, but the performance savings are significant.</p>
+  <p>In Unreal Engine, this is implemented as HLOD proxies - entire clusters of actors merged into low-poly stand-ins that swap in when the player is far enough away. The visual difference is imperceptible at distance, but the performance savings are significant.</p>
 
   <h2>Hierarchical Culling</h2>
   <p>Hierarchical culling reduces the number of rendered objects by eliminating those that the player cannot see. While similar in spirit to HLOD, it emphasizes reducing object count rather than adjusting individual object detail levels.</p>
-  <p>Implementation commonly uses spatial data structures — octrees or quadtrees — to create hierarchical region boundaries. The renderer only processes objects within regions that are currently in view. If the bounding volume of an entire region fails the visibility test, everything inside is skipped without examining individual objects.</p>
+  <p>Implementation commonly uses spatial data structures - octrees or quadtrees - to create hierarchical region boundaries. The renderer only processes objects within regions that are currently in view. If the bounding volume of an entire region fails the visibility test, everything inside is skipped without examining individual objects.</p>
   <p>This is closely related to Bounding Volume Hierarchy (BVH), which takes the same idea and applies it to ray-object intersection tests in ray tracing and ray casting scenarios.</p>
 
   <h2>The Core Principle</h2>

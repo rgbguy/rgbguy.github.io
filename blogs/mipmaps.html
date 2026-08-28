@@ -40,14 +40,14 @@
 </div>
 
 <div class="post-body">
-  <p>MIP is short for the Latin phrase "Multum in Parvo" — many things in a small place. A mipmap is a sequence of progressively smaller versions of a texture, typically created by halving dimensions repeatedly until you reach 1&times;1.</p>
+  <p>MIP is short for the Latin phrase "Multum in Parvo" - many things in a small place. A mipmap is a sequence of progressively smaller versions of a texture, typically created by halving dimensions repeatedly until you reach 1&times;1.</p>
 
   <h2>The Problem They Solve</h2>
-  <p>When a textured object is far from the camera, it occupies very few pixels on screen. A single screen pixel may correspond to a large region of the original texture. If you sample just one texel from that region, you miss everything else — the result is aliasing: flickering, shimmering patterns that appear as the object or camera moves.</p>
+  <p>When a textured object is far from the camera, it occupies very few pixels on screen. A single screen pixel may correspond to a large region of the original texture. If you sample just one texel from that region, you miss everything else - the result is aliasing: flickering, shimmering patterns that appear as the object or camera moves.</p>
   <p>This is a frequency mismatch. The texture has high-frequency detail, but the screen representation doesn't have the resolution to represent it faithfully.</p>
 
   <h2>How Mipmaps Fix It</h2>
-  <p>Mipmaps solve the problem by pre-filtering the texture at multiple scales. When sampling a distant object, the GPU selects a mip level that matches the screen-space footprint of the texture — one texel in the mip maps to roughly one pixel on screen. The pre-averaged color already incorporates all the detail from the larger region, eliminating aliasing.</p>
+  <p>Mipmaps solve the problem by pre-filtering the texture at multiple scales. When sampling a distant object, the GPU selects a mip level that matches the screen-space footprint of the texture - one texel in the mip maps to roughly one pixel on screen. The pre-averaged color already incorporates all the detail from the larger region, eliminating aliasing.</p>
 
   <h2>OpenGL Implementation</h2>
   <pre><code>glBindTexture(GL_TEXTURE_2D, textureID);
@@ -58,7 +58,7 @@ glGenerateMipmap(GL_TEXTURE_2D);
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 glBindTexture(GL_TEXTURE_2D, 0);</code></pre>
-  <p><code>GL_LINEAR_MIPMAP_LINEAR</code> is trilinear filtering — it blends between two adjacent mip levels to avoid visible popping at level transitions.</p>
+  <p><code>GL_LINEAR_MIPMAP_LINEAR</code> is trilinear filtering - it blends between two adjacent mip levels to avoid visible popping at level transitions.</p>
 
   <h2>Requirements</h2>
   <ul>
@@ -71,7 +71,7 @@ glBindTexture(GL_TEXTURE_2D, 0);</code></pre>
     <li>Eliminates texture aliasing at distance</li>
     <li>Only 1/3 additional memory overhead (1/4 + 1/16 + 1/64 + ... converges to 1/3)</li>
     <li>Can be generated offline and cached</li>
-    <li>Accelerates rendering — smaller mips fit better in texture cache</li>
+    <li>Accelerates rendering - smaller mips fit better in texture cache</li>
     <li>Foundation for LOD systems in both textures and geometry</li>
     <li>Enables trilinear and anisotropic filtering</li>
   </ul>

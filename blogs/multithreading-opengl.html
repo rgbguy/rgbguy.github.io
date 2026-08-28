@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-H4ZKJ77Z2W"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-H4ZKJ77Z2W');
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>rgbguy</title>
+  <link rel="icon" type="image/jpeg" href="../assets/dp.jpg" />
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+<nav class="site-nav">
+  <a href="../index.html" class="nav-logo">rgb<b>guy</b></a>
+  <ul class="nav-links">
+    <li><a href="../experience.html">experience</a></li>
+    <li><a href="../projects.html">experiments</a></li>
+    <li><a href="../blog.html">blog</a></li>
+    <li><a href="../read.html">reading</a></li>
+    <li><a href="../videos.html">videos</a></li>
+    <li><a href="../learn.html">learn</a></li>
+  </ul>
+</nav>
+
+<div class="post-header">
+  <a href="../blog.html" class="post-back">&larr; blog</a>
+  <div class="post-meta">
+    <span>Aug 26, 2026</span>
+    <span class="post-tag">graphics</span>
+    <span class="post-tag">optimization</span>
+  </div>
+  <h1 class="post-title">Multithreading OpenGL: The Shared-Context Pattern</h1>
+</div>
+
+<div class="post-body">
+
+  <p>An OpenGL context can only be current on one thread at a time. Every GL call operates on whatever context happens to be current on the thread making the call. So "multithreaded OpenGL" doesn't mean calling <code>glDrawArrays</code> from two threads at once. It means moving work that isn't drawing, usually asset loading, off the render thread and onto another one.</p>
+
+  <h2>The idea</h2>
+
+  <p>You make a second GL context that shares objects with your main one. A worker thread parses a file and uploads buffers on that second context. The main thread keeps rendering the whole time. When the worker is done, the main thread picks up the buffers and finishes setting them up.</p>
+
+  <p>Setup, once at startup:</p>
+
+  <pre><code>// main thread, at init
+HGLRC ghrc = wglCreateContext(hdc);
+wglMakeCurrent(hdc, ghrc);
+
+HGLRC ghrcLoader = wglCreateContext(hdc); // same pixel format
+wglShareLists(ghrc, ghrcLoader); // must happen before ghrcLoader is ever made current</code></pre>
+
+  <p>GLX and EGL have the same idea under different names. The important part is the order: share the lists before the second context is used anywhere.</p>
+
+  <h2>What actually gets shared</h2>
+
+  <p>Buffers and textures are shared. VAOs and FBOs are not. This trips almost everyone up the first time, so it's worth just memorizing:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Shared</th>
+        <th>Not shared</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Buffer objects (VBO, EBO, UBO, SSBO)</td>
+        <td>Vertex array objects (VAO)</td>
+      </tr>
+      <tr>
+        <td>Textures</td>
+        <td>Framebuffer objects (FBO)</td>
+      </tr>
+      <tr>
+        <td>Shader and program objects</td>
+        <td>Query objects</td>
+      </tr>
+      <tr>
+        <td>Sync objects</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Buffers and textures are just memory plus a bit of metadata, so the driver can hand them to any context in the share group. A VAO isn't data, it's a set of bindings: which buffer feeds which attribute slot. That binding state belongs to one context only. Build a VAO on the worker context and bind it from the main context, and you get undefined behavior. Sometimes it renders nothing, sometimes it works for a while and then the driver crashes later.</p>
+
+  <p>So the rule is simple: upload data on the worker thread, build the VAO on the thread that will actually render with it.</p>
+
+  <h2>Worker thread</h2>
+
+  <pre><code>void LoadMeshAsync(const char* path) {
+    wglMakeCurrent(hdc, ghrcLoader);
+
+    MeshData mesh = ParseMeshFile(path); // pure CPU work, no GL calls here
+
+    glGenBuffers(1, &mesh.vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, mesh.vbo);
+    glBufferData(GL_ARRAY_BUFFER, mesh.vertexBytes, mesh.vertices, GL_STATIC_DRAW);
+
+    glGenBuffers(1, &mesh.ebo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.indexBytes, mesh.indices, GL_STATIC_DRAW);
+
+    glFinish(); // block until the GPU has actually finished the uploads
+    wglMakeCurrent(NULL, NULL);
+
+    PushToMainThreadQueue(mesh); // hand off vbo/ebo handles, mesh is ready to consume
+}</code></pre>
+
+  <h2>Main thread</h2>
+
+  <pre><code>// after join(), or after pulling the finished mesh off the queue
+GLuint vao;
+glGenVertexArrays(1, &vao);
+glBindVertexArray(vao);
+
+glBindBuffer(GL_ARRAY_BUFFER, mesh.vbo);
+glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.ebo);
+
+glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+glEnableVertexAttribArray(0);
+
+mesh.vao = vao; // now safe to draw</code></pre>
+
+  <p>Notice the worker never touches <code>glGenVertexArrays</code>. That call, and the attribute setup that follows it, only ever happens on the main thread.</p>
+
+  <p>The speedup here comes from overlap, not from GL calls running in parallel. While the worker parses the file (CPU-bound, no GL involved), the main thread is free to compile shaders or decode other textures. That's where the wall-clock time goes down. If you spawn a thread and immediately <code>join()</code> it with nothing else running in between, you've gained nothing and just paid for thread creation and a context switch.</p>
+
+  <h2>A note on synchronization</h2>
+
+  <p>GL calls are queued, not executed instantly. When the worker calls <code>glBufferData</code>, the driver may just record the command and return right away. If the main thread reads that buffer before the GPU has actually written it, you get a race.</p>
+
+  <p><code>glFinish()</code> is the blunt fix: it stalls the calling thread until every queued GL command has actually finished on the GPU. It works, but it's heavy, since it also waits out any unrelated work still sitting in that context's queue.</p>
+
+  <p>A fence sync object is the lighter alternative:</p>
+
+  <pre><code>GLsync fence = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+// hand the fence to the main thread instead of blocking here
+
+// main thread, later, only when it actually needs the data
+glClientWaitSync(fence, GL_SYNC_FLUSH_COMMANDS_BIT, timeoutNs);
+glDeleteSync(fence);</code></pre>
+
+  <p>The fence marks a point in the command stream. Instead of the worker thread stalling right away, whoever needs the result can check the fence later, right before they touch the data, and only wait as long as necessary. For a background loader this matters: the worker can keep parsing the next asset instead of sitting idle on <code>glFinish()</code>.</p>
+
+  <h2>Where this is worth doing</h2>
+
+  <ul>
+    <li>Loading screens: parse and upload meshes, textures, and audio on a worker while the main thread keeps rendering the loading screen at 60fps.</li>
+    <li>Open-world streaming: load LODs and textures for newly visible chunks in the background as the camera moves.</li>
+    <li>Video or image sequence decode: decode frames off-thread, upload to a texture, consume on the render thread.</li>
+    <li>Large datasets: point clouds, terrain, CAD models, anything where parsing takes as long as or longer than the upload.</li>
+  </ul>
+
+  <h2>Things to watch for</h2>
+
+  <ul>
+    <li>Context creation and <code>wglMakeCurrent</code> switches aren't free, and the cost varies by driver. For small assets, threading can lose to just loading inline.</li>
+    <li>Share group behavior isn't perfectly consistent across NVIDIA, AMD, and Intel drivers at the edges.</li>
+    <li>This only parallelizes preparation, not draw call submission. Submitting commands within a single context is still one thread's job. That's what <code>glMultiDrawIndirect</code>, persistent-mapped buffers, or Vulkan/D3D12 command lists are for.</li>
+  </ul>
+
+  <h2>What it actually saved</h2>
+
+  <p>Loading a 94MB <code>.glb</code> and building its GPU buffers, single threaded (compile shader, then parse and upload, then decode texture, all one after another) versus multithreaded (parse and upload on a worker with a shared context, running at the same time as shader compile and texture decode on the main thread, VAO built on main after the worker finishes) came out roughly 30% faster wall clock. All of that gain came from overlapping the Assimp parse with work the main thread was doing anyway.</p>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-left">&copy; rgbguy &middot; Bengaluru, India &middot; 2026</div>
+</footer>
+<script src="../nav.js"></script>
+</body>
+</html>
