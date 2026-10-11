@@ -1667,3 +1667,95 @@ footer.site-footer {
     padding: 1.5rem;
   }
 }
+
+/* ── Connect page ── */
+.connect-mail {
+  padding: 2.5rem 0 3rem;
+  margin-bottom: 3rem;
+  border-bottom: 1px solid var(--line);
+}
+.connect-mail-addr {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: clamp(1.2rem, 6vw, 2.6rem);
+  letter-spacing: -0.02em;
+  color: #f0f0e8;
+  text-decoration: none;
+  border-bottom: 2px solid var(--red);
+  padding-bottom: 0.2rem;
+  word-break: break-all;
+  transition: color 0.2s;
+}
+.connect-mail-addr:hover { color: var(--red); }
+.connect-mail-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1.75rem;
+}
+button.btn {
+  background: none;
+  cursor: pointer;
+  font-family: var(--mono);
+}
+.connect-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  margin-bottom: 3.5rem;
+}
+.connect-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.75rem;
+  background: var(--bg);
+  text-decoration: none;
+  color: var(--text);
+  transition: background 0.2s;
+}
+.connect-card:hover { background: var(--bg-1); }
+.connect-card-num {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  color: var(--red);
+}
+.connect-card h2 {
+  font-size: 1.05rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: #f0f0e8;
+}
+.connect-card p {
+  font-size: 0.8rem;
+  color: var(--text-2);
+  line-height: 1.6;
+  flex: 1;
+}
+.connect-card-cta {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-top: 0.5rem;
+  transition: color 0.2s;
+}
+.connect-card:hover .connect-card-cta { color: var(--red); }
+.connect-social {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+@media (max-width: 700px) {
+  .connect-grid { grid-template-columns: 1fr; }
+  .connect-card { padding: 1.4rem; }
+  .connect-mail { padding: 1.5rem 0 2.25rem; margin-bottom: 2.25rem; }
+}
+@media (max-width: 600px) {
+  .connect-social { gap: 0.5rem; }
+  .connect-social .social-btn { width: calc(50% - 0.25rem); }
+}
