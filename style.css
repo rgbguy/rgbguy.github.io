@@ -1067,25 +1067,35 @@ nav.site-nav {
 }
 
 /* ── Learn section / Desmos grid ── */
-.learn-section {
-  margin-top: 3rem;
-  padding-top: 2.5rem;
-  border-top: 1px solid var(--line);
+.learn-pairs {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
 }
-.learn-section .section-label { margin-bottom: 1.25rem; }
-.desmos-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+.learn-pair-row {
+  display: flex;
   gap: 1.25rem;
+  height: 560px;
 }
-.desmos-grid iframe {
-  width: 100%;
-  aspect-ratio: 16 / 10;
+.learn-pair-video {
+  aspect-ratio: 9 / 16;
+  height: 100%;
+  flex: none;
+  border: 1px solid var(--line);
+  display: block;
+}
+.learn-pair-graph {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
   border: 1px solid var(--line);
   display: block;
 }
 @media (max-width: 700px) {
-  .desmos-grid { grid-template-columns: 1fr; }
+  .learn-pairs { gap: 2.5rem; }
+  .learn-pair-row { flex-direction: column; height: auto; }
+  .learn-pair-video { width: 100%; max-width: 360px; height: auto; margin: 0 auto; }
+  .learn-pair-graph { width: 100%; height: auto; aspect-ratio: 4 / 5; flex: none; }
 }
 
 /* ── Patent strip ── */
