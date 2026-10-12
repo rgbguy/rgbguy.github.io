@@ -12,7 +12,15 @@
   </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>rgbguy</title>
+  <title>Computationally Fast Object Picking in OpenGL · rgbguy</title>
+  <meta name="description" content="I ran into an interesting problem while working on my engine. I wanted something that sounds trivial from a user&#x27;s perspective: click on the screen,..." />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="rgbguy" />
+  <meta property="og:title" content="Computationally Fast Object Picking in OpenGL · rgbguy" />
+  <meta property="og:description" content="I ran into an interesting problem while working on my engine. I wanted something that sounds trivial from a user&#x27;s perspective: click on the screen,..." />
+  <meta property="og:url" content="https://rgbguy.in/blogs/object-picking.html" />
+  <meta property="og:image" content="https://rgbguy.in/assets/og.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" type="image/jpeg" href="../assets/dp.jpg" />
   <link rel="stylesheet" href="../style.css" />
   <style>
@@ -33,17 +41,16 @@
 </head>
 <body>
 <nav class="site-nav">
-  <a href="../index.html" class="nav-logo">rgb<b>guy</b></a>
-  <ul class="nav-links">
-    <li><a href="../experience.html">experience</a></li>
-    <li><a href="../projects.html">experiments</a></li>
-    <li><a href="../blog.html">blog</a></li>
-    <li><a href="../read.html">reading</a></li>
-    <li><a href="../videos.html">videos</a></li>
-    <li><a href="../learn.html">learn</a></li>
-    <li><a href="../connect.html">connect</a></li>
-  </ul>
-</nav>
+    <a href="../index.html" class="nav-logo">rgb<b>guy</b></a>
+    <ul class="nav-links">
+      <li><a href="../videos.html">videos</a></li>
+      <li><a href="../learn.html">learn</a></li>
+      <li><a href="../blog.html">blog</a></li>
+      <li><a href="../projects.html">lab</a></li>
+      <li><a href="../experience.html">about</a></li>
+    </ul>
+    <a href="../connect.html" class="nav-cta">Work with me</a>
+  </nav>
 
 <div class="post-header">
   <a href="../blog.html" class="post-back">&larr; blog</a>
@@ -155,8 +162,36 @@ int selectedID = (int)round(pixel[0] * totalObjects);</code></pre>
 </div>
 
 <footer class="site-footer">
-  <div class="footer-left">&copy; rgbguy &middot; Bengaluru, India &middot; 2026</div>
-</footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="../index.html" class="nav-logo">rgb<b>guy</b></a>
+        <p>Graphics, gamedev and maths. Built from scratch, explained simply.</p>
+        <a class="footer-mail" href="mailto:partnerships@rgbguy.in">partnerships@rgbguy.in</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-head">Explore</div>
+        <a href="../videos.html">Videos</a>
+        <a href="../learn.html">Learn</a>
+        <a href="../blog.html">Blog</a>
+        <a href="../projects.html">Lab</a>
+        <a href="../read.html">Reading list</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-head">rgbguy</div>
+        <a href="../experience.html">About</a>
+        <a href="../connect.html">Work with me</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-head">Follow</div>
+        <a href="https://www.youtube.com/@rgbguy" target="_blank" rel="noopener">YouTube</a>
+        <a href="https://www.instagram.com/rgbguy/" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.facebook.com/p/RGBguy-100072263191125/" target="_blank" rel="noopener">Facebook</a>
+        <a href="https://www.linkedin.com/in/rgbguy/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/rgbguy" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 rgbguy &middot; Bengaluru, India</div>
+  </footer>
 <script src="../nav.js"></script>
 </body>
 </html>

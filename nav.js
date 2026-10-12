@@ -36,9 +36,30 @@
 
 // ── Active nav link ──
 (function () {
-  var path = window.location.pathname.split('/').pop() || 'index.html';
-  document.querySelectorAll('.nav-links a').forEach(function (a) {
-    if (a.getAttribute('href') === path) a.classList.add('active');
+  var parts = window.location.pathname.split('/');
+  var path = parts.pop() || 'index.html';
+  if (parts.pop() === 'blogs') path = 'blog.html';
+  document.querySelectorAll('.nav-links a, .nav-cta').forEach(function (a) {
+    if (a.getAttribute('href').split('/').pop() === path) a.classList.add('active');
+  });
+})();
+
+// ── Lite YouTube embeds: thumbnail first, iframe on click ──
+(function () {
+  document.querySelectorAll('button.lite-yt').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var params = btn.getAttribute('data-params');
+      var frame = document.createElement('iframe');
+      frame.src = 'https://www.youtube.com/embed/' + btn.getAttribute('data-id') +
+        '?autoplay=1&rel=0' + (params ? '&' + params : '');
+      frame.title = btn.getAttribute('data-title') || 'YouTube video';
+      frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+      frame.allowFullscreen = true;
+      var box = document.createElement('div');
+      box.className = btn.className + ' is-playing';
+      box.appendChild(frame);
+      btn.replaceWith(box);
+    });
   });
 })();
 
