@@ -42,7 +42,8 @@
   if (dir === 'blogs') path = 'blog.html';
   if (dir === 'gta6') path = 'gta6';
   document.querySelectorAll('.nav-links a, .nav-cta').forEach(function (a) {
-    var href = a.getAttribute('href').replace(/\/$/, '');
+    // Folder pages are linked as dir/index.html (so they open from disk too): match on the folder.
+    var href = a.getAttribute('href').replace(/\/(index\.html)?$/, '');
     if (href.split('/').pop() === path) a.classList.add('active');
   });
 })();
