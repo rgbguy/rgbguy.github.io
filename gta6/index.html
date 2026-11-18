@@ -13,20 +13,21 @@
   </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GTA 6 breakdowns · rgbguy</title>
-  <meta name="description" content="rgbguy's series breaking down the graphics of GTA 6: lighting, reflections, water, weather, crowds, and how each one works." />
+  <meta name="theme-color" content="#15112b" />
+  <title>GTA 6: a new series, coming soon · rgbguy</title>
+  <meta name="description" content="Understand gamedev and graphics through GTA 6. A new rgbguy series, coming soon." />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="rgbguy" />
-  <meta property="og:title" content="GTA 6 breakdowns · rgbguy" />
-  <meta property="og:description" content="rgbguy's series breaking down the graphics of GTA 6: lighting, reflections, water, weather, crowds, and how each one works." />
+  <meta property="og:title" content="Understand gamedev and graphics through GTA 6" />
+  <meta property="og:description" content="A new rgbguy series. Coming soon." />
   <meta property="og:url" content="https://rgbguy.in/gta6/" />
-  <meta property="og:image" content="https://rgbguy.in/assets/og.jpg" />
+  <meta property="og:image" content="https://rgbguy.in/assets/gta6-key-art.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" type="image/jpeg" href="../assets/dp.jpg" />
   <link rel="stylesheet" href="../style.css" />
 </head>
 
-<body>
+<body class="gta-page">
 
   <nav class="site-nav">
     <a href="../index.html" class="nav-logo">rgb<b>guy</b></a>
@@ -41,45 +42,26 @@
     <a href="../connect.html" class="nav-cta">Work with me</a>
   </nav>
 
-  <div class="page">
+  <main class="gta-launch">
+    <div class="gta-launch-inner">
 
-    <header class="page-header gta-header">
-      <div class="gta-header-text">
-        <div class="page-eyebrow">series · GTA 6 breakdowns</div>
-        <h1>How GTA 6 <em>looks</em> the way it does</h1>
-        <p class="page-sub">A series where I take GTA 6's graphics apart and explain how they work: lighting, reflections, water, weather, crowds and more. One effect at a time, in plain words, the way a graphics programmer sees it.</p>
-        <div class="tags gta-topics">
-          <span class="tag">lighting</span>
-          <span class="tag">reflections</span>
-          <span class="tag">water</span>
-          <span class="tag">weather</span>
-          <span class="tag">crowds</span>
-        </div>
-        <div class="page-actions">
-          <a class="btn btn-red" href="#breakdowns">See the breakdowns</a>
-          <a class="btn" href="https://www.youtube.com/@rgbguy?sub_confirmation=1" target="_blank" rel="noopener">Subscribe on YouTube</a>
+      <div class="gta-launch-text">
+        <div class="gta-eyebrow"><span class="gta-dot"></span>A new series · coming soon</div>
+        <h1>Understand <em>gamedev</em> and <em>graphics</em> through GTA&nbsp;6</h1>
+        <p class="gta-lede">One game. Every trick behind it. Explained simply.</p>
+        <div class="gta-actions">
+          <a class="gta-btn" href="https://www.youtube.com/@rgbguy?sub_confirmation=1" target="_blank" rel="noopener">Subscribe to catch episode 1</a>
+          <a class="gta-btn gta-btn-ghost" href="https://www.instagram.com/rgbguy/" target="_blank" rel="noopener">Follow on Instagram</a>
         </div>
       </div>
 
-      <!-- PLACEHOLDER: no GTA 6 image is in the repo yet.
-           To use the key art, add it as assets/gta6-key-art.jpg and replace this
-           whole <figure> with:
-           <figure class="gta-hero-art"><img src="../assets/gta6-key-art.jpg" alt="GTA 6 key art" /></figure> -->
-      <figure class="gta-hero-art is-placeholder" aria-label="Placeholder for GTA 6 key art">
-        <div class="gta-placeholder-text">
-          <span class="gta-badge">placeholder</span>
-          <span>GTA 6 key art goes here</span>
-        </div>
+      <figure class="gta-art">
+        <img src="../assets/gta6-key-art.jpg" width="495" height="619" alt="GTA 6 key art: Lucia and Jason in bandanas at a Vice City gas station under a purple sunset" />
+        <figcaption class="gta-stamp">Coming soon</figcaption>
       </figure>
-    </header>
 
-    <section class="page-section" id="breakdowns">
-      <div class="section-label">// breakdowns</div>
-      <div class="gta-grid" id="gta-grid"></div>
-      <noscript><p class="gta-empty">Turn on JavaScript to see the breakdowns, or find them on <a href="https://www.youtube.com/@rgbguy">YouTube</a>.</p></noscript>
-    </section>
-
-  </div>
+    </div>
+  </main>
 
   <footer class="site-footer">
     <div class="footer-inner">
@@ -100,7 +82,7 @@
         <div class="footer-head">rgbguy</div>
         <a href="../experience.html">About</a>
         <a href="../connect.html">Work with me</a>
-        <a href="../gta6/">GTA 6 breakdowns</a>
+        <a href="../gta6/">GTA 6 series</a>
       </div>
       <div class="footer-col">
         <div class="footer-head">Follow</div>
@@ -115,73 +97,6 @@
   </footer>
 
   <script src="../nav.js"></script>
-  <script src="breakdowns.js"></script>
-  <script>
-    // Draws one card per entry in breakdowns.js. Add entries there, not here.
-    (function () {
-      var grid = document.getElementById('gta-grid');
-      var items = (window.GTA6_BREAKDOWNS || []).slice();
-      var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-      function niceDate(s) {
-        var p = String(s || '').split('-');
-        if (p.length !== 3) return s || '';
-        return parseInt(p[2], 10) + ' ' + MONTHS[parseInt(p[1], 10) - 1] + ' ' + p[0];
-      }
-
-      function el(tag, cls, text) {
-        var e = document.createElement(tag);
-        if (cls) e.className = cls;
-        if (text) e.textContent = text;
-        return e;
-      }
-
-      items.sort(function (a, b) { return String(b.date).localeCompare(String(a.date)); });
-
-      if (!items.length) {
-        grid.appendChild(el('p', 'gta-empty', 'The first breakdown is on its way.'));
-        return;
-      }
-
-      items.forEach(function (it) {
-        var isVideo = (it.type || 'video') === 'video';
-        var card = el('a', 'gta-card');
-        card.href = it.link || '#';
-        if (/^https?:/.test(card.getAttribute('href'))) {
-          card.target = '_blank';
-          card.rel = 'noopener';
-        }
-
-        var thumb = el('div', 'gta-thumb' + (it.thumbnail ? '' : ' is-empty'));
-        if (it.thumbnail) {
-          var img = el('img');
-          img.src = it.thumbnail;
-          img.alt = '';
-          img.loading = 'lazy';
-          thumb.appendChild(img);
-        } else {
-          thumb.appendChild(el('span', 'gta-thumb-label', 'GTA 6 · ' + (it.topic || 'breakdown')));
-        }
-        if (isVideo) thumb.appendChild(el('span', 'lite-yt-play'));
-        if (it.placeholder) thumb.appendChild(el('span', 'gta-badge gta-card-badge', 'placeholder'));
-        card.appendChild(thumb);
-
-        var body = el('div', 'gta-card-body');
-        var meta = el('div', 'gta-card-meta');
-        var time = el('time', '', niceDate(it.date));
-        time.dateTime = it.date || '';
-        meta.appendChild(time);
-        if (it.topic) meta.appendChild(el('span', 'gta-card-topic', it.topic));
-        body.appendChild(meta);
-        body.appendChild(el('h2', 'gta-card-title', it.title || 'Untitled'));
-        if (it.summary) body.appendChild(el('p', 'gta-card-summary', it.summary));
-        body.appendChild(el('span', 'gta-card-go', isVideo ? 'Watch →' : 'Read →'));
-        card.appendChild(body);
-
-        grid.appendChild(card);
-      });
-    })();
-  </script>
 </body>
 
 </html>
