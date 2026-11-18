@@ -40,7 +40,7 @@
   var path = parts.pop() || 'index.html';
   var dir = parts.pop();
   if (dir === 'blogs') path = 'blog.html';
-  if (dir === 'igdc') path = 'igdc';
+  if (dir === 'gta6') path = 'gta6';
   document.querySelectorAll('.nav-links a, .nav-cta').forEach(function (a) {
     var href = a.getAttribute('href').replace(/\/$/, '');
     if (href.split('/').pop() === path) a.classList.add('active');
