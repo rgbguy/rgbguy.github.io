@@ -54,19 +54,19 @@
       <div class="section-label">// engines</div>
 
       <div class="lab-feature">
-        <div class="lab-feature-media"><button class="lite-yt" type="button" data-id="iQvv2xveKZ8" data-params="list=PLSPtS15mOXMdVzjdtfMOc_Ekx0UVydaiy" data-title="FuzX, my C++ game engine" aria-label="Play: FuzX, my C++ game engine"><img src="https://i.ytimg.com/vi/iQvv2xveKZ8/hq720.jpg" alt="" /><span class="lite-yt-play" aria-hidden="true"></span></button></div>
+        <div class="lab-feature-media" data-videos="lab-fuzx" data-template="lab-video"></div>
         <div class="lab-feature-body">
           <div class="lab-kicker">Building now</div>
           <h2>FuzX</h2>
           <p>My game engine in C++. OpenGL and DirectX on Windows, and now running on Android. No Unity, no Unreal. I'm building it in public, one episode at a time.</p>
-          <ol class="lab-eps"><li><a href="https://www.youtube.com/watch?v=iQvv2xveKZ8&amp;list=PLSPtS15mOXMdVzjdtfMOc_Ekx0UVydaiy" target="_blank" rel="noopener"><span>EP 1</span>I&#x27;m building a game engine from scratch</a></li><li><a href="https://www.youtube.com/watch?v=bKG9B0Fj6ME&amp;list=PLSPtS15mOXMdVzjdtfMOc_Ekx0UVydaiy" target="_blank" rel="noopener"><span>EP 2</span>How GPUs turn math into pixels</a></li><li><a href="https://www.youtube.com/watch?v=RFbUsjLI1RA&amp;list=PLSPtS15mOXMdVzjdtfMOc_Ekx0UVydaiy" target="_blank" rel="noopener"><span>EP 3</span>Scene graph, components, assets</a></li><li><a href="https://www.youtube.com/watch?v=nMq2D-wM12A&amp;list=PLSPtS15mOXMdVzjdtfMOc_Ekx0UVydaiy" target="_blank" rel="noopener"><span>EP 4</span>Running on Android</a></li></ol>
+          <ol class="lab-eps" data-videos="lab-eps" data-template="ep-link"></ol>
           <div class="lab-tags"><span class="tag">C++</span><span class="tag">OpenGL</span><span class="tag">DirectX</span><span class="tag">Android</span></div>
           <div class="page-actions"><a class="btn btn-red" href="https://www.youtube.com/playlist?list=PLSPtS15mOXMdVzjdtfMOc_Ekx0UVydaiy" target="_blank" rel="noopener">Watch the series</a></div>
         </div>
       </div>
 
       <div class="lab-feature lab-feature-alt">
-        <div class="lab-feature-media"><button class="lite-yt" type="button" data-id="oxQNt2xViic" data-title="Custom WebGL engine" aria-label="Play: Custom WebGL engine"><img src="https://i.ytimg.com/vi/oxQNt2xViic/hq720.jpg" alt="" loading="lazy" /><span class="lite-yt-play" aria-hidden="true"></span><span class="lite-yt-time">4:11</span></button></div>
+        <div class="lab-feature-media" data-videos="lab-webgl" data-template="lab-video"></div>
         <div class="lab-feature-body">
           <div class="lab-kicker">In the browser</div>
           <h2>WebGL engine</h2>
@@ -99,7 +99,7 @@
           </div>
         </article>
         <article class="log-card">
-          <div class="log-media"><button class="lite-yt" type="button" data-id="qcI3KpnP8Cg" data-title="Object picking in OpenGL" aria-label="Play: Object picking in OpenGL"><img src="https://i.ytimg.com/vi/qcI3KpnP8Cg/hqdefault.jpg" alt="" loading="lazy" /><span class="lite-yt-play" aria-hidden="true"></span><span class="lite-yt-time">0:18</span></button></div>
+          <div class="log-media" data-videos="lab-object-picking" data-template="log-video"></div>
           <div class="log-body">
             <div class="lab-tags"><span class="tag">OpenGL</span></div>
             <h3><a href="blogs/object-picking.html">Object picking in OpenGL</a></h3>
@@ -108,7 +108,7 @@
           </div>
         </article>
         <article class="log-card">
-          <div class="log-media"><button class="lite-yt" type="button" data-id="AFimRp_aFlg" data-title="PS1 wobble" aria-label="Play: PS1 wobble"><img src="https://i.ytimg.com/vi/AFimRp_aFlg/hqdefault.jpg" alt="" loading="lazy" /><span class="lite-yt-play" aria-hidden="true"></span><span class="lite-yt-time">0:23</span></button></div>
+          <div class="log-media" data-videos="lab-ps1-wobble" data-template="log-video"></div>
           <div class="log-body">
             <div class="lab-tags"><span class="tag">OpenGL</span></div>
             <h3><a href="blogs/ps1-wobble.html">PS1 wobble</a></h3>
@@ -117,7 +117,7 @@
           </div>
         </article>
         <article class="log-card">
-          <div class="log-media"><button class="lite-yt" type="button" data-id="sxpLHyw5RyY" data-title="Texture space shading" aria-label="Play: Texture space shading"><img src="https://i.ytimg.com/vi/sxpLHyw5RyY/hqdefault.jpg" alt="" loading="lazy" /><span class="lite-yt-play" aria-hidden="true"></span><span class="lite-yt-time">0:31</span></button></div>
+          <div class="log-media" data-videos="lab-texture-space-shading" data-template="log-video"></div>
           <div class="log-body">
             <div class="lab-tags"><span class="tag">OpenGL</span></div>
             <h3><a href="blogs/texture-space-shading.html">Texture space shading</a></h3>
@@ -135,85 +135,12 @@
           <p class="lab-section-sub">Shader and rendering experiments. Click any one to play it here.</p>
         </div>
         <div class="lab-filter" role="group" aria-label="Filter demos by API">
-          <button class="tag active" type="button" data-filter="all">All <span>12</span></button>
-          <button class="tag" type="button" data-filter="opengl">OpenGL <span>8</span></button>
-          <button class="tag" type="button" data-filter="webgl">WebGL <span>4</span></button>
+          <button class="tag active" type="button" data-filter="all">All <span></span></button>
+          <button class="tag" type="button" data-filter="opengl">OpenGL <span></span></button>
+          <button class="tag" type="button" data-filter="webgl">WebGL <span></span></button>
         </div>
       </div>
-      <div class="demo-grid">
-        <article class="demo-item" data-api="opengl">
-          <button class="lite-yt" type="button" data-id="o8Brf2rFM8Y" data-title="The Jungle Book" aria-label="Play: The Jungle Book"><img src="https://i.ytimg.com/vi/o8Brf2rFM8Y/hqdefault.jpg" alt="" loading="lazy" /><span class="lite-yt-play" aria-hidden="true"></span><span class="lite-yt-time">7:05</span></button>
-          <h3>The Jungle Book</h3>
-          <p>A 7 minute demo about Mowgli and Raksha, the wolf mother who raised him. Fixed-function OpenGL and Win32.</p>
-          <div class="lab-tags"><span class="tag">OpenGL</span><span class="tag">C++</span></div>
-        </article>
-        <article class="demo-item" data-api="webgl">
-          <button class="lite-yt" type="button" data-id="cvptUELMK70" data-title="Nindiya" aria-label="Play: Nindiya"><img src="https://i.ytimg.com/vi/cvptUELMK70/hqdefault.jpg" alt="" loading="lazy" /><span class="lite-yt-play" aria-hidden="true"></span><span class="lite-yt-time">8:08</span></button>
-          <h3>Nindiya</h3>
-          <p>A delivery boy&#x27;s journey through modern India. A team demo with the Shader Group, in WebGL and GLSL ES.</p>
-          <div class="lab-tags"><span class="tag">WebGL</span><span class="tag">GLSL</span></div>
-        </article>
-        <article class="demo-item" data-api="opengl">
-          <button class="lite-yt" type="button" data-id="yIO6v3G_8TI" data-title="Dynamic Bharat" aria-label="Play: Dynamic Bharat"><img src="https://i.ytimg.com/vi/yIO6v3G_8TI/hqdefault.jpg" alt="" loading="lazy" /><span class="lite-yt-play" aria-hidden="true"></span><span class="lite-yt-time">1:48</span></button>
-          <h3>Dynamic Bharat</h3>
-          <p>A Win32 and OpenGL demo.</p>
-          <div class="lab-tags"><span class="tag">OpenGL</span></div>
-        </article>
-        <article class="demo-item" data-api="opengl">
-          <button class="lite-yt" type="button" data-id="bewdDM67J3s" data-title="Physically based rendering" aria-label="Play: Physically based rendering"><img src="https://i.ytimg.com/vi/bewdDM67J3s/hqdefault.jpg" alt="" loading="lazy" /><span class="lite-yt-play" aria-hidden="true"></span><span class="lite-yt-time">0:29</span></button>
-          <h3>Physically based rendering</h3>
-          <p>PBR materials and lighting.</p>
-          <div class="lab-tags"><span class="tag">OpenGL</span></div>
-        </article>
-        <article class="demo-item" data-api="opengl">
-          <button class="lite-yt" type="button" data-id="HZ_laNsUPm4" data-title="Tessellation shaders" aria-label="Play: Tessellation shaders"><img src="https://i.ytimg.com/vi/HZ_laNsUPm4/hqdefault.jpg" alt="" loading="lazy" /><span class="lite-yt-play" aria-hidden="true"></span><span class="lite-yt-time">1:01</span></button>
-          <h3>Tessellation shaders</h3>
-          <p>Subdividing geometry on the GPU.</p>
-          <div class="lab-tags"><span class="tag">OpenGL</span></div>
-        </article>
-        <article class="demo-item" data-api="opengl">
-          <button class="lite-yt" type="button" data-id="XCUSl0CkOtc" data-title="Batched grass" aria-label="Play: Batched grass"><img src="https://i.ytimg.com/vi/XCUSl0CkOtc/hqdefault.jpg" alt="" loading="lazy" /><span class="lite-yt-play" aria-hidden="true"></span><span class="lite-yt-time">0:56</span></button>
-          <h3>Batched grass</h3>
-          <p>Batched rendering of grass blades.</p>
-          <div class="lab-tags"><span class="tag">OpenGL</span><span class="tag">C</span></div>
-        </article>
-        <article class="demo-item" data-api="opengl">
-          <button class="lite-yt" type="button" data-id="osvT-_h_s7s" data-title="Spline editor" aria-label="Play: Spline editor"><img src="https://i.ytimg.com/vi/osvT-_h_s7s/hqdefault.jpg" alt="" loading="lazy" /><span class="lite-yt-play" aria-hidden="true"></span><span class="lite-yt-time">1:32</span></button>
-          <h3>Spline editor</h3>
-          <p>A spline editor inside my 3D engine.</p>
-          <div class="lab-tags"><span class="tag">OpenGL</span><span class="tag">C</span></div>
-        </article>
-        <article class="demo-item" data-api="opengl">
-          <button class="lite-yt" type="button" data-id="Yu5HVNnA5Ew" data-title="Spritesheet animations" aria-label="Play: Spritesheet animations"><img src="https://i.ytimg.com/vi/Yu5HVNnA5Ew/hqdefault.jpg" alt="" loading="lazy" /><span class="lite-yt-play" aria-hidden="true"></span><span class="lite-yt-time">4:36</span></button>
-          <h3>Spritesheet animations</h3>
-          <p>Sprite-based animation in my C engine.</p>
-          <div class="lab-tags"><span class="tag">OpenGL</span><span class="tag">C</span></div>
-        </article>
-        <article class="demo-item" data-api="opengl">
-          <button class="lite-yt" type="button" data-id="sNCmQ-88t_I" data-title="Font rendering" aria-label="Play: Font rendering"><img src="https://i.ytimg.com/vi/sNCmQ-88t_I/hqdefault.jpg" alt="" loading="lazy" /><span class="lite-yt-play" aria-hidden="true"></span><span class="lite-yt-time">0:39</span></button>
-          <h3>Font rendering</h3>
-          <p>A font rendering system.</p>
-          <div class="lab-tags"><span class="tag">OpenGL</span><span class="tag">C</span></div>
-        </article>
-        <article class="demo-item" data-api="webgl">
-          <button class="lite-yt" type="button" data-id="DGoThAgsPJ4" data-title="God rays" aria-label="Play: God rays"><img src="https://i.ytimg.com/vi/DGoThAgsPJ4/hqdefault.jpg" alt="" loading="lazy" /><span class="lite-yt-play" aria-hidden="true"></span><span class="lite-yt-time">0:07</span></button>
-          <h3>God rays</h3>
-          <p>Volumetric light shafts.</p>
-          <div class="lab-tags"><span class="tag">WebGL</span><span class="tag">GLSL</span></div>
-        </article>
-        <article class="demo-item" data-api="webgl">
-          <button class="lite-yt" type="button" data-id="ZHmmYcPi6qU" data-title="Fog" aria-label="Play: Fog"><img src="https://i.ytimg.com/vi/ZHmmYcPi6qU/hqdefault.jpg" alt="" loading="lazy" /><span class="lite-yt-play" aria-hidden="true"></span><span class="lite-yt-time">0:24</span></button>
-          <h3>Fog</h3>
-          <p>Distance fog in a shader.</p>
-          <div class="lab-tags"><span class="tag">WebGL</span><span class="tag">GLSL</span></div>
-        </article>
-        <article class="demo-item" data-api="webgl">
-          <button class="lite-yt" type="button" data-id="on7MYx6dL5Q" data-title="Lighting" aria-label="Play: Lighting"><img src="https://i.ytimg.com/vi/on7MYx6dL5Q/hqdefault.jpg" alt="" loading="lazy" /><span class="lite-yt-play" aria-hidden="true"></span><span class="lite-yt-time">0:28</span></button>
-          <h3>Lighting</h3>
-          <p>Real-time lighting in WebGL.</p>
-          <div class="lab-tags"><span class="tag">WebGL</span><span class="tag">GLSL</span></div>
-        </article>
-      </div>
+      <div class="demo-grid" data-videos="lab-demos" data-template="demo"></div>
     </section>
 
     <section class="page-section" id="tools">
@@ -315,9 +242,15 @@
     <div class="footer-bottom">&copy; 2026 rgbguy &middot; Bengaluru, India</div>
   </footer>
 
-<script src="nav.js"></script>
+  <script src="graphics/videos.js?v=2"></script>
+  <script src="videos-render.js?v=1"></script>
+  <script src="nav.js"></script>
   <script>
     document.querySelectorAll('.lab-filter button').forEach(function (b) {
+      // Count the demos from the data, so the numbers stay right.
+      var f0 = b.getAttribute('data-filter');
+      var n = b.querySelector('span');
+      if (n) n.textContent = document.querySelectorAll(f0 === 'all' ? '.demo-item' : '.demo-item[data-api="' + f0 + '"]').length;
       b.addEventListener('click', function () {
         var f = b.getAttribute('data-filter');
         document.querySelectorAll('.lab-filter button').forEach(function (x) { x.classList.toggle('active', x === b); });

@@ -52,9 +52,7 @@
 
   <p>I was studying how light baking works. A baked lightmap is just a texture. The lighting is computed once and stored in UV space, not screen space. That made me curious about the broader idea: what if you did all your shading in UV space instead?</p>
 
-  <div class="video-wrap">
-    <iframe src="https://www.youtube.com/embed/sxpLHyw5RyY" title="Texture space shading" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-  </div>
+  <div class="video-wrap" data-videos="blog-texture-space-shading" data-template="iframe"></div>
 
   <p>So I implemented it. Here's what it is.</p>
 
@@ -124,6 +122,8 @@ fragColor = vec4(shading, 1.0);</code></pre>
     </div>
     <div class="footer-bottom">&copy; 2026 rgbguy &middot; Bengaluru, India</div>
   </footer>
+  <script src="../graphics/videos.js?v=2"></script>
+  <script src="../videos-render.js?v=1"></script>
 <script src="../nav.js"></script>
 </body>
 </html>

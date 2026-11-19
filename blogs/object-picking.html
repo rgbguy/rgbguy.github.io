@@ -156,9 +156,7 @@ int selectedID = (int)round(pixel[0] * totalObjects);</code></pre>
 
   <p>The scene has 24 spheres. IDs are encoded as <code>id / totalObjects</code>, so the first sphere (ID 1) maps to <code>1/24 ≈ 0.04</code>, which renders almost black. The last sphere (ID 24) maps to <code>24/24 = 1.0</code>, which renders pure white. You can see this gradient in the ID buffer: top-left sphere is nearly black, bottom-right is white. Everything in between is a shade of grey proportional to its ID.</p>
 
-  <div class="video-embed">
-    <iframe src="https://www.youtube.com/embed/qcI3KpnP8Cg" title="Object Picking in OpenGL" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-  </div>
+  <div class="video-embed" data-videos="blog-object-picking" data-template="iframe"></div>
 
 </div>
 
@@ -193,6 +191,8 @@ int selectedID = (int)round(pixel[0] * totalObjects);</code></pre>
     </div>
     <div class="footer-bottom">&copy; 2026 rgbguy &middot; Bengaluru, India</div>
   </footer>
+  <script src="../graphics/videos.js?v=2"></script>
+  <script src="../videos-render.js?v=1"></script>
 <script src="../nav.js"></script>
 </body>
 </html>

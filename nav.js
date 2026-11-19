@@ -49,21 +49,23 @@
 })();
 
 // ── Lite YouTube embeds: thumbnail first, iframe on click ──
+// One listener for the whole page, so it also works for thumbnails drawn from
+// graphics/videos.js after the page loads.
 (function () {
-  document.querySelectorAll('button.lite-yt').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var params = btn.getAttribute('data-params');
-      var frame = document.createElement('iframe');
-      frame.src = 'https://www.youtube.com/embed/' + btn.getAttribute('data-id') +
-        '?autoplay=1&rel=0' + (params ? '&' + params : '');
-      frame.title = btn.getAttribute('data-title') || 'YouTube video';
-      frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-      frame.allowFullscreen = true;
-      var box = document.createElement('div');
-      box.className = btn.className + ' is-playing';
-      box.appendChild(frame);
-      btn.replaceWith(box);
-    });
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest && e.target.closest('button.lite-yt');
+    if (!btn) return;
+    var params = btn.getAttribute('data-params');
+    var frame = document.createElement('iframe');
+    frame.src = 'https://www.youtube.com/embed/' + btn.getAttribute('data-id') +
+      '?autoplay=1&rel=0' + (params ? '&' + params : '');
+    frame.title = btn.getAttribute('data-title') || 'YouTube video';
+    frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    frame.allowFullscreen = true;
+    var box = document.createElement('div');
+    box.className = btn.className + ' is-playing';
+    box.appendChild(frame);
+    btn.replaceWith(box);
   });
 })();
 
