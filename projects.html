@@ -29,24 +29,22 @@
 <nav class="site-nav">
     <a href="index.html" class="nav-logo">rgb<b>guy</b></a>
     <ul class="nav-links">
-      <li><a href="videos.html">videos</a></li>
-      <li><a href="learn.html">learn</a></li>
-      <li><a href="blog.html">blog</a></li>
-      <li><a href="projects.html">lab</a></li>
-      <li><a href="experience.html">about</a></li>
-      <li><a href="graphics/index.html">graphics</a></li>
+      <li><a href="projects.html">work</a></li>
+      <li><a href="experience.html">experience</a></li>
+      <li><a href="socials.html">socials</a></li>
+      <li><a href="gallery.html">gallery</a></li>
     </ul>
-    <a href="connect.html" class="nav-cta">Work with me</a>
+    <a href="learn/index.html" class="nav-cta">Learn</a>
   </nav>
 
 <div class="page">
 
     <header class="page-header">
-      <div class="page-eyebrow">lab</div>
+      <div class="page-eyebrow">work</div>
       <h1>Things I've <em>built</em></h1>
-      <p class="page-sub">Engines, shader demos, tools and open source. Built to understand how graphics really works.</p>
+      <p class="page-sub">Engines, shader demos and tools. Built to understand how graphics really works.</p>
       <nav class="lab-jump" aria-label="Lab sections">
-        <a href="#engines">Engines</a><a href="#build-logs">Build logs</a><a href="#demos">Demos</a><a href="#tools">Tools</a><a href="#open-source">Open source</a>
+        <a href="#engines">Engines</a><a href="#blog">Blog</a><a href="#demos">Demos</a><a href="#tools">Tools</a>
       </nav>
     </header>
 
@@ -66,6 +64,17 @@
       </div>
 
       <div class="lab-feature lab-feature-alt">
+        <div class="lab-feature-media"><button class="lite-yt" type="button" data-id="ZjwjEj1Filo" data-title="The Awakening, a GPU ray tracing demo" aria-label="Play: The Awakening, a GPU ray tracing demo"><img src="https://i.ytimg.com/vi/ZjwjEj1Filo/hq720.jpg" alt="" loading="lazy" /><span class="lite-yt-play" aria-hidden="true"></span><span class="lite-yt-time">3:05</span></button></div>
+        <div class="lab-feature-body">
+          <div class="lab-kicker">On the GPU</div>
+          <h2>Path tracing engine</h2>
+          <p>"The Awakening", a ray tracing demo running on the GPU, with CUDA and OpenGL working together.</p>
+          <div class="lab-tags"><span class="tag">CUDA</span><span class="tag">OpenGL</span></div>
+          <div class="page-actions"><a class="btn" href="learn/games/path-tracing.html">Learn path tracing &#8594;</a></div>
+        </div>
+      </div>
+
+      <div class="lab-feature">
         <div class="lab-feature-media"><button class="lite-yt" type="button" data-id="oxQNt2xViic" data-title="Custom WebGL engine" aria-label="Play: Custom WebGL engine"><img src="https://i.ytimg.com/vi/oxQNt2xViic/hq720.jpg" alt="" loading="lazy" /><span class="lite-yt-play" aria-hidden="true"></span><span class="lite-yt-time">4:11</span></button></div>
         <div class="lab-feature-body">
           <div class="lab-kicker">In the browser</div>
@@ -76,56 +85,24 @@
       </div>
     </section>
 
-    <section class="page-section" id="build-logs">
-      <div class="section-label">// build logs</div>
-      <p class="lab-section-sub">Projects with a full write-up. See the result, then read how it works.</p>
-      <div class="log-grid">
-        <article class="log-card log-card-wide">
-          <a class="log-media" href="blogs/software-rasterizer.html"><img src="assets/rasterizer.png" alt="Software rasterizer in C" loading="lazy" /></a>
-          <div class="log-body">
-            <div class="lab-tags"><span class="tag">C</span></div>
-            <h3><a href="blogs/software-rasterizer.html">Software rasterizer in C</a></h3>
-            <p>No OpenGL, no Vulkan. A framebuffer in memory, some maths, and a PNG at the end.</p>
-            <div class="log-links"><a href="blogs/software-rasterizer.html">Read the post &#8594;</a><a href="https://github.com/rgbguy/software-rasterizer" target="_blank" rel="noopener">Code &#8599;</a></div>
-          </div>
-        </article>
-        <article class="log-card">
-          <a class="log-media" href="blogs/msaa.html"><img src="assets/msaa-split.png" alt="MSAA, from scratch" loading="lazy" /></a>
-          <div class="log-body">
-            <div class="lab-tags"><span class="tag">C</span></div>
-            <h3><a href="blogs/msaa.html">MSAA, from scratch</a></h3>
-            <p>Same rasterizer, now with multisample anti-aliasing. Up to 16 samples per pixel.</p>
-            <div class="log-links"><a href="blogs/msaa.html">Read the post &#8594;</a><a href="https://github.com/rgbguy/software-rasterizer/tree/MSAA" target="_blank" rel="noopener">Code &#8599;</a></div>
-          </div>
-        </article>
-        <article class="log-card">
-          <div class="log-media"><button class="lite-yt" type="button" data-id="qcI3KpnP8Cg" data-title="Object picking in OpenGL" aria-label="Play: Object picking in OpenGL"><img src="https://i.ytimg.com/vi/qcI3KpnP8Cg/hqdefault.jpg" alt="" loading="lazy" /><span class="lite-yt-play" aria-hidden="true"></span><span class="lite-yt-time">0:18</span></button></div>
-          <div class="log-body">
-            <div class="lab-tags"><span class="tag">OpenGL</span></div>
-            <h3><a href="blogs/object-picking.html">Object picking in OpenGL</a></h3>
-            <p>Click on the screen, select the object under the cursor. Sounds trivial. It is not.</p>
-            <div class="log-links"><a href="blogs/object-picking.html">Read the post &#8594;</a></div>
-          </div>
-        </article>
-        <article class="log-card">
-          <div class="log-media"><button class="lite-yt" type="button" data-id="AFimRp_aFlg" data-title="PS1 wobble" aria-label="Play: PS1 wobble"><img src="https://i.ytimg.com/vi/AFimRp_aFlg/hqdefault.jpg" alt="" loading="lazy" /><span class="lite-yt-play" aria-hidden="true"></span><span class="lite-yt-time">0:23</span></button></div>
-          <div class="log-body">
-            <div class="lab-tags"><span class="tag">OpenGL</span></div>
-            <h3><a href="blogs/ps1-wobble.html">PS1 wobble</a></h3>
-            <p>The wobbly models and swimming textures were hardware limits. Here is how to fake them.</p>
-            <div class="log-links"><a href="blogs/ps1-wobble.html">Read the post &#8594;</a></div>
-          </div>
-        </article>
-        <article class="log-card">
-          <div class="log-media"><button class="lite-yt" type="button" data-id="sxpLHyw5RyY" data-title="Texture space shading" aria-label="Play: Texture space shading"><img src="https://i.ytimg.com/vi/sxpLHyw5RyY/hqdefault.jpg" alt="" loading="lazy" /><span class="lite-yt-play" aria-hidden="true"></span><span class="lite-yt-time">0:31</span></button></div>
-          <div class="log-body">
-            <div class="lab-tags"><span class="tag">OpenGL</span></div>
-            <h3><a href="blogs/texture-space-shading.html">Texture space shading</a></h3>
-            <p>What if all the shading happened in UV space instead of screen space?</p>
-            <div class="log-links"><a href="blogs/texture-space-shading.html">Read the post &#8594;</a></div>
-          </div>
-        </article>
+    <section class="page-section" id="blog">
+      <div class="lab-section-head">
+        <div>
+          <div class="section-label">// blog</div>
+          <p class="lab-section-sub">Deep dives written while I build, from first principles.</p>
+        </div>
+        <a class="home-more" href="blog.html">All posts &#8594;</a>
       </div>
+      <ul class="home-posts work-posts">
+        <li><span class="bl-date">Aug 2026</span><a href="blogs/multithreading-opengl.html">Multithreading OpenGL: The Shared-Context Pattern</a></li>
+        <li><span class="bl-date">Apr 2026</span><a href="blogs/cuda-opengl-interop.html">CUDA-OpenGL Interop: Letting the GPU Talk to Itself</a></li>
+        <li><span class="bl-date">Apr 2026</span><a href="blogs/texture-space-shading.html">Texture Space Shading</a></li>
+        <li><span class="bl-date">Apr 2026</span><a href="blogs/ps1-wobble.html">Why PS1 Games Wobble (And How to Fake It in OpenGL)</a></li>
+        <li><span class="bl-date">Apr 2026</span><a href="blogs/object-picking.html">Computationally Fast Object Picking in OpenGL</a></li>
+        <li><span class="bl-date">Mar 2026</span><a href="blogs/msaa.html">Adding MSAA to a Software Rasterizer</a></li>
+        <li><span class="bl-date">Mar 2026</span><a href="blogs/texture-compression.html">Your GPU fakes every texture. Here's the math it uses.</a></li>
+        <li><span class="bl-date">Mar 2026</span><a href="blogs/software-rasterizer.html">Writing a Software Rasterizer in C</a></li>
+      </ul>
     </section>
 
     <section class="page-section" id="demos">
@@ -135,12 +112,12 @@
           <p class="lab-section-sub">Shader and rendering experiments. Click any one to play it here.</p>
         </div>
         <div class="lab-filter" role="group" aria-label="Filter demos by API">
-          <button class="tag active" type="button" data-filter="all">All <span>12</span></button>
-          <button class="tag" type="button" data-filter="opengl">OpenGL <span>8</span></button>
-          <button class="tag" type="button" data-filter="webgl">WebGL <span>4</span></button>
+          <button class="tag active" type="button" data-filter="all">All <span>9</span></button>
+          <button class="tag" type="button" data-filter="opengl">OpenGL <span>6</span></button>
+          <button class="tag" type="button" data-filter="webgl">WebGL <span>2</span></button>
         </div>
       </div>
-      <div class="demo-grid">
+      <div class="demo-grid demo-grid-3">
         <article class="demo-item" data-api="opengl">
           <button class="lite-yt" type="button" data-id="o8Brf2rFM8Y" data-title="The Jungle Book" aria-label="Play: The Jungle Book"><img src="https://i.ytimg.com/vi/o8Brf2rFM8Y/hqdefault.jpg" alt="" loading="lazy" /><span class="lite-yt-play" aria-hidden="true"></span><span class="lite-yt-time">7:05</span></button>
           <h3>The Jungle Book</h3>
@@ -154,16 +131,22 @@
           <div class="lab-tags"><span class="tag">WebGL</span><span class="tag">GLSL</span></div>
         </article>
         <article class="demo-item" data-api="opengl">
-          <button class="lite-yt" type="button" data-id="yIO6v3G_8TI" data-title="Dynamic Bharat" aria-label="Play: Dynamic Bharat"><img src="https://i.ytimg.com/vi/yIO6v3G_8TI/hqdefault.jpg" alt="" loading="lazy" /><span class="lite-yt-play" aria-hidden="true"></span><span class="lite-yt-time">1:48</span></button>
-          <h3>Dynamic Bharat</h3>
-          <p>A Win32 and OpenGL demo.</p>
-          <div class="lab-tags"><span class="tag">OpenGL</span></div>
-        </article>
-        <article class="demo-item" data-api="opengl">
-          <button class="lite-yt" type="button" data-id="bewdDM67J3s" data-title="Physically based rendering" aria-label="Play: Physically based rendering"><img src="https://i.ytimg.com/vi/bewdDM67J3s/hqdefault.jpg" alt="" loading="lazy" /><span class="lite-yt-play" aria-hidden="true"></span><span class="lite-yt-time">0:29</span></button>
+          <button class="lite-yt" type="button" data-id="WdJem9E2FTM" data-title="Physically based rendering" aria-label="Play: Physically based rendering"><img src="https://i.ytimg.com/vi/WdJem9E2FTM/hqdefault.jpg" alt="" loading="lazy" /><span class="lite-yt-play" aria-hidden="true"></span><span class="lite-yt-time">0:22</span></button>
           <h3>Physically based rendering</h3>
-          <p>PBR materials and lighting.</p>
-          <div class="lab-tags"><span class="tag">OpenGL</span></div>
+          <p>PBR materials lit by the environment around them, with image based lighting.</p>
+          <div class="lab-tags"><span class="tag">OpenGL</span><span class="tag">GLSL</span></div>
+        </article>
+        <article class="demo-item" data-api="compute">
+          <button class="lite-yt" type="button" data-id="VJTXOKHJH28" data-title="Boids" aria-label="Play: Boids"><img src="https://i.ytimg.com/vi/VJTXOKHJH28/hqdefault.jpg" alt="" loading="lazy" /><span class="lite-yt-play" aria-hidden="true"></span><span class="lite-yt-time">1:05</span></button>
+          <h3>Boids</h3>
+          <p>A flock simulated in a compute shader and drawn with instancing.</p>
+          <div class="lab-tags"><span class="tag">Compute</span><span class="tag">Instancing</span></div>
+        </article>
+        <article class="demo-item" data-api="webgl">
+          <button class="lite-yt" type="button" data-id="duPCPKpa0zo" data-title="Ray marching and metaballs" aria-label="Play: Ray marching and metaballs"><img src="assets/raymarching-metaballs.jpg" alt="" loading="lazy" /><span class="lite-yt-play" aria-hidden="true"></span><span class="lite-yt-time">1:21</span></button>
+          <h3>Ray marching and metaballs</h3>
+          <p>Glass blobs melting into a liquid floor. Signed distance fields, pure code and maths.</p>
+          <div class="lab-tags"><span class="tag">Shadertoy</span><span class="tag">GLSL</span></div>
         </article>
         <article class="demo-item" data-api="opengl">
           <button class="lite-yt" type="button" data-id="HZ_laNsUPm4" data-title="Tessellation shaders" aria-label="Play: Tessellation shaders"><img src="https://i.ytimg.com/vi/HZ_laNsUPm4/hqdefault.jpg" alt="" loading="lazy" /><span class="lite-yt-play" aria-hidden="true"></span><span class="lite-yt-time">1:01</span></button>
@@ -189,30 +172,6 @@
           <p>Sprite-based animation in my C engine.</p>
           <div class="lab-tags"><span class="tag">OpenGL</span><span class="tag">C</span></div>
         </article>
-        <article class="demo-item" data-api="opengl">
-          <button class="lite-yt" type="button" data-id="sNCmQ-88t_I" data-title="Font rendering" aria-label="Play: Font rendering"><img src="https://i.ytimg.com/vi/sNCmQ-88t_I/hqdefault.jpg" alt="" loading="lazy" /><span class="lite-yt-play" aria-hidden="true"></span><span class="lite-yt-time">0:39</span></button>
-          <h3>Font rendering</h3>
-          <p>A font rendering system.</p>
-          <div class="lab-tags"><span class="tag">OpenGL</span><span class="tag">C</span></div>
-        </article>
-        <article class="demo-item" data-api="webgl">
-          <button class="lite-yt" type="button" data-id="DGoThAgsPJ4" data-title="God rays" aria-label="Play: God rays"><img src="https://i.ytimg.com/vi/DGoThAgsPJ4/hqdefault.jpg" alt="" loading="lazy" /><span class="lite-yt-play" aria-hidden="true"></span><span class="lite-yt-time">0:07</span></button>
-          <h3>God rays</h3>
-          <p>Volumetric light shafts.</p>
-          <div class="lab-tags"><span class="tag">WebGL</span><span class="tag">GLSL</span></div>
-        </article>
-        <article class="demo-item" data-api="webgl">
-          <button class="lite-yt" type="button" data-id="ZHmmYcPi6qU" data-title="Fog" aria-label="Play: Fog"><img src="https://i.ytimg.com/vi/ZHmmYcPi6qU/hqdefault.jpg" alt="" loading="lazy" /><span class="lite-yt-play" aria-hidden="true"></span><span class="lite-yt-time">0:24</span></button>
-          <h3>Fog</h3>
-          <p>Distance fog in a shader.</p>
-          <div class="lab-tags"><span class="tag">WebGL</span><span class="tag">GLSL</span></div>
-        </article>
-        <article class="demo-item" data-api="webgl">
-          <button class="lite-yt" type="button" data-id="on7MYx6dL5Q" data-title="Lighting" aria-label="Play: Lighting"><img src="https://i.ytimg.com/vi/on7MYx6dL5Q/hqdefault.jpg" alt="" loading="lazy" /><span class="lite-yt-play" aria-hidden="true"></span><span class="lite-yt-time">0:28</span></button>
-          <h3>Lighting</h3>
-          <p>Real-time lighting in WebGL.</p>
-          <div class="lab-tags"><span class="tag">WebGL</span><span class="tag">GLSL</span></div>
-        </article>
       </div>
     </section>
 
@@ -235,55 +194,11 @@
       </div>
     </section>
 
-    <section class="page-section" id="open-source">
-      <div class="lab-section-head">
-        <div class="section-label">// open source</div>
-        <a class="home-more" href="https://github.com/rgbguy" target="_blank" rel="noopener">All repos &#8599;</a>
-      </div>
-      <div class="repo-cards">
-        <a class="repo-card" href="https://github.com/rgbguy/software-rasterizer" target="_blank" rel="noopener">
-          <span class="repo-name">rgbguy / software-rasterizer</span>
-          <p>A minimal triangle rasterizer in C that writes a PNG. The base for the MSAA post.</p>
-          <span class="repo-lang">C</span>
-        </a>
-        <a class="repo-card" href="https://github.com/rgbguy/GlitchWork" target="_blank" rel="noopener">
-          <span class="repo-name">rgbguy / GlitchWork</span>
-          <p>A lightweight, cross-platform image editor in C++ and OpenGL.</p>
-          <span class="repo-lang">C++</span>
-        </a>
-        <a class="repo-card" href="https://github.com/rgbguy/OpenGL-CatmullRomSpline" target="_blank" rel="noopener">
-          <span class="repo-name">rgbguy / OpenGL-CatmullRomSpline</span>
-          <p>Catmull-Rom splines in OpenGL.</p>
-          <span class="repo-lang">C++</span>
-        </a>
-        <a class="repo-card" href="https://github.com/rgbguy/Azgar" target="_blank" rel="noopener">
-          <span class="repo-name">rgbguy / Azgar</span>
-          <p>The classic Snake game, rebuilt in OpenGL and C++. Runs on Windows, macOS and Linux.</p>
-          <span class="repo-lang">C++</span>
-        </a>
-        <a class="repo-card" href="https://github.com/rgbguy/webgpu-triangle" target="_blank" rel="noopener">
-          <span class="repo-name">rgbguy / webgpu-triangle</span>
-          <p>A starter template for WebGPU.</p>
-          <span class="repo-lang">JavaScript</span>
-        </a>
-        <a class="repo-card" href="https://github.com/rgbguy/Assembly101" target="_blank" rel="noopener">
-          <span class="repo-name">rgbguy / Assembly101</span>
-          <p>Experiments in x86 assembly.</p>
-          <span class="repo-lang">x86 Assembly</span>
-        </a>
-      </div>
-    </section>
-
-    <section class="lab-cta">
-      <h2>Need something like this built?</h2>
-      <p>Engines, rendering features, performance work. I take on graphics and R&amp;D projects.</p>
-      <a class="btn btn-red btn-lg" href="connect.html">Work with me</a>
-    </section>
 
   </div>
 
 
-<footer class="site-footer">
+  <footer class="site-footer">
     <div class="footer-inner">
       <div class="footer-brand">
         <a href="index.html" class="nav-logo">rgb<b>guy</b></a>
@@ -291,16 +206,17 @@
         <a class="footer-mail" href="mailto:partnerships@rgbguy.in">partnerships@rgbguy.in</a>
       </div>
       <div class="footer-col">
-        <div class="footer-head">Explore</div>
-        <a href="videos.html">Videos</a>
-        <a href="learn.html">Learn</a>
-        <a href="blog.html">Blog</a>
-        <a href="projects.html">Lab</a>
-        <a href="read.html">Reading list</a>
+        <div class="footer-head">Learn</div>
+        <a href="learn/index.html#games">How Games Work</a>
+        <a href="learn/index.html#maths">Made with Maths</a>
       </div>
       <div class="footer-col">
         <div class="footer-head">rgbguy</div>
-        <a href="experience.html">About</a>
+        <a href="projects.html">Work</a>
+        <a href="experience.html">Experience</a>
+        <a href="socials.html">Socials</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="blog.html">Blog</a>
         <a href="connect.html">Work with me</a>
       </div>
       <div class="footer-col">
