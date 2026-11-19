@@ -17,14 +17,14 @@
   --mono:   'Space Mono', monospace;
   --sans:   'DM Sans', sans-serif;
 
-  /* GTA 6 palette, sampled from assets/gta6-key-art.jpg */
-  --gta-night:  #15112b;
-  --gta-dusk:   #2a2152;
-  --gta-indigo: #554a8f;
-  --gta-violet: #7a72be;
-  --gta-lilac:  #977acd;
-  --gta-orchid: #c387d0;
-  --gta-pink:   #db8cc3;
+  /* Graphics page palette (the Graphics tab keeps --gfx-pink as its accent) */
+  --gfx-night:  #15112b;
+  --gfx-dusk:   #2a2152;
+  --gfx-indigo: #554a8f;
+  --gfx-violet: #7a72be;
+  --gfx-lilac:  #977acd;
+  --gfx-orchid: #c387d0;
+  --gfx-pink:   #db8cc3;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -85,11 +85,11 @@ nav.site-nav {
 .nav-links a.active { color: var(--text-1); }
 .nav-links a.active { box-shadow: inset 0 -1px 0 var(--red); }
 
-/* GTA 6 tab: its own colour, from the GTA 6 palette */
-.nav-links a[href*="gta6/"] { color: var(--gta-pink); }
-.nav-links a[href*="gta6/"]:hover,
-.nav-links a[href*="gta6/"].active { color: #f0b3dc; }
-.nav-links a[href*="gta6/"].active { box-shadow: inset 0 -1px 0 var(--gta-pink); }
+/* Graphics tab: its own accent colour */
+.nav-links a[href*="graphics/"] { color: var(--gfx-pink); }
+.nav-links a[href*="graphics/"]:hover,
+.nav-links a[href*="graphics/"].active { color: #f0b3dc; }
+.nav-links a[href*="graphics/"].active { box-shadow: inset 0 -1px 0 var(--gfx-pink); }
 
 .nav-cta {
   font-family: var(--mono);
@@ -158,9 +158,9 @@ nav.site-nav {
 }
 .nav-mobile a:hover,
 .nav-mobile a.active { color: var(--text); }
-.nav-mobile a[href*="gta6/"] { color: var(--gta-pink); }
-.nav-mobile a[href*="gta6/"]:hover,
-.nav-mobile a[href*="gta6/"].active { color: #f0b3dc; }
+.nav-mobile a[href*="graphics/"] { color: var(--gfx-pink); }
+.nav-mobile a[href*="graphics/"]:hover,
+.nav-mobile a[href*="graphics/"].active { color: #f0b3dc; }
 .nav-mobile .nav-mobile-cta {
   margin-top: 1.5rem;
   color: var(--red);
