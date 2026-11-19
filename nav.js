@@ -40,7 +40,7 @@
   var path = parts.pop() || 'index.html';
   var dir = parts.pop();
   if (dir === 'blogs') path = 'blog.html';
-  if (dir === 'gta6') path = 'gta6';
+  if (dir === 'graphics') path = 'graphics';
   document.querySelectorAll('.nav-links a, .nav-cta').forEach(function (a) {
     // Folder pages are linked as dir/index.html (so they open from disk too): match on the folder.
     var href = a.getAttribute('href').replace(/\/(index\.html)?$/, '');
