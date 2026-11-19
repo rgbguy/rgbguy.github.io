@@ -39,6 +39,26 @@ var TRACKS = [
 
 var LESSONS = [
   // ── How Games Work ──
+  { slug: 'rdr2-snow', track: 'games', title: 'How a snake deforms snow in RDR2', date: '2026-11-19',
+    hook: 'The snow has no idea a snake is crossing it. The trail is a picture.',
+    tags: ['rendering', 'shaders'],
+    links: [
+      { title: 'Graphics Study: Red Dead Redemption 2, a RenderDoc frame breakdown (imgeself)', url: 'https://imgeself.github.io/posts/2020-06-19-graphics-study-rdr2/' },
+      { title: 'Deformable Snow Rendering in Batman: Arkham Origins, GDC 2014 (PDF)', url: 'https://colinbarrebrisebois.com/wp-content/uploads/2022/06/gdc2014-deformable_snow_rendering.pdf' },
+      { title: 'Deformable Snow Rendering in Batman: Arkham Origins (SlideShare)', url: 'https://www.slideshare.net/colinbb/gdc2014-deformable-snow-rendering-in-batman-arkham-origins' },
+      { title: 'GPU Pro 7: Advanced Rendering Techniques (Rise of the Tomb Raider snow chapter)', url: 'https://www.routledge.com/GPU-Pro-7-Advanced-Rendering-Techniques/Engel/p/book/9781498742535' },
+      { title: 'The Rendering of Rise of the Tomb Raider (elopezr)', url: 'https://www.elopezr.com/the-rendering-of-rise-of-the-tomb-raider/' },
+      { title: 'RDR2 optimized settings: what Tessellation does (PCOptimizedSettings)', url: 'https://pcoptimizedsettings.com/red-dead-redemption-2-rdr2-optimized-settings-for-pc-2024/' },
+      { title: 'Steam: tessellation needed for mud and snow', url: 'https://steamcommunity.com/app/1174180/discussions/0/2961642185092923091/' },
+      { title: 'Steam: the deepsurfaceQuality setting', url: 'https://steamcommunity.com/app/1174180/discussions/0/5056966106388936723' },
+      { title: 'Steam: strange square deformity in snow', url: 'https://steamcommunity.com/app/1174180/discussions/0/1742268065075385587/' },
+      { title: 'Steam: terrain and snow deformation glitch', url: 'https://steamcommunity.com/app/1174180/discussions/0/1735507300805016886/' },
+      { title: 'Best Red Dead Redemption 2 settings (GamesRadar)', url: 'https://www.gamesradar.com/best-red-dead-redemption-2-settings/' },
+      { title: 'RDR2 tech analysis: animations, physics, weather (GamingBolt)', url: 'https://gamingbolt.com/red-dead-redemption-2-tech-analysis-animations-physics-post-processing-effects-weather-systems-and-more' },
+      { title: 'Red Dead Redemption 2 details players noticed (GameRant)', url: 'https://gamerant.com/red-dead-redemption-incredible-details/' },
+      { title: "Assassin's Creed III PC technology (Geeks3D)", url: 'https://www.geeks3d.com/20121123/assassins-creed-iii-pc-technology-video/' },
+      { title: 'Snakes in the snow, in real life (Metroparks)', url: 'https://www.metroparks.com/snakes-in-the-snow/' }
+    ] },
   { slug: 'dot-product', track: 'games', video: 'n_V5RLQhW4c', title: 'Dot product in games', date: '2026-11-08', tags: ['maths'] },
   { slug: 'physics-with-maths', track: 'games', video: 'CyYfOpHcBUs', title: 'Physics simulated using maths', date: '2026-10-31', tags: ['physics', 'maths'] },
   { slug: 'fog', track: 'games', video: 'dXGgZs1sFTE', title: 'How video games create fog', date: '2026-10-27', tags: ['rendering', 'shaders'] },
