@@ -39,8 +39,8 @@ var TRACKS = [
 
 var LESSONS = [
   // ── How Games Work ──
-  { slug: 'rdr2-snow', track: 'games', title: 'How a snake deforms snow in RDR2', date: '2026-11-19',
-    hook: 'The snow has no idea a snake is crossing it. The trail is a picture.',
+  { slug: 'rdr2-snow', track: 'games', video: 'n3ygUN0IHUQ', title: 'How ground deformation works in games', date: '2026-11-19',
+    hook: 'The ground has no idea what is crossing it. Every footprint and tyre track is a picture.',
     tags: ['rendering', 'shaders'],
     links: [
       { title: 'Graphics Study: Red Dead Redemption 2, a RenderDoc frame breakdown (imgeself)', url: 'https://imgeself.github.io/posts/2020-06-19-graphics-study-rdr2/' },
