@@ -48,13 +48,14 @@
     btn.setAttribute('data-title', v.title);
     btn.setAttribute('aria-label', 'Play: ' + v.title);
     var img = el('img');
-    img.src = 'https://i.ytimg.com/vi/' + v.id + '/oar2.jpg';
+    // hqdefault follows the thumbnail picked on YouTube (oar2 keeps the first
+    // auto frame). Bump ?v= after changing thumbnails so browsers refetch.
+    img.src = 'https://i.ytimg.com/vi/' + v.id + '/hqdefault.jpg?v=2';
     img.alt = '';
     img.loading = 'lazy';
     img.decoding = 'async';
     img.width = 270;
     img.height = 480;
-    img.onerror = function () { img.onerror = null; img.src = 'https://i.ytimg.com/vi/' + v.id + '/hqdefault.jpg'; };
     btn.appendChild(img);
     var play = el('span', 'lite-yt-play');
     play.setAttribute('aria-hidden', 'true');

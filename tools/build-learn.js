@@ -19,6 +19,14 @@ var LESSONS = data.LESSONS;
 var TAG_LABEL = { ai: 'AI' };
 var SITE = 'https://rgbguy.in';
 
+// Shorts thumbnails: hqdefault follows the thumbnail picked on YouTube (oar2
+// keeps the first auto frame). After changing thumbnails on YouTube, add 1 to
+// THUMB_VERSION and rerun this script so browsers fetch the new ones.
+var THUMB_VERSION = 2;
+function ytThumb(id) {
+  return 'https://i.ytimg.com/vi/' + id + '/hqdefault.jpg?v=' + THUMB_VERSION;
+}
+
 function esc(s) {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#x27;');
 }
@@ -46,7 +54,7 @@ function badgeHtml(l) {
 
 function thumb(l, prefix) {
   if (l.video) {
-    return '<img src="https://i.ytimg.com/vi/' + l.video + '/oar2.jpg" alt="" loading="lazy" decoding="async" width="270" height="480" />';
+    return '<img src="' + ytThumb(l.video) + '" alt="" loading="lazy" decoding="async" width="270" height="480" />';
   }
   // No video yet: a drawing of the idea instead
   return '<svg class="thumb-art" viewBox="0 0 90 160" aria-hidden="true">' +
@@ -205,7 +213,7 @@ function buildLesson(l) {
   var next = [1, 2, 3].map(function (k) { return ls[(idx + k) % ls.length]; }).filter(function (x) { return x !== l; });
 
   var video = l.video
-    ? '        <button class="lite-yt lite-yt--short lesson-video" type="button" data-id="' + l.video + '" data-title="' + esc(l.title) + '" aria-label="Play: ' + esc(l.title) + '"><img src="https://i.ytimg.com/vi/' + l.video + '/oar2.jpg" alt="" /><span class="lite-yt-play" aria-hidden="true"></span></button>\n'
+    ? '        <button class="lite-yt lite-yt--short lesson-video" type="button" data-id="' + l.video + '" data-title="' + esc(l.title) + '" aria-label="Play: ' + esc(l.title) + '"><img src="' + ytThumb(l.video) + '" alt="" /><span class="lite-yt-play" aria-hidden="true"></span></button>\n'
     : '        <div class="lesson-video lesson-video-soon">\n          <span class="lesson-kicker">Video coming</span>\n          <p>The short for this one is in the edit. Follow and you\'ll catch it first.</p>\n' +
       '          <a class="btn btn-sm" href="https://www.instagram.com/rgbguy/" target="_blank" rel="noopener">Instagram</a>\n' +
       '          <a class="btn btn-sm" href="https://www.youtube.com/@rgbguy?sub_confirmation=1" target="_blank" rel="noopener">YouTube</a>\n        </div>\n';
@@ -259,7 +267,7 @@ function buildLesson(l) {
     depth: 2, url: '/learn/' + t.id + '/' + l.slug + '.html', bodyClass: 'learn-page',
     title: l.title + ' · ' + t.name + ' · rgbguy',
     desc: l.hook || (l.title + '. A lesson in ' + t.name + ' by rgbguy.'),
-    image: l.video ? 'https://i.ytimg.com/vi/' + l.video + '/oar2.jpg' : null,
+    image: l.video ? ytThumb(l.video) : null,
     body: body
   });
   var dir = path.join(LEARN, t.id);
