@@ -41,6 +41,17 @@
 
 var GRAPHICS_NEW_FROM = '2026-11-19';
 
+// ── Thumbnails ──
+// Every thumbnail comes live from YouTube, built from the id, so a thumbnail
+// changed on YouTube shows here too. Shorts use hqdefault (it follows the
+// thumbnail picked on YouTube; oar2 keeps the first auto frame). The ?v= gets
+// past browser caches: after changing thumbnails on YouTube, add 1 to it.
+var THUMB_VERSION = 2;
+
+function ytThumb(id, size) {
+  return 'https://i.ytimg.com/vi/' + id + '/' + (size || 'hqdefault') + '.jpg?v=' + THUMB_VERSION;
+}
+
 var VIDEO_SERIES = {
   fuzx: { title: 'FuzX', playlist: 'PLSPtS15mOXMdVzjdtfMOc_Ekx0UVydaiy' }
 };

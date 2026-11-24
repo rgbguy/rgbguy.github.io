@@ -53,7 +53,7 @@
     var time = opts.time && x.v.length ? '<span class="lite-yt-time">' + esc(x.v.length) + '</span>' : '';
     return '<button class="' + cls + '" type="button" data-id="' + esc(x.v.id) + '"' + params +
       ' data-title="' + esc(x.title) + '" aria-label="Play: ' + esc(x.title) + '">' +
-      '<img src="https://i.ytimg.com/vi/' + esc(x.v.id) + '/' + opts.thumb + '.jpg" alt=""' + lazy + ' />' +
+      '<img src="' + esc(ytThumb(x.v.id, opts.thumb)) + '" alt=""' + lazy + ' />' +
       '<span class="lite-yt-play" aria-hidden="true"></span>' + time + '</button>';
   }
 
@@ -66,7 +66,7 @@
   var TEMPLATES = {
     // Home and Videos: most watched Shorts
     'short-card': function (x) {
-      return '<div class="short-card">' + button(x, { cls: 'lite-yt--short', thumb: 'oar2' }) +
+      return '<div class="short-card">' + button(x, { cls: 'lite-yt--short', thumb: 'hqdefault' }) +
         '<div class="short-meta"><span class="short-title">' + esc(x.title) + '</span>' +
         '<span class="short-views">' + views(x.v.views) + '</span></div></div>';
     },
@@ -87,7 +87,7 @@
       var graph = (x.v.resources || []).filter(function (r) { return /desmos\.com/.test(r.url); })[0];
       var label = x.o.label || x.title;
       return '<div class="learn-pair"><div class="section-label">// ' + (n < 9 ? '0' : '') + (n + 1) + ' · ' + esc(label) + '</div>' +
-        '<div class="learn-pair-row">' + button(x, { cls: 'lite-yt--short learn-pair-video', thumb: 'oar2' }) +
+        '<div class="learn-pair-row">' + button(x, { cls: 'lite-yt--short learn-pair-video', thumb: 'hqdefault' }) +
         (graph ? '<iframe class="learn-pair-graph" src="' + esc(graph.url) + '" title="' + esc(label) + ' · Desmos 3D" frameborder="0" loading="lazy" allowfullscreen></iframe>' : '') +
         '</div></div>';
     },

@@ -49,13 +49,12 @@
     btn.setAttribute('data-title', v.title);
     btn.setAttribute('aria-label', 'Play: ' + v.title);
     var img = el('img');
-    img.src = 'https://i.ytimg.com/vi/' + v.id + '/oar2.jpg';
+    img.src = ytThumb(v.id, 'hqdefault');
     img.alt = '';
     img.loading = 'lazy';
     img.decoding = 'async';
     img.width = 270;
     img.height = 480;
-    img.onerror = function () { img.onerror = null; img.src = 'https://i.ytimg.com/vi/' + v.id + '/hqdefault.jpg'; };
     btn.appendChild(img);
     var play = el('span', 'lite-yt-play');
     play.setAttribute('aria-hidden', 'true');
