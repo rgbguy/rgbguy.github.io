@@ -41,6 +41,7 @@
   var dir = parts.pop();
   if (dir === 'blogs') path = 'blog.html';
   if (dir === 'graphics') path = 'graphics';
+  if (dir === 'learn' || parts.pop() === 'learn') path = 'learn';
   document.querySelectorAll('.nav-links a, .nav-cta').forEach(function (a) {
     // Folder pages are linked as dir/index.html (so they open from disk too): match on the folder.
     var href = a.getAttribute('href').replace(/\/(index\.html)?$/, '');
@@ -49,23 +50,21 @@
 })();
 
 // ── Lite YouTube embeds: thumbnail first, iframe on click ──
-// One listener for the whole page, so it also works for thumbnails drawn from
-// graphics/videos.js after the page loads.
 (function () {
-  document.addEventListener('click', function (e) {
-    var btn = e.target.closest && e.target.closest('button.lite-yt');
-    if (!btn) return;
-    var params = btn.getAttribute('data-params');
-    var frame = document.createElement('iframe');
-    frame.src = 'https://www.youtube.com/embed/' + btn.getAttribute('data-id') +
-      '?autoplay=1&rel=0' + (params ? '&' + params : '');
-    frame.title = btn.getAttribute('data-title') || 'YouTube video';
-    frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-    frame.allowFullscreen = true;
-    var box = document.createElement('div');
-    box.className = btn.className + ' is-playing';
-    box.appendChild(frame);
-    btn.replaceWith(box);
+  document.querySelectorAll('button.lite-yt').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var params = btn.getAttribute('data-params');
+      var frame = document.createElement('iframe');
+      frame.src = 'https://www.youtube.com/embed/' + btn.getAttribute('data-id') +
+        '?autoplay=1&rel=0' + (params ? '&' + params : '');
+      frame.title = btn.getAttribute('data-title') || 'YouTube video';
+      frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+      frame.allowFullscreen = true;
+      var box = document.createElement('div');
+      box.className = btn.className + ' is-playing';
+      box.appendChild(frame);
+      btn.replaceWith(box);
+    });
   });
 })();
 

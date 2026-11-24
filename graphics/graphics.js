@@ -1,17 +1,16 @@
 // ── Graphics page: builds the sections, topic chips and cards from videos.js ──
-// Nothing here needs editing to add a video: add an entry to videos.js with
-// on: { graphics: true }.
+// Nothing here needs editing to add a video: add an entry to videos.js.
 (function () {
   var root = document.getElementById('gfx-root');
-  if (!root || typeof VIDEOS === 'undefined') return;
+  if (!root || typeof GRAPHICS_VIDEOS === 'undefined') return;
 
   var NEW_FROM = typeof GRAPHICS_NEW_FROM === 'string' ? GRAPHICS_NEW_FROM : '9999-12-31';
   var TAG_ORDER = ['rendering', 'shaders', 'physics', 'engines', 'animation', 'procedural', 'ai', 'maths'];
   var TAG_LABEL = { ai: 'AI' };
   var BATCH = { 'new': 6, earlier: 12 };
 
-  var videos = VIDEOS
-    .filter(function (v) { return v && v.id && v.title && v.on && v.on.graphics; })
+  var videos = GRAPHICS_VIDEOS
+    .filter(function (v) { return v && v.id && v.title; })
     .map(function (v) {
       return {
         id: v.id,
@@ -49,12 +48,13 @@
     btn.setAttribute('data-title', v.title);
     btn.setAttribute('aria-label', 'Play: ' + v.title);
     var img = el('img');
-    img.src = ytThumb(v.id, 'hqdefault');
+    img.src = 'https://i.ytimg.com/vi/' + v.id + '/oar2.jpg';
     img.alt = '';
     img.loading = 'lazy';
     img.decoding = 'async';
     img.width = 270;
     img.height = 480;
+    img.onerror = function () { img.onerror = null; img.src = 'https://i.ytimg.com/vi/' + v.id + '/hqdefault.jpg'; };
     btn.appendChild(img);
     var play = el('span', 'lite-yt-play');
     play.setAttribute('aria-hidden', 'true');
@@ -194,5 +194,18 @@
   var count = document.getElementById('gfx-count');
   if (count) count.textContent = videos.length + ' videos';
 
-  // Thumbnails turn into the YouTube player on click: nav.js does that.
+  // ── Lazy embeds: thumbnail first, the YouTube player only on click ──
+  root.addEventListener('click', function (e) {
+    var btn = e.target.closest && e.target.closest('button.lite-yt');
+    if (!btn || !root.contains(btn)) return;
+    var frame = document.createElement('iframe');
+    frame.src = 'https://www.youtube.com/embed/' + btn.getAttribute('data-id') + '?autoplay=1&rel=0';
+    frame.title = btn.getAttribute('data-title') || 'YouTube video';
+    frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    frame.allowFullscreen = true;
+    var box = document.createElement('div');
+    box.className = btn.className + ' is-playing';
+    box.appendChild(frame);
+    btn.replaceWith(box);
+  });
 })();
